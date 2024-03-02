@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 203, 202, 206, 1;
+  --background-start-rgb: 7, 7, 28, 0.8;
+  --background-end-rgb: 0, 0, 0, 1;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(var(--background-end-rgb))
+    )
+    rgba(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
