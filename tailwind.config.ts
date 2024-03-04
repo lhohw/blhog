@@ -22,6 +22,8 @@ const config: Config = {
           1000: "#1e3a8a",
           1100: "#172554",
         },
+        dark: "#010103",
+        darkgray: "#17161b",
       },
       borderWidth: {
         slight: "0.5px",
@@ -30,6 +32,9 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      flex: {
+        "1.6": "1.618 1.618 0%",
       },
     },
   },
