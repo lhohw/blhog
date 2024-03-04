@@ -1,11 +1,20 @@
 import type { PropsWithChildren } from "react";
+import Header from "@/app/ui/Header";
+import Contents from "@/app/ui/Contents";
 
 export default function Home() {
-  return <Main>aa</Main>;
+  return (
+    <Main>
+      <Header />
+      <Contents />
+    </Main>
+  );
 }
 
 const Main = ({ children }: PropsWithChildren) => (
-  <main className="flex flex-col min-h-screen pt-2 px-4 pb-4 border-slight border-sea-200">
-    {children}
+  <main className="min-h-screen pt-3 px-6 pb-6">
+    <div className="flex flex-col flex-1 h-[calc(100dvh-36px)] bg-dark">
+      {children}
+    </div>
   </main>
 );
