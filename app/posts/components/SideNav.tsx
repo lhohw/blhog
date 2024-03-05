@@ -1,7 +1,7 @@
 import { JS, Menu } from "@/app/ui/icons";
 import ListItem from "./ListItem";
 
-export default function NavBar() {
+export default function SideNav() {
   return (
     <div className="flex flex-col flex-1 h-full min-w-[295px] max-w-[393px] bg-darkgray rounded-tr-2xl">
       <div className="flex flex-none items-center h-[60px] pl-[20px]">
