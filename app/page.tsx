@@ -1,20 +1,16 @@
-import type { PropsWithChildren } from "react";
-import Header from "@/app/ui/Header";
-import Contents from "@/app/ui/Contents";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <Main>
-      <Header />
-      <Contents />
-    </Main>
+    <main className="min-h-screen pt-3 px-6 pb-6">
+      <div className="flex flex-col flex-1 bg-dark">
+        <Link
+          className="p-2 hover:text-sea-100 rounded-md border-slight border-sea-200"
+          href={"/posts"}
+        >
+          Posts
+        </Link>
+      </div>
+    </main>
   );
 }
-
-const Main = ({ children }: PropsWithChildren) => (
-  <main className="min-h-screen pt-3 px-6 pb-6">
-    <div className="flex flex-col flex-1 h-[calc(100dvh-36px)] bg-dark">
-      {children}
-    </div>
-  </main>
-);

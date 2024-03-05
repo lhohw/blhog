@@ -1,5 +1,5 @@
-import { Menu } from "@/app/ui/icons";
-import ListItem from "@/app/ui/ListItem";
+import { JS, Menu } from "@/app/ui/icons";
+import ListItem from "./ListItem";
 
 export default function NavBar() {
   return (
@@ -8,8 +8,7 @@ export default function NavBar() {
         <Menu className="cursor-pointer" />
       </div>
       <ul className="flex flex-col overflow-y-scroll h-full">
-        <ListItem isDirectory={true} />
-        <ListItem isDirectory={false} />
+        <ListItem isDirectory={true} title="JavaScript" Icon={JS} />
       </ul>
     </div>
   );

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "@/app/ui/globals.css";
+import "@/app/ui/styles/globals.css";
 import { nunito_sans } from "@/app/ui/fonts";
 
 export const metadata: Metadata = {
