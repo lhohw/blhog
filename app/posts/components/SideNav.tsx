@@ -1,14 +1,17 @@
-import { JS, Menu } from "@/app/ui/icons";
-import ListItem from "./ListItem";
+import { Menu } from "@/app/ui/icons";
+import NavLinks from "./NavLinks";
+import { fetchDirectoryNames } from "@/app/lib/actions";
 
-export default function SideNav() {
+export default async function SideNav() {
+  const links = await fetchDirectoryNames();
+
   return (
     <div className="flex flex-col flex-1 h-full min-w-[295px] max-w-[393px] bg-darkgray rounded-tr-2xl">
-      <div className="flex flex-none items-center h-[60px] pl-[20px]">
+      <div className="flex flex-none items-center h-14 pl-5">
         <Menu className="cursor-pointer" />
       </div>
       <ul className="flex flex-col overflow-y-scroll h-full">
-        <ListItem isDirectory={true} title="JavaScript" Icon={JS} />
+        <NavLinks links={links} />
       </ul>
     </div>
   );
