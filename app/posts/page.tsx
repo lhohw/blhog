@@ -1,22 +1,18 @@
 import { Suspense } from "react";
-import Breadcrumbs, { Breadcrumb } from "./components/Breadcrumbs";
-import Posts from "./components/Posts";
+import LatestPosts from "./components/LatestPosts";
 
 export default function Page() {
-  const breadcrumbs: Breadcrumb[] = [
-    {
-      label: "Latest Posts",
-      href: "posts",
-      active: true,
-    },
-  ];
   return (
     <div className="flex flex-[2] flex-col m-1 p-3">
-      <Breadcrumbs breadcrumbs={breadcrumbs} />
-      <div className="flex-1 flex flex-col overflow-y-scroll">
-        <Suspense key={"posts"} fallback={<div>take 3 seconds...</div>}>
-          <Posts />
-        </Suspense>
+      <div className="flex-1 flex flex-row overflow-y-scroll">
+        <div className="flex flex-1 flex-col">
+          <div className="mb-6 h-8 text-lg md:text-2xl text-sea-200">
+            Latest Posts
+          </div>
+          <Suspense key={"posts"} fallback={<div>take 3 seconds...</div>}>
+            <LatestPosts />
+          </Suspense>
+        </div>
       </div>
     </div>
   );
