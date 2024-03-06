@@ -1,5 +1,5 @@
-import Breadcrumbs from "./components/Breadcrumbs";
-import CategoryPosts from "./components/CategoryPosts";
+import Breadcrumbs from "@/app/ui/posts/[key]/Breadcrumbs";
+import CategoryPosts from "@/app/ui/posts/[key]/CategoryPosts";
 
 export default function Page({ params: { key } }: { params: { key: string } }) {
   return (

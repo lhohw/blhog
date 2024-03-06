@@ -1,5 +1,5 @@
 import { Menu } from "@/app/ui/icons";
-import NavLinks from "./NavLinks";
+import NavLinks from "@/app/ui/posts/NavLinks";
 import { fetchDirectoryNames } from "@/app/lib/actions";
 
 export default async function SideNav() {

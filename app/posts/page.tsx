@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import LatestPosts from "./components/LatestPosts";
+import LatestPosts from "@/app/ui/posts/LatestPosts";
 
 export default function Page() {
   return (

@@ -1,8 +1,8 @@
-import { Suspense, type PropsWithChildren } from "react";
 import type { Metadata } from "next";
-import Header from "./components/Header";
-import SideNav from "./components/SideNav";
-import SideNavFallback from "./components/SideNavFallback";
+import { Suspense, type PropsWithChildren } from "react";
+import Header from "@/app/ui/posts/Header";
+import SideNav from "@/app/ui/posts/SideNav";
+import SideNavFallback from "@/app/ui/posts/SideNavFallback";
 
 export const metadata: Metadata = {
   title: "Posts",

@@ -1,5 +1,5 @@
 import { fetchPostsByKey } from "@/app/lib/actions";
-import Posts from "../../components/Posts";
+import Posts from "@/app/ui/posts/Posts";
 
 export default async function CategoryPosts({
   category,
