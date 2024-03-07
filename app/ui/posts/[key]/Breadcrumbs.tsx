@@ -1,4 +1,5 @@
 "use client";
+import { slugToStr } from "@/app/lib/utils";
 import { clsx } from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,7 +15,7 @@ export default function Breadcrumbs() {
   ].concat(
     splitted.map((key) => ({
       href: `/posts/${key}`,
-      label: key,
+      label: slugToStr(key),
     }))
   );
 
