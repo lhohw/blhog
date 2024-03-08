@@ -16,10 +16,7 @@ export default function NavLinks({ links }: NavLinksProps) {
           className="flex items-center flex-none h-14 py-2 px-4"
           href={`/posts/${href}`}
         >
-          <div className="flex flex-1 flex-row items-center h-10 p-2 rounded-lg cursor-pointer hover:bg-[#2D2C31] transition-color">
-            <div className="w-4 mr-2">
-              <ChevronLeft className="mr-2" />
-            </div>
+          <div className="flex flex-1 flex-row items-center h-10 py-2 pl-4 rounded-lg cursor-pointer hover:bg-[#2D2C31] transition-color">
             <Image src={icon} alt={name} width={16} height={16} />
             <span className="flex flex-1 ml-2">{name}</span>
           </div>
