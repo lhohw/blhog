@@ -9,7 +9,7 @@ export default function MainColorEffect() {
     const id = setInterval(() => {
       root.style.setProperty("--main-color", textSeaColors[i]);
       i = (i + 1) % 11;
-    }, 1e4);
+    }, 11e3);
     return () => clearInterval(id);
   }, []);
   return <></>;
