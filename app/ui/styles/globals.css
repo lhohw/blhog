@@ -42,3 +42,9 @@ body {
   color: var(--main-color);
   transition: color .25s ease-in-out;
 }
+
+@media (prefers-reduced-motion) {
+  .main-color {
+    color: #8ebac7;
+  }
+}
