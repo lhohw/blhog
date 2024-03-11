@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/app/ui/styles/globals.css";
 import { nunito_sans } from "@/app/ui/fonts";
+import MainColorEffect from "./MainColorEffect";
 
 export const metadata: Metadata = {
   title: {
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={nunito_sans.className}>{children}</body>
+      <MainColorEffect />
     </html>
   );
 }

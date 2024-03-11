@@ -16,7 +16,7 @@ export default function Breadcrumbs() {
     splitted.map((key) => ({
       href: `/posts/${key}`,
       label: slugToStr(key),
-    }))
+    })),
   );
 
   return (
@@ -27,7 +27,7 @@ export default function Breadcrumbs() {
             key={breadcrumb.href}
             aria-current={index === breadcrumbs.length - 1}
             className={clsx(
-              index === breadcrumbs.length - 1 ? "text-sea-200" : "inherit"
+              index === breadcrumbs.length - 1 ? "main-color" : "inherit",
             )}
           >
             <Link href={breadcrumb.href}>{breadcrumb.label}</Link>

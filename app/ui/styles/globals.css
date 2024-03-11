@@ -6,6 +6,7 @@
   --foreground-rgb: 203, 202, 206, 1;
   --background-start-rgb: 27, 30, 29, 0.8;
   --background-end-rgb: 27, 9, 19, 0.342;
+  --main-color: #8ebac7;
 }
 
 body {
@@ -23,9 +24,6 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-  .area {
-    border: 0.2px solid #d1fae511;
-  }
 }
 
 ::-webkit-scrollbar {
@@ -40,3 +38,7 @@ body {
   background-color: #94b7a66d;
 }
 
+.main-color {
+  color: var(--main-color);
+  transition: color .25s ease-in-out;
+}
