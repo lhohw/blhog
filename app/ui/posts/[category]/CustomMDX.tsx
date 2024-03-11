@@ -1,5 +1,6 @@
+import rehypePrism from "@mapbox/rehype-prism";
 import clsx from "clsx";
-import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
+import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
 
 const components: MDXRemoteProps["components"] = {
   a: (props) => (
@@ -25,11 +26,16 @@ const components: MDXRemoteProps["components"] = {
   ),
 };
 
-export function CustomMDX(props: MDXRemoteProps) {
+export async function CustomMDX({ source }: MDXRemoteProps) {
   return (
     <MDXRemote
-      {...props}
-      components={{ ...components, ...(props.components || {}) }}
+      source={source}
+      options={{
+        mdxOptions: {
+          rehypePlugins: [rehypePrism],
+        },
+      }}
+      components={components}
     />
   );
 }

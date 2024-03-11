@@ -1,11 +1,14 @@
+import { Suspense } from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import BodySerializer from "@/app/class/BodySerializer";
+
 import { fetchPostByCategoryAndId } from "@/app/lib/actions";
 import { CustomMDX } from "@/app/ui/posts/[category]/CustomMDX";
+import CustomMDXFallback from "@/app/ui/posts/[category]/CustomMDXFallback";
 
 import styles from "@/app/ui/styles/post.module.scss";
+import "@/app/ui/styles/post-prism.scss";
 
 export default async function Post({
   category,
@@ -18,11 +21,9 @@ export default async function Post({
   if (!post) notFound();
 
   const { src, title, date, body } = post;
-  const bodySerializer = new BodySerializer(body);
-  const text = bodySerializer.text();
 
   return (
-    <div className={clsx(styles.post, "flex flex-col w-full")}>
+    <div className={clsx("flex flex-col w-full", styles.post)}>
       <h1 className="text-3xl ml-4 my-4 self-start">{title}</h1>
       <h4 className="text-sm ml-4 self-start opacity-60">{date}</h4>
       <Image
@@ -32,8 +33,10 @@ export default async function Post({
         width={376}
         height={376 / 1.6}
       />
-      <article className={styles.article}>
-        <CustomMDX source={text} />
+      <article className={clsx("prism", styles.article)}>
+        <Suspense fallback={<CustomMDXFallback />}>
+          <CustomMDX source={body} />
+        </Suspense>
       </article>
     </div>
   );
