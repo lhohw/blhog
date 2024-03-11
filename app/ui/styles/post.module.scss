@@ -61,9 +61,9 @@
   /** link */
   a {
     cursor: pointer;
-    transition: font-weight .375s ease-in-out;
+    transition: color .375s ease-in-out;
     &:hover {
-      font-weight: bold;
+      color: $seagreen;
     }
   }
 
@@ -75,6 +75,6 @@
 
   /** code for emphasis */
   p > code {
-    text-shadow: 1px 1px 1.5px #e8c2e1fc;
+    text-shadow: 1px 1px 1.5px $lavender;
   }
 }
