@@ -1,0 +1,80 @@
+@import "./variables.module.scss";
+
+.post {
+  padding: 0 1rem;
+  margin-bottom: 2em;
+
+  @media (min-width: 480px) {
+    font-size: calc(-0.95048vw + 1.4568rem);
+  }
+  @media (min-width: 768px) {
+    font-size: calc(0.14041vw + 0.93317rem);
+  }
+  @media (min-width: 1280px) {
+    font-size: calc(0.13069vw + 0.94095rem);
+  }
+  @media (min-width: 1920px) {
+    font-size: calc(0.50823vw + 0.4879rem);
+  }
+}
+
+.article {
+  /** heading */
+  & h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    margin: 1.5em 0 .5em 0;
+  }
+  h1 {
+    font-size: 2em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  h3 {
+    font-size: 1.17em;
+  }
+  h4 {
+    font-size: 0.5em;
+  }
+  h5 {
+    font-size: 0.83em;
+  }
+  h6 {
+    font-size: 0.67em;
+  }
+  
+  /** pre */
+  pre {
+    padding: 1em;
+    overflow: scroll;
+    opacity: 0.75;
+    margin: 1.5em 0.5em;
+    border: .5px solid $primary-color;
+    border-radius: 8px;
+  }
+
+  /** paragraph */
+  p {
+    margin: 1em 0;
+  }
+
+  /** link */
+  a {
+    cursor: pointer;
+    transition: font-weight .375s ease-in-out;
+    &:hover {
+      font-weight: bold;
+    }
+  }
+
+  /** list */
+  ol {
+    list-style: decimal;
+    margin-left: 2em;
+  }
+
+  /** code for emphasis */
+  p > code {
+    text-shadow: 1px 1px 1.5px #e8c2e1fc;
+  }
+}

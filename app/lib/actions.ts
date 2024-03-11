@@ -1,6 +1,5 @@
-import { Post } from "./definitions";
 import { links, posts } from "./mockup";
-import { strToSlug } from "./utils";
+
 // import { sql } from '@vercel/postgres';
 // import { unstable_noStore as noStore } from 'next/cache';
 
@@ -16,31 +15,44 @@ export async function fetchLatestPosts() {
   try {
     await delay(3000);
     return Promise.resolve(
-      posts.map(({ title, src, category }) => ({
+      posts.map(({ id, title, src, category }) => ({
         title,
         src,
-        href: `/posts/${category}/${strToSlug(title)}`,
-      }))
+        href: `/posts/${category}/${id}`,
+      })),
     );
   } catch (error) {
     throw new Error("Failed to fetch latest posts");
   }
 }
 
-export async function fetchPostsByKey(key: string) {
+export async function fetchPostsByCategory(category: string) {
   try {
     await delay(3000);
     return Promise.resolve(
       posts
-        .filter(({ category }) => category === key)
-        .map(({ title, src, category }) => ({
+        .filter((post) => post.category === category)
+        .map(({ id, title, src }) => ({
           title,
           src,
-          href: `/posts/${category}/${strToSlug(title)}`,
-        }))
+          href: `/posts/${category}?id=${id}`,
+        })),
     );
   } catch (error) {
-    throw new Error("Failed to fetch posts by " + key);
+    throw new Error("Failed to fetch posts by " + category);
+  }
+}
+
+export async function fetchPostByCategoryAndId(category: string, id: string) {
+  try {
+    await delay(3000);
+    return Promise.resolve(
+      posts.find((post) => post.category === category && post.id === id),
+    );
+  } catch (error) {
+    throw new Error(
+      `Failed to fetch post by category: ${category} | id: ${id}`,
+    );
   }
 }
 
