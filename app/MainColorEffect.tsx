@@ -8,9 +8,10 @@ export default function MainColorEffect() {
     const root = document.querySelector(":root")! as HTMLHtmlElement;
     const id = setInterval(() => {
       root.style.setProperty("--main-color", textSeaColors[i]);
-      i = (i + 1) % 11;
-    }, 11e3);
+      i = ++i % textSeaColors.length;
+    }, 1e4);
     return () => clearInterval(id);
   }, []);
+
   return <></>;
 }
