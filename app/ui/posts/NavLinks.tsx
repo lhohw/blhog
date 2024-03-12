@@ -31,45 +31,48 @@ export default function NavLinks({ links }: NavLinksProps) {
   }, [isOpen]);
 
   return (
-    <>
-      <div className="flex flex-none items-center h-14">
-        <div
-          className={"relative flex flex-1 items-center ml-[30px] lg:hidden"}
-        >
-          <Menu
-            className={"cursor-pointer bg-darkgray z-10"}
-            onClick={toggle}
-          />
-        </div>
-      </div>
-      <ul className="flex flex-col overflow-y-scroll h-full">
-        {links.map(({ name, href, icon }) => (
-          <Link
-            key={name}
-            className="flex items-center flex-none h-14 py-2 px-4"
-            href={`/posts/${href}`}
+    <div className="flex flex-col h-full rounded-tr-2xl relative">
+      <div className="flex flex-col h-full max-lg:absolute max-lg:left-0 bg-darkgray rounded-tr-2xl z-10">
+        <div className="flex flex-none items-center h-14">
+          <div
+            className={"relative flex flex-1 items-center ml-[30px] lg:hidden"}
           >
-            <div
-              className="flex flex-1 flex-row items-center py-2 pl-4 rounded-lg cursor-pointer hover:bg-[#2D2C31] transition-color"
-              title={name}
+            <Menu
+              className={"cursor-pointer bg-darkgray z-10"}
+              onClick={toggle}
+            />
+          </div>
+        </div>
+        <ul className="flex flex-col overflow-y-scroll h-full">
+          {links.map(({ name, href, icon }) => (
+            <Link
+              key={name}
+              className="flex items-center flex-none h-14 py-2 px-4"
+              href={`/posts/${href}`}
             >
-              <Image src={icon} alt={name} width={16} height={16} />
               <div
-                className={clsx(
-                  "flex flex-1 ml-2 mr-4 overflow-hidden",
-                  isOpen ? "w-40" : "w-0",
-                )}
-                style={{
-                  transition: `width .375s ease-in-out`,
-                  transitionDelay: "0.125s",
-                }}
+                className="flex flex-1 flex-row items-center py-2 px-4 rounded-lg cursor-pointer hover:bg-[#2D2C31] transition-color"
+                title={name}
               >
-                {name}
+                <Image src={icon} alt={name} width={16} height={16} />
+                <div
+                  className={clsx(
+                    "flex flex-1 ml-2 mr-4 overflow-hidden",
+                    isOpen ? "w-40" : "w-0",
+                  )}
+                  style={{
+                    transition: `width .375s ease-in-out`,
+                    transitionDelay: "0.125s",
+                  }}
+                >
+                  {name}
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </ul>
-    </>
+            </Link>
+          ))}
+        </ul>
+      </div>
+      <div className="w-20" />
+    </div>
   );
 }
