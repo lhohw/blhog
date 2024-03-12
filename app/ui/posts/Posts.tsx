@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default async function Posts({ posts }: { posts: PostItemProps[] }) {
   return (
-    <div className="w-full max-w-[808px] grid grid-cols-2 lg:grid-cols-4 p-2 gap-2 border-slight border-sea-200">
+    <div className="w-full max-w-[808px] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 p-2 gap-2 border-slight border-sea-200">
       {posts.map((props) => (
         <PostItem key={props.title} {...props} />
       ))}

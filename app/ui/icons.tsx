@@ -4,6 +4,7 @@ export type IconProps = {
   size?: number;
   strokeWidth?: number;
   className?: string;
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 };
 
 export const Menu = ({
