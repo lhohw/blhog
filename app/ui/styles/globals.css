@@ -3,21 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 203, 202, 206, 1;
-  --background-start-rgb: 27, 30, 29, 0.8;
-  --background-end-rgb: 27, 9, 19, 0.342;
+  --color-hs: 255, 4%;
+  --color-l: 80%;
+  --background-hs: 180, 25%;
+  --background-l: 11%;
   --main-color: #8ebac7;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      225deg,
-      transparent 15%,
-      rgba(var(--background-start-rgb)) 30%,
-      rgba(var(--background-end-rgb)) 100%
-    ),
-    rgba(var(--background-start-rgb));
+  color: hsla(var(--color-hs), var(--color-l));
+  background: hsla(var(--background-hs), var(--background-l), 0.7);
 }
 
 @layer utilities {
