@@ -1,10 +1,17 @@
 import rehypePrism from "@mapbox/rehype-prism";
 import clsx from "clsx";
 import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
+import Link from "next/link";
 
 const components: MDXRemoteProps["components"] = {
-  a: (props) => (
-    <a className={clsx(props.className, "main-color")}>{props.children}</a>
+  a: ({ children, className, href, ...props }) => (
+    <Link
+      className={clsx(className, "main-color")}
+      href={href || ""}
+      {...props}
+    >
+      {children}
+    </Link>
   ),
   h1: (props) => (
     <h1 className={clsx(props.className, "main-color")}>{props.children}</h1>
@@ -26,7 +33,7 @@ const components: MDXRemoteProps["components"] = {
   ),
 };
 
-export async function CustomMDX({ source }: MDXRemoteProps) {
+export async function CustomMDX({ source }: { source: string }) {
   return (
     <MDXRemote
       source={source}
@@ -34,6 +41,7 @@ export async function CustomMDX({ source }: MDXRemoteProps) {
         mdxOptions: {
           rehypePlugins: [rehypePrism],
         },
+        parseFrontmatter: true,
       }}
       components={components}
     />
