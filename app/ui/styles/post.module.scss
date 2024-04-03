@@ -1,8 +1,7 @@
 @import "./variables.module.scss";
 
 .post {
-  padding: 0 1rem;
-  margin-bottom: 2em;
+  padding: 2rem 3rem;
   @media (min-width: 480px) {
     font-size: calc(-0.95048vw + 1.4568rem);
   }
@@ -16,8 +15,9 @@
     font-size: calc(0.50823vw + 0.4879rem);
   }
   
-  .article {
+  article {
     word-break: normal;
+    overflow-wrap: break-word;
     line-height: 1.6;
     /** heading */
     & h1, h2, h3, h4, h5, h6 {

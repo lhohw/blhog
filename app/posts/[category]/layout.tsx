@@ -1,10 +1,13 @@
-import type { PropsWithChildren } from "react";
-import Breadcrumbs from "@/app/ui/posts/[category]/Breadcrumbs";
+import { PropsWithChildren, Suspense } from "react";
+import SideNav from "@/app/ui/posts/SideNav";
+import { SideNavSkeleton } from "@/app/ui/skeletons";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <div className="flex flex-1 flex-col p-4 overflow-y-scroll">
-      <Breadcrumbs />
+    <div className="flex w-full">
+      <Suspense key={"side-nav"} fallback={<SideNavSkeleton />}>
+        <SideNav />
+      </Suspense>
       {children}
     </div>
   );

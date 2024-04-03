@@ -1,12 +1,16 @@
+import { Suspense } from "react";
 import CategoryPosts from "@/app/ui/posts/[category]/CategoryPosts";
-import Post from "@/app/ui/posts/[category]/Post";
+import Breadcrumbs from "@/app/ui/posts/[category]/Breadcrumbs";
+import { PostsSkeleton } from "@/app/ui/skeletons";
 
-export default function Page({
-  params,
-  searchParams,
-}: PageProps<{ category: string }, { id?: string }>) {
+export default function Page({ params }: PageProps<{ category: string }>) {
   const { category } = params;
-  const id = searchParams?.id;
-  if (id == undefined) return <CategoryPosts category={category} />;
-  return <Post category={category} id={id} />;
+  return (
+    <div className="flex flex-1 flex-col p-4 overflow-y-scroll">
+      <Breadcrumbs />
+      <Suspense key={"category-posts"} fallback={<PostsSkeleton />}>
+        <CategoryPosts category={category} />
+      </Suspense>
+    </div>
+  );
 }

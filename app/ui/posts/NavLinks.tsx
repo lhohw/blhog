@@ -1,9 +1,8 @@
 "use client";
-import type { Link as LinkType } from "@/app/lib/definitions";
+import type { Link as LinkType } from "@/app/const/definitions";
 import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
-import Image from "next/image";
 import { Menu } from "@/app/ui/icons";
 import { throttling } from "@/app/lib/utils";
 
@@ -44,17 +43,17 @@ export default function NavLinks({ links }: NavLinksProps) {
           </div>
         </div>
         <ul className="flex flex-col overflow-y-scroll h-full">
-          {links.map(({ name, href, icon }) => (
+          {links.map(({ category }) => (
             <Link
-              key={name}
+              key={category}
               className="flex items-center flex-none h-14 py-2 px-4"
-              href={`/posts/${href}`}
+              href={`/posts/${category}`}
             >
               <div
                 className="flex flex-1 flex-row items-center py-2 px-4 rounded-lg cursor-pointer hover:bg-[#2D2C31] transition-color"
-                title={name}
+                title={category}
               >
-                <Image src={icon} alt={name} width={16} height={16} />
+                {/* <Image src={icon} alt={name} width={16} height={16} /> */}
                 <div
                   className={clsx(
                     "flex flex-1 ml-2 mr-4 overflow-hidden",
@@ -65,7 +64,7 @@ export default function NavLinks({ links }: NavLinksProps) {
                     transitionDelay: "0.125s",
                   }}
                 >
-                  {name}
+                  {category}
                 </div>
               </div>
             </Link>

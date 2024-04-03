@@ -1,9 +1,10 @@
 import type { Post } from "@/app/const/definitions";
+import Image from "next/image";
 import Link from "next/link";
 
-export default async function Posts({ posts }: { posts: PostItemProps[] }) {
+export default async function Posts({ posts }: { posts: Post[] }) {
   return (
-    <div className="w-full max-w-[808px] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 p-2 gap-2 border-slight border-sea-200">
+    <div className="max-w-[816px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 p-2 gap-2 border-slight border-sea-200">
       {posts.map((props) => (
         <PostItem key={props.title} {...props} />
       ))}
@@ -11,21 +12,21 @@ export default async function Posts({ posts }: { posts: PostItemProps[] }) {
   );
 }
 
-export type PostItemProps = Pick<Post, "title" | "photo_url"> & {
-  href: string;
-};
-function PostItem({ title, photo_url, href }: PostItemProps) {
+function PostItem({ title, category, slug, photo_url, alt }: Post) {
+  const href = `/posts/${category}/${slug}`;
   return (
     <Link href={href}>
-      <div
-        className="relative flex min-w-20 min-h-20 justify-center text-center items-end pb-4 border-slight border-sea-200 cursor-pointer rounded-lg aspect-square"
-        style={{
-          background: `no-repeat bottom/100% url(${photo_url}), #00000023`,
-          backgroundBlendMode: "darken",
-          backgroundSize: "cover",
-        }}
-      >
-        <span className="font-bold text-lg bottom-4 text-white">{title}</span>
+      <div className="relative flex min-w-20 min-h-20 justify-center text-center items-end border-slight border-sea-200 cursor-pointer rounded-lg aspect-square">
+        <Image
+          className="w-full h-full object-cover rounded-lg"
+          width={194}
+          height={194}
+          alt={alt}
+          src={photo_url}
+        />
+        <span className="px-2 absolute font-bold text-lg bottom-4 text-[hsl(var(--color-hs),100%)]">
+          {title}
+        </span>
       </div>
     </Link>
   );

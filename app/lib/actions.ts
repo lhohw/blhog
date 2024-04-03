@@ -2,7 +2,6 @@
 
 import { Post } from "@/app/const/definitions";
 import DBPool from "@/app/class/DBClient";
-import { PostItemProps } from "../ui/posts/Posts";
 import { withImageSize } from "./utils";
 
 // import { sql } from '@vercel/postgres';
@@ -16,25 +15,26 @@ export async function fetchDirectoryNames(): Promise<Pick<Post, "category">[]> {
     );
     return res.rows;
   } catch (error) {
+    console.error(error);
     throw new Error("Failed to fetch directory names.");
   }
 }
-export async function fetchLatestPosts(): Promise<PostItemProps[]> {
+export async function fetchLatestPosts(): Promise<Post[]> {
   try {
     const client = await DBPool.getInstance();
     const res = await client.query<Post>(`
-      SELECT title, id, photo_url, category
+      SELECT *
         FROM posts
         ORDER BY posts.updated_at DESC
         LIMIT 12
     `);
     const latestPosts = res.rows;
-    return latestPosts.map(({ id, title, photo_url, category }) => ({
-      title,
-      photo_url: withImageSize(photo_url, 320, "auto"),
-      href: `/posts/${category}?id=${id}`,
+    return latestPosts.map((post) => ({
+      ...post,
+      photo_url: withImageSize(post.photo_url, 388, 388),
     }));
   } catch (error) {
+    console.error(error);
     throw new Error("Failed to fetch latest posts");
   }
 }
@@ -43,42 +43,40 @@ export async function fetchPostsByCategory(category: string) {
   try {
     const client = await DBPool.getInstance();
     const res = await client.query<Post>({
-      text: `SELECT title, id, photo_url, category
+      text: `SELECT *
         FROM posts
         WHERE category=$1`,
       values: [category],
     });
     const posts = res.rows;
-    return posts
-      .filter((post) => post.category === category)
-      .map(({ id, title, photo_url }) => ({
-        title,
-        photo_url: withImageSize(photo_url, 320),
-        href: `/posts/${category}?id=${id}`,
-      }));
+    return posts.map((post) => ({
+      ...post,
+      photo_url: withImageSize(post.photo_url, 388),
+    }));
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch posts by " + category);
   }
 }
 
-export async function fetchPostByCategoryAndId(
+export async function fetchPostByCategoryAndSlug(
   category: string,
-  id: string,
+  slug: string,
 ): Promise<Post | null> {
   try {
     const client = await DBPool.getInstance();
     const res = await client.query<Post>({
       text: `SELECT * FROM posts
-        WHERE category=$1 AND id=$2`,
-      values: [category, id],
+        WHERE category=$1 AND slug=$2`,
+      values: [category, slug],
     });
 
     const post = res.rows[0] || null;
     return post;
   } catch (error) {
+    console.error(error);
     throw new Error(
-      `Failed to fetch post by category: ${category} | id: ${id}`,
+      `Failed to fetch post by category: ${category} | slug: ${slug}`,
     );
   }
 }

@@ -4,7 +4,7 @@
 
 :root {
   --color-hs: 255, 4%;
-  --color-l: 80%;
+  --color-l: 85%;
   --background-hs: 180, 25%;
   --background-l: 11%;
   --main-color: #8ebac7;
@@ -42,4 +42,8 @@ body {
   .main-color {
     color: #8ebac7;
   }
+}
+
+.area {
+  border: 0.5px solid #8ebac7;
 }
