@@ -8,6 +8,7 @@ const components: MDXRemoteProps["components"] = {
     <Link
       className={clsx(className, "main-color")}
       href={href || ""}
+      target={href?.match(/^http[s]?:\/\//) ? "_blank" : "_self"}
       {...props}
     >
       {children}
