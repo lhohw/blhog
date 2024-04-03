@@ -4,16 +4,19 @@ import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
 import Link from "next/link";
 
 const components: MDXRemoteProps["components"] = {
-  a: ({ children, className, href, ...props }) => (
-    <Link
-      className={clsx(className, "main-color")}
-      href={href || ""}
-      target={href?.match(/^http[s]?:\/\//) ? "_blank" : "_self"}
-      {...props}
-    >
-      {children}
-    </Link>
-  ),
+  a: ({ children, className, href, ...props }) => {
+    if (href?.endsWith(".md")) href = href.replace(/.md$/, "");
+    return (
+      <Link
+        className={clsx(className, "main-color")}
+        href={href || ""}
+        target={href?.match(/^http[s]?:\/\//) ? "_blank" : "_self"}
+        {...props}
+      >
+        {children}
+      </Link>
+    );
+  },
   h1: (props) => (
     <h1 className={clsx(props.className, "main-color")}>{props.children}</h1>
   ),
