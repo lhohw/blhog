@@ -42,7 +42,7 @@ export default function NavLinks({ links }: NavLinksProps) {
             />
           </div>
         </div>
-        <ul className="flex flex-col overflow-y-scroll h-full">
+        <ul className="flex flex-col overflow-y-scroll h-full text-nowrap">
           {links.map(({ category }) => (
             <Link
               key={category}
