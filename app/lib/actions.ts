@@ -2,10 +2,7 @@
 
 import { Post } from "@/app/const/definitions";
 import DBPool from "@/app/class/DBClient";
-import { withImageSize } from "./utils";
-
-// import { sql } from '@vercel/postgres';
-// import { unstable_noStore as noStore } from 'next/cache';
+import { withImageSize } from "@/app/lib/utils";
 
 export async function fetchDirectoryNames(): Promise<Pick<Post, "category">[]> {
   try {

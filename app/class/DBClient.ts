@@ -1,12 +1,12 @@
-import { Pool } from "pg";
+// import { Pool } from "pg";
+import { VercelPoolClient, db } from "@vercel/postgres";
 
 class DBPool {
-  private static uniqueInstance: Pool | null = null;
+  private static uniqueInstance: VercelPoolClient | null = null;
   private constructor() {}
   static async getInstance() {
     if (!DBPool.uniqueInstance) {
-      DBPool.uniqueInstance = new Pool();
-      await DBPool.uniqueInstance.connect();
+      DBPool.uniqueInstance = await db.connect();
     }
     return DBPool.uniqueInstance;
   }
