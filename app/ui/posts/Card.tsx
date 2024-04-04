@@ -1,4 +1,5 @@
 import { Post } from "@/app/const/definitions";
+import { format } from "@/app/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -39,9 +40,7 @@ export default function Card({
             <div className="font-bold leading-snug">
               <span>{title}</span>
             </div>
-            <div className="mt-2 text-sm opacity-70">
-              {updated_at.toLocaleDateString()}
-            </div>
+            <div className="mt-2 text-sm opacity-70">{format(updated_at)}</div>
           </div>
         </div>
       </Link>

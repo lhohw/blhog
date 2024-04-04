@@ -31,3 +31,8 @@ export const decompress = (body: Uint8Array) => {
   const decoded = decoder.decode(decompressed);
   return decoded;
 };
+
+export const format = (date: Date) => {
+  const formatter = Intl.DateTimeFormat("ko-KR", { dateStyle: "medium" });
+  return formatter.format(date);
+};

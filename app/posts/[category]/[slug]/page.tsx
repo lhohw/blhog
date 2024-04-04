@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { fetchPostByCategoryAndSlug } from "@/app/lib/actions";
-import { decompress } from "@/app/lib/utils";
+import { decompress, format } from "@/app/lib/utils";
 import { CustomMDX } from "@/app/ui/posts/[category]/CustomMDX";
 
 import "@/app/ui/styles/post-prism.scss";
@@ -24,9 +24,7 @@ export default async function Post({
       <h1 className="text-4xl ml-4 my-6 text-left font-semibold main-color">
         {title}
       </h1>
-      <h4 className="mr-4 text-right mb-4 text-sm">
-        {updated_at.toLocaleDateString()}
-      </h4>
+      <h4 className="mr-4 text-right mb-4 text-sm">{format(updated_at)}</h4>
       <article className="prism">
         <CustomMDX source={decompressed} />
       </article>
