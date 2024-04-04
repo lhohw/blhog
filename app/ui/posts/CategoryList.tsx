@@ -10,7 +10,7 @@ export default async function CategoryList() {
   }));
 
   return (
-    <AreaBox title="Category" classNames="max-md:mt-4 md:ml-4">
+    <AreaBox title="Category" classNames="max-md:mb-4 md:ml-4">
       <div className="flex flex-col h-full bg-darkgray rounded">
         <ul className="flex flex-col overflow-y-scroll h-full text-nowrap">
           {list.map(({ title, href }) => (

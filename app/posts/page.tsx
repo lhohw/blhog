@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <div className="flex flex-[2] flex-col m-1 p-3">
       <div className="flex-1 flex flex-col overflow-y-scroll">
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col-reverse md:flex-row">
           <Suspense key={"posts"} fallback={<PostsSkeleton />}>
             <LatestPosts />
           </Suspense>
