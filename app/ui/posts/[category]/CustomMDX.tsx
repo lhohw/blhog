@@ -1,40 +1,33 @@
-import rehypePrism from "@mapbox/rehype-prism";
+import React from "react";
 import clsx from "clsx";
-import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
 import Link from "next/link";
+import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
+import rehypePrism from "@mapbox/rehype-prism";
+import { createMDXHeadings } from "@/app/lib/utils";
+import { httpRegex, mdLinkRegex } from "@/app/const/regex";
 
 const components: MDXRemoteProps["components"] = {
-  a: ({ children, className, href, ...props }) => {
-    if (href?.endsWith(".md")) href = href.replace(/.md$/, "");
+  a: ({ children, className, href = "", ...props }) => {
+    href = decodeURIComponent(href);
+    const isHttp = href.match(httpRegex);
+    if (!isHttp) {
+      const matched = mdLinkRegex.exec(href);
+      if (matched) {
+        href = href.replace(matched[0], matched[1] || "");
+      }
+    }
     return (
       <Link
         className={clsx(className, "main-color")}
-        href={href || ""}
-        target={href?.match(/^http[s]?:\/\//) ? "_blank" : "_self"}
+        href={href}
+        target={isHttp ? "_blank" : "_self"}
         {...props}
       >
         {children}
       </Link>
     );
   },
-  h1: (props) => (
-    <h1 className={clsx(props.className, "main-color")}>{props.children}</h1>
-  ),
-  h2: (props) => (
-    <h2 className={clsx(props.className, "main-color")}>{props.children}</h2>
-  ),
-  h3: (props) => (
-    <h3 className={clsx(props.className, "main-color")}>{props.children}</h3>
-  ),
-  h4: (props) => (
-    <h4 className={clsx(props.className, "main-color")}>{props.children}</h4>
-  ),
-  h5: (props) => (
-    <h5 className={clsx(props.className, "main-color")}>{props.children}</h5>
-  ),
-  h6: (props) => (
-    <h6 className={clsx(props.className, "main-color")}>{props.children}</h6>
-  ),
+  ...createMDXHeadings(),
 };
 
 export async function CustomMDX({ source }: { source: string }) {
