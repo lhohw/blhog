@@ -1,7 +1,7 @@
-import clsx from "clsx";
-import { MDXRemoteProps } from "next-mdx-remote/rsc";
 import React from "react";
+import clsx from "clsx";
 import { gunzipSync } from "zlib";
+import { MDXRemoteProps } from "next-mdx-remote/rsc";
 
 export const slugToStr = (slug: string) => slug.split("-").join(" ");
 export const strToSlug = (str: string) => str.split(" ").join("-");
@@ -40,21 +40,18 @@ export const format = (date: Date) => {
   return formatter.format(date);
 };
 
+type DetailedHTMLProps<T> = React.DetailedHTMLProps<React.HTMLAttributes<T>, T>;
 export const convertToMDX =
   <T extends keyof HTMLElementTagNameMap, E = HTMLElementTagNameMap[T]>(
     tagName: T,
-    id?:
-      | string
-      | ((
-          props: React.DetailedHTMLProps<React.HTMLAttributes<E>, E>,
-        ) => string),
+    id?: string,
   ) =>
-  (props: React.DetailedHTMLProps<React.HTMLAttributes<E>, E>) => {
+  (props: DetailedHTMLProps<E>) => {
     const h = React.createElement(
       tagName,
       {
         className: clsx(props.className, "main-color"),
-        id: id && (typeof id === "string" ? id : id(props)),
+        id,
       },
       props.children,
     );
@@ -66,12 +63,14 @@ export const createMDXHeadings = () => {
     MDXRemoteProps["components"]
   >((acc, _, idx) => {
     const tagName = `h${idx + 1}`;
-    const heading = convertToMDX(tagName as "h1", (props) =>
-      strToSlug(props.children as string),
-    );
+    const createHeading = (props: DetailedHTMLProps<HTMLHeadingElement>) => {
+      const h = convertToMDX(tagName as "h1")(props);
+      h.props.id = strToSlug(props.children as string);
+      return h;
+    };
     return {
       ...acc,
-      [tagName]: heading,
+      [tagName]: createHeading,
     };
   }, {});
 
