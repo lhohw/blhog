@@ -8,6 +8,7 @@ import { httpRegex, mdLinkRegex } from "@/app/const/regex";
 
 const components: MDXRemoteProps["components"] = {
   a: ({ children, className, href = "", ...props }) => {
+    const isURI = children === href;
     href = decodeURIComponent(href);
     const isHttp = href.match(httpRegex);
     if (!isHttp) {
@@ -15,6 +16,8 @@ const components: MDXRemoteProps["components"] = {
       if (matched) {
         href = href.replace(matched[0], matched[1] || "");
       }
+    } else if (isURI) {
+      children = href;
     }
     return (
       <Link
