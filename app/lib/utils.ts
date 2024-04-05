@@ -64,9 +64,8 @@ export const createMDXHeadings = () => {
   >((acc, _, idx) => {
     const tagName = `h${idx + 1}`;
     const createHeading = (props: DetailedHTMLProps<HTMLHeadingElement>) => {
-      const h = convertToMDX(tagName as "h1")(props);
-      h.props.id = strToSlug(props.children as string);
-      return h;
+      const id = strToSlug(props.children as string);
+      return convertToMDX(tagName as "h1", id)(props);
     };
     return {
       ...acc,
