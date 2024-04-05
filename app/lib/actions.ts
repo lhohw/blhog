@@ -28,7 +28,7 @@ export async function fetchLatestPosts(): Promise<Post[]> {
     const latestPosts = res.rows;
     return latestPosts.map((post) => ({
       ...post,
-      photo_url: withImageSize(post.photo_url, 388, 388),
+      photo_url: withImageSize(post.photo_url, 640, 400),
     }));
   } catch (error) {
     console.error(error);
@@ -48,7 +48,7 @@ export async function fetchPostsByCategory(category: string) {
     const posts = res.rows;
     return posts.map((post) => ({
       ...post,
-      photo_url: withImageSize(post.photo_url, 388),
+      photo_url: withImageSize(post.photo_url, 640, 400),
     }));
   } catch (error) {
     console.error(error);
