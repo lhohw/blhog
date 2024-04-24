@@ -11,7 +11,7 @@ export type NavLinksProps = {
 };
 export default function NavLinks({ links }: NavLinksProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const height = useMemo(() => (links.length + 1) * 64 + "px", [links]);
+  const height = useMemo(() => (links.length + 1.25) * 56 + "px", [links]);
   const toggle = useCallback(() => {
     setIsOpen((isOpen) => !isOpen);
   }, []);
