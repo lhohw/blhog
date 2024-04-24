@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 
 export default async function Layout({ children }: PropsWithChildren) {
   return (
-    <main className="min-h-screen pt-3 px-6 pb-6">
-      <div className="flex flex-col flex-1 h-[calc(100vh-36px)] bg-dark rounded-lg">
+    <main className="min-h-screen p-1 sm:pt-3 sm:px-6 sm:pb-6">
+      <div className="flex flex-col flex-1 h-[calc(100vh-8px)] sm:h-[calc(100vh-36px)] bg-dark rounded-lg">
         <Header />
-        <div className="flex flex-1 overflow-y-hidden">
+        <div className="flex flex-1 flex-col md:flex-row overflow-y-hidden">
           <SideNavWrapper>
             <Suspense key={"side-nav"} fallback={<SideNavSkeleton />}>
               <SideNav />
@@ -27,11 +27,11 @@ export default async function Layout({ children }: PropsWithChildren) {
 }
 
 const SideNavWrapper = ({ children }: PropsWithChildren) => (
-  <div className="flex flex-col h-full lg:min-w-[295px] bg-darkgray rounded-tr-2xl">
+  <div className="flex flex-col md:flex-1 md:min-w-[230px] md:max-w-[295px] bg-darkgray rounded-tr-2xl mx-4 mt-4 mb-0 md:mb-4">
     {children}
   </div>
 );
 
 const ContentWrapper = ({ children }: PropsWithChildren) => (
-  <div className="flex flex-1 flex-col p-4 overflow-y-scroll">{children}</div>
+  <div className="flex flex-1.6 flex-col p-4 overflow-y-scroll">{children}</div>
 );

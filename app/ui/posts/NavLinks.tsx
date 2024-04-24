@@ -1,6 +1,6 @@
 "use client";
 import type { Link as LinkType } from "@/app/const/definitions";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
 import { Menu } from "@/app/ui/icons";
@@ -11,30 +11,47 @@ export type NavLinksProps = {
 };
 export default function NavLinks({ links }: NavLinksProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const height = useMemo(() => (links.length + 1) * 64 + "px", [links]);
   const toggle = useCallback(() => {
     setIsOpen((isOpen) => !isOpen);
+  }, []);
+  const close = useCallback(() => {
+    setIsOpen(false);
   }, []);
 
   useEffect(() => {
     const throttledHandleResize = throttling(function (e: UIEvent) {
-      if (!isOpen) return;
-      const target = e.target as typeof window;
-      if (target.outerWidth >= 1024) {
-        setIsOpen(false);
-      }
+      if (isOpen) close();
     }, 150);
+
+    const clickListener = (e: MouseEvent) => {
+      if (!isOpen) return;
+
+      const target = e.target as HTMLDivElement;
+      if (!target.closest("#nav-link")) close();
+    };
+
     window.addEventListener("resize", throttledHandleResize);
+    window.addEventListener("click", clickListener);
     return () => {
       window.removeEventListener("resize", throttledHandleResize);
+      window.removeEventListener("click", clickListener);
     };
-  }, [isOpen]);
+  }, [isOpen, height, close]);
 
   return (
-    <div className="flex flex-col h-full rounded-tr-2xl relative">
-      <div className="flex flex-col h-full max-lg:absolute max-lg:left-0 bg-darkgray rounded-tr-2xl z-10">
+    <div id="nav-link" className="flex flex-col h-full rounded-tr-2xl relative">
+      <div
+        className={clsx(
+          "flex flex-col w-full h-14 bg-darkgray rounded-tr-2xl z-10 transition-all duration-300 delay-100 absolute top-0 left-0 bg-opacity-90",
+          "md:h-full md:static",
+          isOpen && "ring-sea-200 ring-inset ring-1",
+        )}
+        style={isOpen ? { height } : {}}
+      >
         <div className="flex flex-none items-center h-14">
           <div
-            className={"relative flex flex-1 items-center ml-[30px] lg:hidden"}
+            className={"relative flex flex-1 items-center ml-[30px] md:hidden"}
           >
             <Menu
               className={"cursor-pointer bg-darkgray z-10"}
@@ -48,22 +65,14 @@ export default function NavLinks({ links }: NavLinksProps) {
               key={category}
               className="flex items-center flex-none h-14 py-2 px-4"
               href={`/posts/${category}`}
+              onClick={close}
             >
               <div
                 className="flex flex-1 flex-row items-center py-2 px-4 rounded-lg cursor-pointer hover:bg-[#2D2C31] transition-color"
                 title={category}
               >
                 {/* <Image src={icon} alt={name} width={16} height={16} /> */}
-                <div
-                  className={clsx(
-                    "flex flex-1 ml-2 mr-4 overflow-hidden",
-                    isOpen ? "w-40" : "w-0",
-                  )}
-                  style={{
-                    transition: `width .375s ease-in-out`,
-                    transitionDelay: "0.125s",
-                  }}
-                >
+                <div className={clsx("flex flex-1 ml-2 mr-4 overflow-hidden")}>
                   {category}
                 </div>
               </div>
@@ -71,7 +80,7 @@ export default function NavLinks({ links }: NavLinksProps) {
           ))}
         </ul>
       </div>
-      <div className="w-20" />
+      <div className="h-14 md:hidden bg-opacity-90" />
     </div>
   );
 }

@@ -36,6 +36,10 @@ const config: Config = {
       flex: {
         "1.6": "1.618 1.618 0%",
       },
+      transitionProperty: {
+        height: "height",
+        width: "width",
+      },
     },
   },
   plugins: [],
