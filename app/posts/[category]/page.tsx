@@ -6,11 +6,11 @@ import { PostsSkeleton } from "@/app/ui/skeletons";
 export default function Page({ params }: PageProps<{ category: string }>) {
   const { category } = params;
   return (
-    <div className="flex flex-1 flex-col p-4 overflow-y-scroll">
+    <>
       <Breadcrumbs />
       <Suspense key={"category-posts"} fallback={<PostsSkeleton />}>
         <CategoryPosts category={category} />
       </Suspense>
-    </div>
+    </>
   );
 }
