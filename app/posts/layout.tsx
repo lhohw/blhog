@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 export default async function Layout({ children }: PropsWithChildren) {
   return (
-    <main className="min-h-screen p-1 sm:pt-3 sm:px-6 sm:pb-6">
-      <div className="flex flex-col flex-1 h-[calc(100vh-8px)] sm:h-[calc(100vh-36px)] bg-dark rounded-lg">
+    <main className="p-1 sm:pt-3 sm:px-6 sm:pb-6">
+      <div className="flex flex-col flex-1 h-[calc(100dvh-8px)] sm:h-[calc(100dvh-36px)] bg-dark rounded-lg">
         <Header />
         <div className="flex flex-1 flex-col md:flex-row overflow-y-hidden">
           <SideNavWrapper>
