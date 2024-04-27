@@ -42,7 +42,8 @@ export async function fetchPostsByCategory(category: string) {
     const res = await client.query<Post>({
       text: `SELECT *
         FROM posts
-        WHERE category=$1`,
+        WHERE category=$1
+        ORDER BY posts.updated_at DESC`,
       values: [category],
     });
     const posts = res.rows;
