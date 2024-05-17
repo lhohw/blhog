@@ -5,7 +5,7 @@ import { PostSkeleton } from "@/app/ui/skeletons";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <div className={clsx("w-full overflow-y-scroll", styles.post)}>
+    <div className={clsx("w-full", styles.post)}>
       <Suspense fallback={<PostSkeleton />}>{children}</Suspense>
     </div>
   );
