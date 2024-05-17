@@ -1,6 +1,6 @@
-import { fetchDirectoryNames } from "@/app/lib/actions";
-import AreaBox from "@/app/ui/AreaBox";
 import Link from "next/link";
+import AreaBox from "@/app/ui/AreaBox";
+import { fetchDirectoryNames } from "@/app/lib/api/post";
 
 export default async function CategoryList() {
   const links = await fetchDirectoryNames();

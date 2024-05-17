@@ -1,4 +1,4 @@
-import { fetchPostsByCategory } from "@/app/lib/actions";
+import { fetchPostsByCategory } from "@/app/lib/api/post";
 import Posts from "@/app/ui/posts/Posts";
 
 export default async function CategoryPosts({

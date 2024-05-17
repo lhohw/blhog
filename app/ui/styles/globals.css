@@ -5,14 +5,14 @@
 :root {
   --color-hs: 255, 4%;
   --color-l: 85%;
-  --background-hs: 180, 25%;
-  --background-l: 11%;
+  --background-hs: 240, 50%;
+  --background-l: 1%;
   --main-color: #8ebac7;
 }
 
 body {
-  color: hsla(var(--color-hs), var(--color-l));
-  background: hsla(var(--background-hs), var(--background-l), 0.7);
+  color: hsl(var(--color-hs), var(--color-l));
+  background: hsl(var(--background-hs), var(--background-l));
 }
 
 @layer utilities {

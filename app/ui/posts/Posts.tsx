@@ -1,5 +1,5 @@
 import type { Post } from "@/app/const/definitions";
-import Card from "./Card";
+import Card from "@/app/ui/posts/Card";
 
 export default async function Posts({ posts }: { posts: Post[] }) {
   return (

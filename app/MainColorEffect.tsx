@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect } from "react";
 import { textSeaColors } from "@/app/const/color";
 
@@ -10,6 +11,7 @@ export default function MainColorEffect() {
       root.style.setProperty("--main-color", textSeaColors[i]);
       i = ++i % textSeaColors.length;
     }, 1e4);
+
     return () => clearInterval(id);
   }, []);
 

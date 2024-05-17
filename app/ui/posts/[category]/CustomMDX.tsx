@@ -3,7 +3,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
 import rehypePrism from "@mapbox/rehype-prism";
-import { createMDXHeadings } from "@/app/lib/utils";
+import { createMDXHeadings } from "@/app/lib/utils/markdown";
 import { httpRegex, mdLinkRegex } from "@/app/const/regex";
 
 const components: MDXRemoteProps["components"] = {

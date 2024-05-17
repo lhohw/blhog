@@ -1,24 +1,8 @@
-import React from "react";
 import clsx from "clsx";
-import { gunzipSync } from "zlib";
 import { MDXRemoteProps } from "next-mdx-remote/rsc";
-
-export const slugToStr = (slug: string) => slug.split("-").join(" ");
-export const strToSlug = (str: string) => str.split(" ").join("-");
-
-export const throttling = <T extends (...args: any[]) => void>(
-  cb: T extends infer R ? R : (...args: any[]) => void,
-  throttle = 500,
-) => {
-  let timer = 0;
-  return (...args: Parameters<T>) => {
-    const current = Date.now();
-    if (current >= timer + throttle) {
-      cb(...args);
-      timer = current;
-    }
-  };
-};
+import React from "react";
+import { gunzipSync } from "zlib";
+import { strToSlug } from "@/app/lib/utils/string";
 
 export const withImageSize = (
   url: string,
@@ -33,11 +17,6 @@ export const decompress = (body: Uint8Array) => {
   const decoder = new TextDecoder("utf-8");
   const decoded = decoder.decode(decompressed);
   return decoded;
-};
-
-export const format = (date: Date) => {
-  const formatter = Intl.DateTimeFormat("ko-KR", { dateStyle: "medium" });
-  return formatter.format(date);
 };
 
 type DetailedHTMLProps<T> = React.DetailedHTMLProps<React.HTMLAttributes<T>, T>;
@@ -74,4 +53,9 @@ export const createMDXHeadings = () => {
   }, {});
 
   return headings;
+};
+
+export const format = (date: Date) => {
+  const formatter = Intl.DateTimeFormat("ko-KR", { dateStyle: "medium" });
+  return formatter.format(date);
 };

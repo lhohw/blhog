@@ -1,8 +1,9 @@
 "use client";
-import { slugToStr } from "@/app/lib/utils";
+
 import { clsx } from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { slugToStr } from "@/app/lib/utils/string";
 
 export default function Breadcrumbs() {
   const pathname = usePathname();

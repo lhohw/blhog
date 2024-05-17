@@ -1,5 +1,5 @@
 import { Post } from "@/app/const/definitions";
-import { format } from "@/app/lib/utils";
+import { format } from "@/app/lib/utils/markdown";
 import Image from "next/image";
 import Link from "next/link";
 

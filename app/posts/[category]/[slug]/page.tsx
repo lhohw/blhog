@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { fetchPostByCategoryAndSlug } from "@/app/lib/actions";
-import { decompress, format } from "@/app/lib/utils";
+import { fetchPostByCategoryAndSlug } from "@/app/lib/api/post";
+import { decompress, format } from "@/app/lib/utils/markdown";
 import { CustomMDX } from "@/app/ui/posts/[category]/CustomMDX";
 
 import "@/app/ui/styles/post-prism.scss";

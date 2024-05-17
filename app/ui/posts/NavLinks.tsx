@@ -1,10 +1,11 @@
 "use client";
+
 import type { Link as LinkType } from "@/app/const/definitions";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
 import { Menu } from "@/app/ui/icons";
-import { throttling } from "@/app/lib/utils";
+import { throttling } from "@/app/lib/utils/performance";
 
 export type NavLinksProps = {
   links: LinkType[];

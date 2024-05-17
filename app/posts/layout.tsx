@@ -25,7 +25,12 @@ export default async function Layout({ children }: PropsWithChildren) {
 }
 
 const SideNavWrapper = ({ children }: PropsWithChildren) => (
-  <div className="flex flex-col md:flex-1 md:min-w-[230px] md:max-w-[295px] bg-darkgray rounded-tr-2xl mx-4 mt-4 mb-0 md:mb-4 sticky z-10 top-10 md:top-[56px] max-h-[calc(100vh-108px)]">
+  <div
+    className={`
+    sticky z-10 top-10 flex flex-col bg-darkgray rounded-tr-2xl mx-4 mt-4 mb-0
+    md:flex-1 md:min-w-[230px] md:max-w-[295px] md:mb-4 md:top-[56px] md:h-[calc(100vh-108px)]
+  `}
+  >
     {children}
   </div>
 );
