@@ -15,14 +15,17 @@ export const throttling = <T extends (...args: any[]) => void>(
 export const debouncing = <T extends (...args: any[]) => void>(
   cb: T extends infer R ? R : (...args: any[]) => void,
   throttle = 500,
+  limit = 1 << 30,
 ) => {
-  let iter = 0;
+  let prev = 0;
+  let nextLimit = limit;
   return (...args: Parameters<T>) => {
-    const current = ++iter;
+    prev = performance.now();
     setTimeout(() => {
-      if (current === iter) {
+      const now = performance.now();
+      if (now - prev >= throttle || now >= nextLimit) {
+        nextLimit = now + limit;
         cb(...args);
-        console.log(iter, "cb!");
       }
     }, throttle);
   };
