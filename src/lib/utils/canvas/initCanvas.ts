@@ -1,8 +1,8 @@
-export const initCanvas = (
+export default function initCanvas(
   canvas: HTMLCanvasElement,
   width: number,
   height: number,
-) => {
+) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
@@ -23,4 +23,4 @@ export const initCanvas = (
   ctx.strokeStyle = "#d1fae525";
 
   return ctx;
-};
+}

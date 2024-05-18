@@ -1,7 +1,7 @@
 import RafControl from "@/class/RafControl";
 import Vector from "@/class/Vector";
 import { r180, r90, r15, random, prob } from "@/lib/utils/math";
-import { initCanvas } from "@/lib/utils/canvas";
+import initCanvas from "@/lib/utils/canvas/initCanvas";
 
 type StepProps = {
   vec: Vector;
