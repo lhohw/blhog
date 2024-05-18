@@ -31,7 +31,7 @@ export default function LinkList({
       style={isOpen ? { height } : {}}
     >
       <div
-        className="flex flex-none ml-8 items-center h-14 md:hidden object-contain"
+        className="flex flex-none ml-8 items-center h-14 md:hidden object-contain p-3.5 w-12"
         onClick={onMenuClick}
       >
         <Menu />
