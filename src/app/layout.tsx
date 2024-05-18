@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { nunito_sans } from "@/styles/fonts";
 import MainColorEffect from "@/components/effects/MainColorEffect";
+import PlumTreeEffect from "@/components/effects/PlumTreeEffect";
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={nunito_sans.className}>{children}</body>
+      <body className={nunito_sans.className}>
+        {children}
+        <PlumTreeEffect />
+      </body>
       <MainColorEffect />
     </html>
   );
