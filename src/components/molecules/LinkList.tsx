@@ -24,7 +24,7 @@ export default function LinkList({
   return (
     <div
       className={clsx(
-        "flex flex-col w-full h-14 bg-darkgray rounded-tr-2xl z-10 transition-all duration-300 delay-100 absolute top-0 left-0 bg-opacity-90",
+        "flex flex-col w-full h-14 rounded-tr-2xl z-10 transition-all duration-300 delay-100 absolute top-0 left-0",
         "md:h-full md:static",
         isOpen && "ring-sea-200 ring-inset ring-1",
       )}

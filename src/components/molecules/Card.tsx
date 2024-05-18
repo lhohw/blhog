@@ -17,7 +17,7 @@ export default function Card({
     <div className="p-4 min-w-40 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4">
       <Link
         href={href}
-        className="p-4 block border-slight border-sea-200 border-opacity-50 rounded-lg bg-darkgray hover:bg-[#232226] transition-colors duration-300"
+        className="p-4 block border-slight border-sea-200 border-opacity-50 rounded-lg bg-darkgray hover:bg-dark transition-colors duration-300"
       >
         <Photo
           url={photo_url}

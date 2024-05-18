@@ -24,6 +24,7 @@ const config: Config = {
         },
         dark: "#010103",
         darkgray: "#17161b",
+        darkgrayAlpha: "#17161baa",
       },
       borderWidth: {
         slight: "0.5px",

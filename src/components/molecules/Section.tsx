@@ -10,7 +10,7 @@ export default function Section({ title, children, classNames }: SectionProps) {
   return (
     <div
       className={clsx(
-        "flex flex-col p-4 border-sea-200 border-slight rounded-lg",
+        "flex flex-col p-4 border-sea-200 border-slight rounded-lg bg-darkgrayAlpha",
         classNames,
       )}
     >
