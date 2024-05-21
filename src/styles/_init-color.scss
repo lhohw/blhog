@@ -1,0 +1,50 @@
+$bg-light: hsl(0, 0%, 92%);
+$bg-dark: hsl(240, 50%, 1%);
+
+$text-light: hsl(240, 50%, 1%);
+$text-dark: hsl(0, 0%, 92%);
+
+$primary-light: hsl(149, 45%, 61%);
+$primary-dark: hsl(149, 80%, 90%);
+
+:root {
+  --background: #{$bg-light};
+  --text: #{$text-light};
+  --primary: #{$primary-light};
+  --primary-alpha: #{transparentize($primary-light, 0.3)};
+  --background-alpha: #{transparentize($bg-light, 0.3)};
+}
+
+@media ((prefers-color-scheme: dark)) {
+  :root {
+    --background: #{$bg-dark};
+    --text: #{$text-dark};
+    --primary: #{$primary-dark};
+    --primary-alpha: #{transparentize($primary-dark, 0.3)};
+    --background-alpha: #{transparentize($bg-dark, 0.5)};
+  }
+}
+
+@for $i from 1 through 9 {
+  $opacity: 1 - ($i / 10);
+  $light: transparentize($bg-light, $opacity + 0.05);
+  $dark: transparentize($bg-dark, $opacity);
+  :root {
+    --background-alpha-#{$i}: light-dark(#{$light}, #{$dark});
+  }
+}
+
+$sea100: #ecfdf5;
+$sea200: #d1fae5;
+$sea300: #99f6e4;
+$sea400: #5eead4;
+$sea500: #22d3ee;
+$sea600: #06b6d4;
+$sea700: #0284c7;
+$sea800: #0369a1;
+$sea900: #1e40af;
+$sea1000: #1e3a8a;
+$sea1100: #172554;
+
+$seagreen: #48b979;
+$lavender: #e8c2e1fc;

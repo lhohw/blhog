@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import "@/styles/globals.css";
-import { nunito_sans } from "@/styles/fonts";
 import MainColorEffect from "@/components/effects/MainColorEffect";
 import PlumTreeEffect from "@/components/effects/PlumTreeEffect";
+import { nunito_sans } from "@/styles/fonts";
+import "@/styles/globals.scss";
 
 export const metadata: Metadata = {
   title: {

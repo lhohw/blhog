@@ -1,7 +1,7 @@
 import Link, { LinkProps } from "next/link";
 import clsx from "clsx";
 import * as Icons from "@/components/icons";
-import { slugToStr, toPascalCase } from "@/lib/utils/string";
+import { toPascalCase } from "@/lib/utils/string";
 
 export type LinkListItemProps = {
   title: string;
@@ -27,7 +27,7 @@ export default function LinkListItem({
       {...props}
     >
       <div
-        className="flex flex-1 flex-row items-center py-2 px-4 rounded-lg cursor-pointer hover:bg-[#2D2C31] transition-color"
+        className="flex flex-1 flex-row items-center py-2 px-4 rounded-lg cursor-pointer hover:bg-primary-alpha transition-color"
         title={title}
       >
         <div className="w-6 h-6 p-1 mr-3">{icon ? <Icon /> : null}</div>

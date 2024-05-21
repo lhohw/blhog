@@ -9,30 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        sea: {
-          100: "#ecfdf5",
-          200: "#d1fae5",
-          300: "#99f6e4",
-          400: "#5eead4",
-          500: "#22d3ee",
-          600: "#06b6d4",
-          700: "#0284c7",
-          800: "#0369a1",
-          900: "#1e40af",
-          1000: "#1e3a8a",
-          1100: "#172554",
-        },
-        dark: "#010103",
-        darkgray: "#17161b",
-        darkgrayAlpha: "#17161baa",
+        background: "var(--background)",
+        "background-alpha": "var(--background-alpha)",
+        text: "var(--text)",
+        primary: "var(--primary)",
+        "primary-alpha": "var(--primary-alpha)",
       },
       borderWidth: {
         slight: "0.5px",
-      },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       flex: {
         "1.6": "1.618 1.618 0%",
@@ -40,6 +24,9 @@ const config: Config = {
       transitionProperty: {
         height: "height",
         width: "width",
+      },
+      boxShadow: {
+        "corona-primary": "0 0 7px hsl(149, 45%, 61%)",
       },
     },
   },

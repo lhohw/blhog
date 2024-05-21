@@ -1,19 +1,16 @@
+@import "./_init-color";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --color-hs: 255, 4%;
-  --color-l: 85%;
-  --background-hs: 240, 50%;
-  --background-l: 1%;
   --main-color: #8ebac7;
-  --primary: #8ebac7;
 }
 
 body {
-  color: hsl(var(--color-hs), var(--color-l));
-  background: hsl(var(--background-hs), var(--background-l));
+  background: var(--background);
+  color: var(--text);
 }
 
 @layer utilities {

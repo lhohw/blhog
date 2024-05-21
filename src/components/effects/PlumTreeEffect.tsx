@@ -24,7 +24,7 @@ export default function PlumTreeEffect() {
         maskImage: "radial-gradient(circle, transparent, black)",
       }}
     >
-      <canvas ref={canvasRef} />
+      <canvas className="mix-blend-exclusion" ref={canvasRef} />
     </div>
   );
 }
