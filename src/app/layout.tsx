@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import MainColorEffect from "@/components/effects/MainColorEffect";
 import PlumTreeEffect from "@/components/effects/PlumTreeEffect";
 import { nunito_sans } from "@/styles/fonts";
@@ -17,9 +18,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const themeCookie = cookies().get("theme");
+  const theme = themeCookie?.value || "unset";
+
   return (
     <html lang="ko">
-      <body className={nunito_sans.className}>
+      <body className={nunito_sans.className} data-theme={theme}>
         {children}
         <PlumTreeEffect />
       </body>

@@ -9,19 +9,19 @@ $primary-dark: hsl(149, 80%, 90%);
 
 :root {
   --background: #{$bg-light};
+  --background-alpha: #{transparentize($bg-light, 0.3)};
   --text: #{$text-light};
   --primary: #{$primary-light};
   --primary-alpha: #{transparentize($primary-light, 0.3)};
-  --background-alpha: #{transparentize($bg-light, 0.3)};
 }
 
 @media ((prefers-color-scheme: dark)) {
-  :root {
+  body[data-theme=unset] {
     --background: #{$bg-dark};
+    --background-alpha: #{transparentize($bg-dark, 0.5)};
     --text: #{$text-dark};
     --primary: #{$primary-dark};
     --primary-alpha: #{transparentize($primary-dark, 0.3)};
-    --background-alpha: #{transparentize($bg-dark, 0.5)};
   }
 }
 

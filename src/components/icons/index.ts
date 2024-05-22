@@ -6,3 +6,5 @@ export { default as React } from "./React";
 export { default as TypeScript } from "./TypeScript";
 export { default as ComputerScience } from "./ComputerScience";
 export { default as Circle } from "./Circle";
+export { default as Git } from "./Git";
+export { default as Mail } from "./Mail";

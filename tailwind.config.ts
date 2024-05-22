@@ -26,7 +26,7 @@ const config: Config = {
         width: "width",
       },
       boxShadow: {
-        "corona-primary": "0 0 7px hsl(149, 45%, 61%)",
+        "corona-primary": "0 0 12px hsl(149, 45%, 61%)",
       },
     },
   },
