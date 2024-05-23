@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Metaphor from "../atoms/Metaphor";
-import { Git, Mail } from "@/components/icons";
+import { Git } from "@/components/icons";
 import ThemeMetaphor from "@/components/organisms/ThemeMetaphor";
 
 export default function Header() {
@@ -20,13 +20,6 @@ export default function Header() {
             title="git"
             Icon={Git}
             href={"https://github.com/lhohw"}
-          />
-        </li>
-        <li className="flex">
-          <Metaphor.Link
-            title="mail"
-            Icon={Mail}
-            href="mailto:lho.hw.an1@gmail.com"
           />
         </li>
         <li className="flex">
