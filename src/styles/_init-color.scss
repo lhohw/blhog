@@ -25,15 +25,6 @@ $primary-dark: hsl(149, 80%, 90%);
   }
 }
 
-@for $i from 1 through 9 {
-  $opacity: 1 - ($i / 10);
-  $light: transparentize($bg-light, $opacity + 0.05);
-  $dark: transparentize($bg-dark, $opacity);
-  :root {
-    --background-alpha-#{$i}: light-dark(#{$light}, #{$dark});
-  }
-}
-
 $sea100: #ecfdf5;
 $sea200: #d1fae5;
 $sea300: #99f6e4;
