@@ -8,3 +8,4 @@ export { default as ComputerScience } from "./ComputerScience";
 export { default as Circle } from "./Circle";
 export { default as Git } from "./Git";
 export { default as Mail } from "./Mail";
+export { default as Browser } from "./Browser";
