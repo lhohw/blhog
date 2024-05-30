@@ -13,12 +13,15 @@ body {
   color: var(--text);
   transition: all .125s ease-in-out;
 }
+
 body[data-theme=dark] {
-  --background: #{$bg-dark};
-  --background-alpha: #{transparentize($bg-dark, 0.5)};
-  --text: #{$text-dark};
-  --primary: #{$primary-dark};
-  --primary-alpha: #{transparentize($primary-dark, 0.3)};
+  @include darkTheme();
+}
+
+@media ((prefers-color-scheme: dark)) {
+  body[data-theme=unset] {
+    @include darkTheme();
+  }
 }
 
 @layer utilities {
