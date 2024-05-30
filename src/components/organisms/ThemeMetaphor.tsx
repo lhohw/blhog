@@ -1,9 +1,8 @@
 "use client";
 
-import Metaphor from "@/components/atoms/Metaphor";
-import Sun from "@/components/icons/Sun";
-import Moon from "@/components/icons/Moon";
 import { useCallback, useEffect, useState } from "react";
+import Metaphor from "@/components/atoms/Metaphor";
+import { Sun, Moon } from "@/components/icons";
 
 type Theme = "unset" | "light" | "dark";
 export default function ThemeMetaphor() {
@@ -23,7 +22,6 @@ export default function ThemeMetaphor() {
   const onChangeTheme = useCallback(() => {
     const nextTheme = theme === "dark" ? "light" : "dark";
     setThemeState(nextTheme);
-    document.cookie = `theme=${nextTheme}; max-age=${3600 * 24 * 30}; path=/`;
     document.body.setAttribute("data-theme", nextTheme);
   }, [setThemeState, theme]);
 
