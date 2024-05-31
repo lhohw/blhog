@@ -1,10 +1,15 @@
+import LinkListWrapper from "@/components/atoms/wrapper/LinkListWrapper";
+
 export default function SideNavSkeleton() {
   return (
-    <div
-      className={`
-        flex flex-col flex-none h-full min-w-20 lg:min-w-[295px] bg-background-alpha 
-        rounded-tr-2xl border-slight border-primary relative
-      `}
-    />
+    <LinkListWrapper className="flex-none md:h-full min-h-14 bg-background-alpha md:bg-background md:relative">
+      <div className="max-md:shimmer border-slight border-primary before:rounded-tr-2xl h-full flex flex-col">
+        <ul className="hidden md:flex md:flex-col md:h-full md:mt-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="h-10 my-2 mx-4 rounded-md shimmer" />
+          ))}
+        </ul>
+      </div>
+    </LinkListWrapper>
   );
 }
