@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import LinkList, { LinkListProps } from "@/components/molecules/LinkList";
+import ResizeEffect from "@/components/effects/ResizeEffect";
 import useList from "@/hooks/react/useList";
 
 export default function NavLinks({ links }: Pick<LinkListProps, "links">) {
@@ -18,29 +19,6 @@ export default function NavLinks({ links }: Pick<LinkListProps, "links">) {
     [toggle],
   );
 
-  const handleResize = useCallback(() => {
-    if (isOpen) close();
-  }, [isOpen, close]);
-
-  const clickListener = useCallback(
-    (e: MouseEvent) => {
-      if (!isOpen) return;
-
-      const target = e.target as HTMLDivElement;
-      if (!target.closest("#nav-link")) close();
-    },
-    [isOpen, close],
-  );
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("click", clickListener);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("click", clickListener);
-    };
-  }, [handleResize, clickListener]);
-
   return (
     <nav id="nav-link" className="flex flex-col h-full rounded-tr-2xl relative">
       <LinkList
@@ -50,6 +28,7 @@ export default function NavLinks({ links }: Pick<LinkListProps, "links">) {
         close={close}
         onMenuClick={onMenuClick}
       />
+      <ResizeEffect isOpen={isOpen} close={close} />
     </nav>
   );
 }
