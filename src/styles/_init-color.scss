@@ -7,20 +7,32 @@ $text-dark: hsl(0, 0%, 92%);
 $primary-light: hsl(149, 45%, 61%);
 $primary-dark: hsl(149, 80%, 90%);
 
+$shimmer-bg-light: hsla(0, 0%, 73%, 0.489);
+$shimmer-bg-dark: hsla(356, 100%, 95%, 0.1);
+
+$shimmer-light: hsla(0, 0%, 95%, 0.72);
+$shimmer-dark: #{$shimmer-bg-dark};
+
 :root {
   --background: #{$bg-light};
   --background-alpha: #{transparentize($bg-light, 0.3)};
   --text: #{$text-light};
+  --text-alpha: #{transparentize($text-light, 0.2)};
   --primary: #{$primary-light};
   --primary-alpha: #{transparentize($primary-light, 0.3)};
+  --shimmer-bg: #{$shimmer-bg-light};
+  --shimmer: #{$shimmer-light};
 }
 
 @mixin darkTheme() {
   --background: #{$bg-dark};
   --background-alpha: #{transparentize($bg-dark, 0.5)};
   --text: #{$text-dark};
+  --text-alpha: #{transparentize($text-dark, 0.2)};
   --primary: #{$primary-dark};
   --primary-alpha: #{transparentize($primary-dark, 0.3)};
+  --shimmer-bg: #{$shimmer-bg-dark};
+  --shimmer: #{$shimmer-dark};
 }
 
 $sea100: #ecfdf5;

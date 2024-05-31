@@ -17,6 +17,8 @@ const config: Config = {
         text: "var(--text)",
         primary: "var(--primary)",
         "primary-alpha": "var(--primary-alpha)",
+        shimmer: "var(--shimmer)",
+        "shimmer-bg": "var(--shimmer-bg)",
       },
       borderWidth: {
         slight: "0.5px",

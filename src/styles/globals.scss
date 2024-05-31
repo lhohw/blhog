@@ -11,7 +11,7 @@
 body {
   background: var(--background);
   color: var(--text);
-  transition: all .125s ease-in-out;
+  transition: color .125s ease-in-out, background-color .0125s ease-in-out;
 }
 
 body[data-theme=dark] {
@@ -27,6 +27,33 @@ body[data-theme=dark] {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--shimmer-bg);
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0px;
+      border-top-width: 1px;
+      border-color: var(--shimmer);
+      will-change: transform;
+      transform: translateX(-100%);
+      animation: shimmer 2s infinite;
+      background-image: linear-gradient(
+        to right,
+        transparent 0,
+        var(--shimmer) 50%, 
+        transparent 100%
+      );
+    }
+  }
+}
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
   }
 }
 
