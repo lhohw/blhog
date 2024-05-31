@@ -1,24 +1,29 @@
 "use client";
-import { useCallback, useEffect } from "react";
+import { memo, useEffect } from "react";
 
 export type ResizeEffectProps = {
   isOpen: boolean;
   close: () => void;
 };
-export default function ResizeEffect({ isOpen, close }: ResizeEffectProps) {
-  const handleResize = useCallback(() => {
+/**
+ * isOpen이나 close 변경 시 모두 항상 업데이트되기 때문에 deps 불필요
+ *   -> useCallback 및 useEffect deps 제거 후 memo 적용
+ * 새로운 기능 적용 시 해당 내용 변경 필요성 고려
+ */
+export default memo(function ResizeEffect({
+  isOpen,
+  close,
+}: ResizeEffectProps) {
+  const handleResize = () => {
     if (isOpen) close();
-  }, [isOpen, close]);
+  };
 
-  const clickListener = useCallback(
-    (e: MouseEvent) => {
-      if (!isOpen) return;
+  const clickListener = (e: MouseEvent) => {
+    if (!isOpen) return;
 
-      const target = e.target as HTMLDivElement;
-      if (!target.closest("#nav-link")) close();
-    },
-    [isOpen, close],
-  );
+    const target = e.target as HTMLDivElement;
+    if (!target.closest("#nav-link")) close();
+  };
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
@@ -27,7 +32,7 @@ export default function ResizeEffect({ isOpen, close }: ResizeEffectProps) {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("click", clickListener);
     };
-  }, [handleResize, clickListener]);
+  });
 
   return <></>;
-}
+});
