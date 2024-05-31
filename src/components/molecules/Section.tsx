@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import clsx from "clsx";
-import H3 from "@/components/atoms/H3";
+import H3 from "@/components/atoms/headings/H3";
 
 export type SectionProps = PropsWithChildren<{
   title?: string;
