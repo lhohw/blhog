@@ -3,11 +3,9 @@
 import { Post } from "@/const/definitions";
 import DBPool from "@/class/DBClient";
 import { withImageSize } from "@/lib/utils/markdown";
-import { delay } from "@/lib/utils/helper";
 
 export async function fetchDirectoryNames(): Promise<Pick<Post, "category">[]> {
   try {
-    await delay(3000);
     const client = await DBPool.getInstance();
     const res = await client.query<Pick<Post, "category">>(
       `SELECT DISTINCT category FROM posts`,
@@ -20,7 +18,6 @@ export async function fetchDirectoryNames(): Promise<Pick<Post, "category">[]> {
 }
 export async function fetchLatestPosts(): Promise<Post[]> {
   try {
-    await delay(3000);
     const client = await DBPool.getInstance();
     const res = await client.query<Post>(`
       SELECT *
@@ -41,7 +38,6 @@ export async function fetchLatestPosts(): Promise<Post[]> {
 
 export async function fetchPostsByCategory(category: string) {
   try {
-    delay(3000);
     const client = await DBPool.getInstance();
     const res = await client.query<Post>({
       text: `SELECT *
