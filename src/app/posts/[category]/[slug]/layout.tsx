@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import { Suspense, type PropsWithChildren } from "react";
+import clsx from "clsx";
 import PostSkeleton from "@/components/skeletons/PostSkeleton";
 import styles from "@/styles/post.module.scss";
 

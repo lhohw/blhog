@@ -78,6 +78,10 @@ body[data-theme=dark] {
   .main-color {
     color: #8ebac7;
   }
+  .shimmer::before {
+    display: none;
+    animation: none;
+  }
 }
 
 .area {

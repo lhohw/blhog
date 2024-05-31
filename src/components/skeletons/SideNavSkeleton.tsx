@@ -1,4 +1,5 @@
 import LinkListWrapper from "@/components/atoms/wrapper/LinkListWrapper";
+import ShimmerBar from "@/components/atoms/ShimmerBar";
 
 export default function SideNavSkeleton() {
   return (
@@ -6,7 +7,7 @@ export default function SideNavSkeleton() {
       <div className="max-md:shimmer border-slight border-primary before:rounded-tr-2xl h-full flex flex-col">
         <ul className="hidden md:flex md:flex-col md:h-full md:mt-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-10 my-2 mx-4 rounded-md shimmer" />
+            <ShimmerBar key={i} className="h-10 my-2 mx-4" />
           ))}
         </ul>
       </div>
