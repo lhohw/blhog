@@ -1,10 +1,11 @@
 "use client";
 
+import { useMemo } from "react";
 import { clsx } from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { slugToStr } from "@/lib/utils/string";
-import { useMemo } from "react";
+import BreadcrumbWrapper from "@/components/atoms/wrapper/BreadcrumbWrapper";
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
@@ -28,7 +29,7 @@ export default function Breadcrumbs() {
   );
 
   return (
-    <div aria-label="Breadcrumb" className="mb-6 block h-8">
+    <BreadcrumbWrapper>
       <ol className="flex text-xl md:text-2xl">
         {breadcrumbs.map((breadcrumb, index) => (
           <li
@@ -45,6 +46,6 @@ export default function Breadcrumbs() {
           </li>
         ))}
       </ol>
-    </div>
+    </BreadcrumbWrapper>
   );
 }

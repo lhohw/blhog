@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import Image from "next/image";
+import PhotoWrapper from "./wrapper/PhotoWrapper";
 
 export type PhotoProps = {
   url: string;
@@ -24,9 +25,8 @@ export default function Photo({
   ratio = "video",
 }: PhotoProps) {
   return (
-    <div
+    <PhotoWrapper
       className={clsx(
-        "w-full rounded mb-4 flex flex-col items-end",
         ratio === "auto"
           ? "aspect-auto"
           : ratio === "video"
@@ -46,6 +46,6 @@ export default function Photo({
       <span className="text-[12px] text-opacity-80 mt-2">
         photo by: {user_name}
       </span>
-    </div>
+    </PhotoWrapper>
   );
 }

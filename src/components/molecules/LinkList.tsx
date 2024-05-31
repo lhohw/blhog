@@ -1,10 +1,10 @@
 "use client";
 
-import clsx from "clsx";
 import LinkListItem, {
   LinkListItemProps,
 } from "@/components/atoms/LinkListItem";
 import Menu from "@/components/icons/Menu";
+import LinkListWrapper from "@/components/atoms/wrapper/LinkListWrapper";
 
 export type LinkListProps = {
   links: LinkListItemProps[];
@@ -22,14 +22,7 @@ export default function LinkList({
   onMenuClick,
 }: LinkListProps) {
   return (
-    <div
-      className={clsx(
-        "flex flex-col w-full h-14 rounded-tr-2xl z-10 transition-height duration-300 delay-100 absolute top-0 left-0 bg-background",
-        "md:h-full md:static md:bg-background-alpha",
-        "border-primary border-slight",
-      )}
-      style={isOpen ? { height } : {}}
-    >
+    <LinkListWrapper style={isOpen ? { height } : {}}>
       <div
         className="flex flex-none ml-8 items-center h-14 md:hidden object-contain p-3.5 w-12"
         onClick={onMenuClick}
@@ -41,6 +34,6 @@ export default function LinkList({
           <LinkListItem key={link.title} onClick={close} {...link} />
         ))}
       </ul>
-    </div>
+    </LinkListWrapper>
   );
 }
