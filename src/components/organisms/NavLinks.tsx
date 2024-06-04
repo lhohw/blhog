@@ -3,6 +3,7 @@
 import { useCallback, useMemo } from "react";
 import LinkList, { LinkListProps } from "@/components/molecules/LinkList";
 import ResizeEffect from "@/components/effects/ResizeEffect";
+import Resizer from "@/components/atoms/Resizer";
 import useList from "@/hooks/react/useList";
 
 export default function NavLinks({ links }: Pick<LinkListProps, "links">) {
@@ -20,14 +21,25 @@ export default function NavLinks({ links }: Pick<LinkListProps, "links">) {
   );
 
   return (
-    <nav id="nav-link" className="flex flex-col h-full rounded-tr-2xl relative">
-      <LinkList
-        links={links}
-        height={height}
-        isOpen={isOpen}
-        close={close}
-        onMenuClick={onMenuClick}
-      />
+    <nav
+      id="nav-link"
+      className="flex flex-1 flex-col h-full rounded-tr-2xl relative"
+    >
+      <Resizer
+        className="min-w-full max-w-full"
+        initialLength={350}
+        min={300}
+        max={700}
+        direction="right"
+      >
+        <LinkList
+          links={links}
+          height={height}
+          isOpen={isOpen}
+          close={close}
+          onMenuClick={onMenuClick}
+        />
+      </Resizer>
       <ResizeEffect isOpen={isOpen} close={close} />
     </nav>
   );

@@ -28,7 +28,7 @@ const SideNavWrapper = ({ children }: PropsWithChildren) => (
   <div
     className={`
     sticky z-10 top-12 flex flex-col rounded-tr-2xl mx-4 mt-4 mb-0
-    md:flex-1 md:min-w-[230px] md:max-w-[295px] md:mb-4 md:top-[56px] md:h-[calc(100vh-108px)]
+    md:min-w-[230px] md:mb-4 md:top-[56px] md:h-[calc(100vh-108px)]
   `}
   >
     {children}
@@ -36,7 +36,7 @@ const SideNavWrapper = ({ children }: PropsWithChildren) => (
 );
 
 const ContentWrapper = ({ children }: PropsWithChildren) => (
-  <div className="flex flex-1.6 flex-col p-4 overflow-y-scroll mt-14 md:mt-0">
+  <div className="flex flex-1.6 flex-col p-4 overflow-y-scroll mt-14 md:mt-0 min-w-72">
     {children}
   </div>
 );
