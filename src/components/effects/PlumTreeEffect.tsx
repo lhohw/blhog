@@ -19,7 +19,7 @@ export default function PlumTreeEffect() {
 
   return (
     <div
-      className="bg-inherit fixed left-0 top-0 w-full h-full -z-10 area"
+      className="bg-inherit fixed left-0 top-0 w-full h-full -z-10"
       style={{
         maskImage: "radial-gradient(circle, transparent, black)",
       }}
