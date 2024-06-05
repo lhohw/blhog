@@ -23,7 +23,7 @@ export default function NavLinks({ links }: Pick<LinkListProps, "links">) {
   return (
     <nav
       id="nav-link"
-      className="flex flex-1 flex-col h-full rounded-tr-2xl relative"
+      className="flex flex-1 flex-col h-full rounded-tr-2xl relative shadow-md"
     >
       <Resizer
         className="min-w-full max-w-full"

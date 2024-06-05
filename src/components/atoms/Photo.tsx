@@ -1,6 +1,6 @@
-import clsx from "clsx";
 import Image from "next/image";
-import PhotoWrapper from "./wrapper/PhotoWrapper";
+import clsx from "clsx";
+import PhotoWrapper from "@/components/atoms/wrapper/PhotoWrapper";
 
 export type PhotoProps = {
   url: string;
@@ -36,7 +36,7 @@ export default function Photo({
       )}
     >
       <Image
-        className="rounded w-full h-full object-cover"
+        className="rounded w-full h-full object-cover shadow-md"
         src={url}
         alt={alt}
         title={title || user_link}
