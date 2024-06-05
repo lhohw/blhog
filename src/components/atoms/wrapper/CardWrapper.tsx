@@ -9,7 +9,7 @@ export default function CardWrapper({
   return (
     <div
       className={clsx(
-        "p-4 min-w-40 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 mix-blend-unset",
+        "w-60 m-4 bg-background-alpha border-primary border-slight rounded-lg transition-shadow hover:shadow-corona-primary",
         className,
       )}
       {...props}

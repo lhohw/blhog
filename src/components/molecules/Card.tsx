@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Post } from "@/const/definitions";
 import { format } from "@/lib/utils/markdown";
 import Photo from "@/components/atoms/Photo";
-import CardWrapper from "../atoms/wrapper/CardWrapper";
+import CardWrapper from "@/components/atoms/wrapper/CardWrapper";
 
 export default function Card({
   photo_url,
@@ -16,10 +16,7 @@ export default function Card({
 }: Post & { href: string }) {
   return (
     <CardWrapper>
-      <Link
-        href={href}
-        className="p-4 block border-slight border-primary rounded-lg transition-shadow hover:shadow-corona-primary"
-      >
+      <Link href={href} className="p-4 block">
         <Photo
           url={photo_url}
           alt={alt}
