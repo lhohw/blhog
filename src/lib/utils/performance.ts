@@ -1,5 +1,5 @@
-export const throttling = <T extends (...args: any[]) => void>(
-  cb: T extends infer R ? R : (...args: any[]) => void,
+export const throttling = <T extends (...args: any[]) => any>(
+  cb: T,
   throttle = 500,
 ) => {
   let timer = 0;
@@ -12,8 +12,8 @@ export const throttling = <T extends (...args: any[]) => void>(
   };
 };
 
-export const debouncing = <T extends (...args: any[]) => void>(
-  cb: T extends infer R ? R : (...args: any[]) => void,
+export const debouncing = <T extends (...args: any[]) => any>(
+  cb: T,
   throttle = 500,
   limit = 1 << 30,
 ) => {
@@ -26,6 +26,7 @@ export const debouncing = <T extends (...args: any[]) => void>(
       if (now - prev >= throttle || now >= nextLimit) {
         nextLimit = now + limit;
         cb(...args);
+        prev = now;
       }
     }, throttle);
   };
