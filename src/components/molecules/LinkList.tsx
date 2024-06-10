@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import LinkListItem, {
   LinkListItemProps,
 } from "@/components/atoms/LinkListItem";
@@ -8,7 +9,6 @@ import LinkListWrapper from "@/components/atoms/wrapper/LinkListWrapper";
 
 export type LinkListProps = {
   links: LinkListItemProps[];
-  height: string;
   isOpen: boolean;
   close: () => void;
   onMenuClick: React.MouseEventHandler;
@@ -16,11 +16,12 @@ export type LinkListProps = {
 
 export default function LinkList({
   links,
-  height,
   isOpen,
   close,
   onMenuClick,
 }: LinkListProps) {
+  const height = useMemo(() => (links.length + 1.25) * 56 + "px", [links]);
+
   return (
     <LinkListWrapper style={isOpen ? { height } : {}}>
       <div

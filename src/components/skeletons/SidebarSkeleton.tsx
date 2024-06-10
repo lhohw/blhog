@@ -1,7 +1,7 @@
 import LinkListWrapper from "@/components/atoms/wrapper/LinkListWrapper";
 import ShimmerBar from "@/components/atoms/ShimmerBar";
 
-export default function SideNavSkeleton() {
+export default function SidebarSkeleton() {
   return (
     <LinkListWrapper className="flex-none md:h-full min-h-14 bg-background-alpha md:bg-background md:relative">
       <div className="max-md:shimmer border-slight border-primary before:rounded-tr-2xl h-full flex flex-col">

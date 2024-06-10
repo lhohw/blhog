@@ -2,7 +2,7 @@ import type { HTMLAttributes, PropsWithChildren } from "react";
 import clsx from "clsx";
 import Resizer, { type ResizerProps } from "@/components/atoms/Resizer";
 
-export default function NavWithResizer({
+export default function SidebarWithResizer({
   resizerProps,
   children,
   ...props
@@ -11,15 +11,15 @@ export default function NavWithResizer({
     resizerProps: Omit<ResizerProps, "children">;
   } & HTMLAttributes<HTMLElement>
 >) {
-  const { className, ...navProps } = props;
+  const { className, ...sidebarProps } = props;
   const { className: resizerClassName, ..._resizerProps } = resizerProps;
   return (
-    <nav
+    <aside
       className={clsx(
         "flex flex-1 flex-col h-full rounded-tr-2xl relative shadow-md",
         className,
       )}
-      {...navProps}
+      {...sidebarProps}
     >
       <Resizer
         className={clsx("min-w-full max-w-full", resizerClassName)}
@@ -27,6 +27,6 @@ export default function NavWithResizer({
       >
         {children}
       </Resizer>
-    </nav>
+    </aside>
   );
 }

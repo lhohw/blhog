@@ -1,13 +1,13 @@
+import type { LinkListItemProps } from "@/components/atoms/LinkListItem";
 import { fetchDirectoryNames } from "@/lib/api/post";
-import { LinkListItemProps } from "../atoms/LinkListItem";
-import NavLinks from "@/components/organisms/NavLinks";
+import SidebarLinks from "@/components/organisms/SidebarLinks";
 
-export default async function SideNav() {
+export default async function Sidebar() {
   const dirNames = await fetchDirectoryNames();
   const links: LinkListItemProps[] = dirNames.map(({ category }) => ({
     title: category,
     href: `/posts/${category}`,
   }));
 
-  return <NavLinks links={links} />;
+  return <SidebarLinks links={links} />;
 }

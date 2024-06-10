@@ -21,7 +21,7 @@ export default memo(function WindowResizeEffect({
     if (!isOpen) return;
 
     const target = e.target as HTMLDivElement;
-    if (!target.closest("#nav-link")) close();
+    if (!target.closest("#sidebar-link")) close();
   };
 
   useEffect(() => {

@@ -1,42 +1,22 @@
 import type { Metadata } from "next";
-import { Suspense, type PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import Header from "@/components/organisms/Header";
-import SideNav from "@/components/templates/SideNav";
-import SideNavSkeleton from "@/components/skeletons/SideNavSkeleton";
+import PostLayoutComposition from "@/components/molecules/PostLayoutComposition";
 
 export const metadata: Metadata = {
   title: "Posts",
 };
 
-export default async function Layout({ children }: PropsWithChildren) {
+export default async function Layout({
+  children,
+  sidebar,
+}: PropsWithChildren<{ sidebar: React.ReactNode }>) {
   return (
-    <main className="p-1 sm:pt-3 sm:px-6 sm:pb-6">
+    <div className="p-1 sm:pt-3 sm:px-6 sm:pb-6">
       <Header />
-      <div className="flex flex-1 flex-col md:flex-row">
-        <SideNavWrapper>
-          <Suspense key={"side-nav"} fallback={<SideNavSkeleton />}>
-            <SideNav />
-          </Suspense>
-        </SideNavWrapper>
-        <ContentWrapper>{children}</ContentWrapper>
-      </div>
-    </main>
+      <main className="flex flex-1 flex-col md:flex-row">
+        <PostLayoutComposition sidebar={sidebar} content={children} />
+      </main>
+    </div>
   );
 }
-
-const SideNavWrapper = ({ children }: PropsWithChildren) => (
-  <div
-    className={`
-    sticky z-10 top-12 flex flex-col rounded-tr-2xl mx-4 mt-4 mb-0
-    md:min-w-[230px] md:mb-4 md:top-[56px] md:h-[calc(100vh-108px)]
-  `}
-  >
-    {children}
-  </div>
-);
-
-const ContentWrapper = ({ children }: PropsWithChildren) => (
-  <div className="flex flex-1.6 flex-col p-4 overflow-y-scroll mt-14 md:mt-0 min-w-72">
-    {children}
-  </div>
-);
