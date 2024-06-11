@@ -1,4 +1,5 @@
 "use client";
+
 import clsx from "clsx";
 import EWResize from "@/components/icons/EWResize";
 import NSResize from "@/components/icons/NSResize";
@@ -15,6 +16,7 @@ export type ResizerProps = {
   initialWidth?: number;
   initialHeight?: number;
   noIcon?: boolean;
+  isReversed?: boolean;
 };
 const Resizer = ({
   children,
@@ -28,9 +30,8 @@ const Resizer = ({
   initialHeight,
   noIcon = false,
 }: ResizerProps) => {
-  const { length, isHorizontal } = useResizer(
+  const { length, isHorizontal, onMouseDown } = useResizer(
     initialLength,
-    hitSlop,
     direction,
     min,
     max,
@@ -41,8 +42,14 @@ const Resizer = ({
       style={{
         width: isHorizontal ? `${length}px` : initialWidth ?? "100%",
         height: !isHorizontal ? `${length}px` : initialHeight ?? "100%",
+        maxHeight: `${max}px`,
+        minHeight: `${min}px`,
       }}
-      className={clsx("flex bg-inherit text-inherit relative", className)}
+      className={clsx(
+        "flex bg-inherit text-inherit relative border-4",
+        !isHorizontal && "flex-col",
+        className,
+      )}
     >
       {children}
       <div
@@ -60,15 +67,22 @@ const Resizer = ({
         style={{
           width: isHorizontal ? `${hitSlop * 2}px` : initialWidth ?? "100%",
           height: !isHorizontal ? `${hitSlop * 2}px` : initialHeight ?? "100%",
-          transform: isHorizontal ? "translateX(50%)" : "translateY(50%)",
+          transform: isHorizontal
+            ? direction === "left"
+              ? "translateX(-50%)"
+              : "translateX(50%)"
+            : direction === "top"
+              ? "translateY(-50%)"
+              : "translateY(50%)",
         }}
+        onMouseDown={onMouseDown}
       >
         <div
           className={clsx(
             "rounded-full border-primary border-2 absolute w-8 h-8 bg-background p-1 z-20 opacity-0 transition-opacity duration-300 hidden md:block",
             isHorizontal
-              ? "top-[50%] cursor-ew-resize"
-              : "left-[50%] cursor-ns-resize",
+              ? "cursor-ew-resize top-1/2 -translate-y-1/2"
+              : "cursor-ns-resize left-1/2 -translate-x-1/2",
             noIcon && "md:hidden",
           )}
         >

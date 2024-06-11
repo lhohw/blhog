@@ -5,8 +5,14 @@ import H3 from "@/components/atoms/headings/H3";
 export type SectionProps = PropsWithChildren<{
   title?: string;
   className?: string;
+  titleClassName?: string;
 }>;
-export default function Section({ title, children, className }: SectionProps) {
+export default function Section({
+  title,
+  children,
+  className,
+  titleClassName,
+}: SectionProps) {
   return (
     <div
       className={clsx(
@@ -14,7 +20,7 @@ export default function Section({ title, children, className }: SectionProps) {
         className,
       )}
     >
-      {title ? <H3>{title}</H3> : null}
+      {title ? <H3 className={titleClassName}>{title}</H3> : null}
       {children}
     </div>
   );

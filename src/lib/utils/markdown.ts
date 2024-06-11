@@ -29,7 +29,7 @@ export const convertToMDX =
     const h = React.createElement(
       tagName,
       {
-        className: clsx(props.className, "main-color"),
+        className: clsx(props.className, "main-color heading"),
         id,
       },
       props.children,
@@ -38,12 +38,13 @@ export const convertToMDX =
   };
 
 export const createMDXHeadings = () => {
+  let i = 0;
   const headings = Array.from({ length: 6 }).reduce<
     MDXRemoteProps["components"]
   >((acc, _, idx) => {
     const tagName = `h${idx + 1}`;
     const createHeading = (props: DetailedHTMLProps<HTMLHeadingElement>) => {
-      const id = strToSlug(props.children as string);
+      const id = strToSlug(props.children as string) + `-${i++}`;
       return convertToMDX(tagName as "h1", id)(props);
     };
     return {

@@ -20,7 +20,7 @@ export default async function Post({ category, slug }: PostProps) {
     <>
       <H1 className="main-color">{title}</H1>
       <h4 className="mr-4 text-right mb-4 text-sm">{format(updated_at)}</h4>
-      <article className="prism">
+      <article id="post-article" className="prism">
         <CustomMDX source={decompressed} />
       </article>
     </>

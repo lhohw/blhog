@@ -1,4 +1,5 @@
 "use client";
+
 import { memo, useEffect } from "react";
 
 export type WindowResizeEffectProps = {
@@ -21,7 +22,7 @@ export default memo(function WindowResizeEffect({
     if (!isOpen) return;
 
     const target = e.target as HTMLDivElement;
-    if (!target.closest("#sidebar-link")) close();
+    if (!target.closest("#sidebar")) close();
   };
 
   useEffect(() => {

@@ -15,6 +15,7 @@ const config: Config = {
         background: "var(--background)",
         "background-alpha": "var(--background-alpha)",
         text: "var(--text)",
+        "text-alpha": "var(--text-alpha)",
         primary: "var(--primary)",
         "primary-alpha": "var(--primary-alpha)",
         shimmer: "var(--shimmer)",

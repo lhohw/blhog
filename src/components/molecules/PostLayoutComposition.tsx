@@ -10,7 +10,7 @@ export default function PostLayoutComposition({
     <>
       <SidebarWrapper>
         <SidebarWithResizer
-          id="sidebar-link"
+          id="sidebar"
           resizerProps={{
             initialLength: 350,
             min: 300,
