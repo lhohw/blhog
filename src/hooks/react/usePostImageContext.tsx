@@ -2,7 +2,7 @@
 
 import type { Handler } from "@/types/type";
 import {
-  PropsWithChildren,
+  type PropsWithChildren,
   createContext,
   useCallback,
   useContext,
@@ -17,31 +17,61 @@ export type PostImageContext = {
     offsetTop: number;
   }>;
 };
-const initialState = {
+export type PostSidebarImageSectionHeightContext = {
+  maxHeight: number;
+};
+const imageInitialState = {
   images: [],
 };
-const postImageContext = createContext<Handler<PostImageContext>>(null!);
+const heightInitialState = {
+  maxHeight: 100,
+};
+const imageContext = createContext<Handler<PostImageContext>>(null!);
+const heightContext = createContext<
+  Handler<PostSidebarImageSectionHeightContext>
+>(null!);
 
 export const PostImageContextProvider = ({ children }: PropsWithChildren) => {
-  const handler = useState<PostImageContext>(initialState);
+  const imageHandler = useState<PostImageContext>(imageInitialState);
+  const heightHandler =
+    useState<PostSidebarImageSectionHeightContext>(heightInitialState);
   return (
-    <postImageContext.Provider value={handler}>
-      {children}
-    </postImageContext.Provider>
+    <heightContext.Provider value={heightHandler}>
+      <imageContext.Provider value={imageHandler}>
+        {children}
+      </imageContext.Provider>
+    </heightContext.Provider>
   );
 };
 
 const usePostImageContext = () => {
-  const [{ images }, setPostImageContext] = useContext(postImageContext);
+  const [{ images }, setPostImageContext] = useContext(imageContext);
+  const [{ maxHeight }, setHeightContext] = useContext(heightContext);
 
-  const resetPostImageContext = useCallback(() => {
-    setPostImageContext(initialState);
+  const initializeImages = useCallback(
+    (images: PostImageContext["images"]) => {
+      setPostImageContext({ images });
+    },
+    [setPostImageContext],
+  );
+
+  const resetImages = useCallback(() => {
+    setPostImageContext({ images: imageInitialState.images });
   }, [setPostImageContext]);
+
+  const setMaxHeight = useCallback(
+    (height: number) => {
+      setHeightContext({ maxHeight: height });
+    },
+    [setHeightContext],
+  );
 
   return {
     images,
-    setPostImageContext,
-    resetPostImageContext,
+    maxHeight,
+    resetImages,
+    setMaxHeight,
+    initializeImages,
   };
 };
 

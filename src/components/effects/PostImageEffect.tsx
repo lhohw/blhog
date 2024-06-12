@@ -1,13 +1,14 @@
 "use client";
 
-import { type Dispatch, type SetStateAction, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import usePostImageContext from "@/hooks/react/usePostImageContext";
 
-export type PostIndexEffectProps = {
-  setMax: Dispatch<SetStateAction<number>>;
-};
-export default function PostImageEffect({ setMax }: PostIndexEffectProps) {
-  const { setPostImageContext, resetPostImageContext } = usePostImageContext();
+export default function PostImageEffect() {
+  const {
+    initializeImages: initImages,
+    resetImages,
+    setMaxHeight,
+  } = usePostImageContext();
 
   useEffect(
     function initializeImages() {
@@ -22,12 +23,12 @@ export default function PostImageEffect({ setMax }: PostIndexEffectProps) {
         return { src, title, alt, offsetTop };
       });
 
-      setPostImageContext({ images });
+      initImages(images);
       return () => {
-        resetPostImageContext();
+        resetImages();
       };
     },
-    [setPostImageContext, resetPostImageContext],
+    [initImages, resetImages],
   );
 
   const sidebar = useRef<HTMLDivElement>(null!);
@@ -41,13 +42,13 @@ export default function PostImageEffect({ setMax }: PostIndexEffectProps) {
         sidebar.current = document.querySelector("#sidebar") as HTMLDivElement;
       }
 
-      const max =
+      const maxHeight =
         sidebar.current.offsetHeight -
         SIDEBAR_PADDING -
         INDEX_MIN_HEIGHT -
         POST_INDEX_SECTION_MARGIN_BOTTOM;
 
-      setMax(max);
+      setMaxHeight(maxHeight);
     };
 
     resizeListener();
@@ -56,7 +57,7 @@ export default function PostImageEffect({ setMax }: PostIndexEffectProps) {
     return () => {
       window.removeEventListener("resize", resizeListener);
     };
-  }, [setMax]);
+  }, [setMaxHeight]);
 
   return <></>;
 }
