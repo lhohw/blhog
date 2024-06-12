@@ -42,11 +42,11 @@ const Resizer = ({
       style={{
         width: isHorizontal ? `${length}px` : initialWidth ?? "100%",
         height: !isHorizontal ? `${length}px` : initialHeight ?? "100%",
-        maxHeight: `${max}px`,
-        minHeight: `${min}px`,
+        maxHeight: !isHorizontal ? `${max}px` : "none",
+        minHeight: !isHorizontal ? `${min}px` : "auto",
       }}
       className={clsx(
-        "flex bg-inherit text-inherit relative border-4",
+        "flex bg-inherit text-inherit relative",
         !isHorizontal && "flex-col",
         className,
       )}

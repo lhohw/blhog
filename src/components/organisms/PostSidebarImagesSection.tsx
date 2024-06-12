@@ -13,7 +13,13 @@ export default function PostSidebarImagesSection() {
 
   return (
     <>
-      <Resizer initialLength={100} min={100} max={max} direction="top">
+      <Resizer
+        className="hidden md:flex"
+        initialLength={100}
+        min={100}
+        max={max}
+        direction="top"
+      >
         <Section
           title="IMAGE"
           titleClassName="text-xs md:text-xs pb-1"
