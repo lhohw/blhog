@@ -2,7 +2,7 @@ import ShimmerBar from "@/components/atoms/ShimmerBar";
 
 export default function PostSkeleton() {
   return (
-    <div className="py-8 px-12">
+    <div className="py-8 px-6 md:px-12">
       <div className="w-full flex flex-col">
         <ShimmerBar className="w-1/2 ml-4 mt-6 mb-10 h-16" />
         <ShimmerBar className="flex self-end w-24 mr-4 mb-4 h-5" />

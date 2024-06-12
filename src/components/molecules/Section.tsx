@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import clsx from "clsx";
 import H3 from "@/components/atoms/headings/H3";
 
@@ -16,7 +16,7 @@ export default function Section({
   return (
     <div
       className={clsx(
-        "flex flex-col p-6 border-primary border-slight rounded-lg bg-background-alpha shadow-md",
+        "flex flex-col p-4 md:p-6 border-primary border-slight rounded-lg bg-background-alpha shadow-md",
         className,
       )}
     >
