@@ -1,6 +1,6 @@
 "use server";
 
-import { Post } from "@/const/definitions";
+import type { Post } from "@/const/definitions";
 import DBPool from "@/class/DBClient";
 import { withImageSize } from "@/lib/utils/markdown";
 

@@ -1,5 +1,5 @@
+import type { Post } from "@/const/definitions";
 import Link from "next/link";
-import { Post } from "@/const/definitions";
 import { format } from "@/lib/utils/markdown";
 import Photo from "@/components/atoms/Photo";
 import CardWrapper from "@/components/atoms/wrapper/CardWrapper";
