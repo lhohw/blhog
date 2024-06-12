@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { debouncing } from "@/lib/utils/performance";
 import usePostIndexContext, {
-  PostIndexContext,
+  type PostIndexHeadingsContext,
 } from "@/hooks/react/usePostIndexContext";
 
 export default function PostIndexEffect() {
@@ -12,12 +12,14 @@ export default function PostIndexEffect() {
     setIdx,
     findNextIdx,
     findPrevIdx,
-    initializePostIndexContext,
-    resetPostIndexContext,
+    initializePostIndexHeadingsContext,
+    resetPostIndexHeadingsContext,
+    isFold,
+    setFoldContext,
   } = usePostIndexContext();
 
   useEffect(function initializeHeadings() {
-    const postHeadings: PostIndexContext["postHeadings"] =
+    const postHeadings: PostIndexHeadingsContext["postHeadings"] =
       Array.from<HTMLHeadingElement>(document.querySelectorAll(".heading")).map(
         (heading) => {
           const { tagName, textContent, offsetTop, id } = heading;
@@ -25,9 +27,9 @@ export default function PostIndexEffect() {
         },
       );
 
-    initializePostIndexContext(postHeadings);
+    initializePostIndexHeadingsContext(postHeadings);
     return () => {
-      resetPostIndexContext();
+      resetPostIndexHeadingsContext();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -54,6 +56,29 @@ export default function PostIndexEffect() {
       };
     },
     [findNextIdx, findPrevIdx, setIdx, currentIdx],
+  );
+
+  useEffect(function initializeIsFold() {
+    const { scrollY } = window;
+    const isFold = scrollY !== 0;
+    setFoldContext({ isFold, maxHeight: isFold ? "0" : "none" });
+    return () => {
+      setFoldContext({ isFold: false, maxHeight: "none" });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(
+    function isFoldResizeListener() {
+      const resizeListener = () => {
+        setFoldContext({ isFold: true, maxHeight: "0" });
+      };
+      window.addEventListener("resize", resizeListener);
+      return () => {
+        window.removeEventListener("resize", resizeListener);
+      };
+    },
+    [setFoldContext],
   );
 
   return <></>;

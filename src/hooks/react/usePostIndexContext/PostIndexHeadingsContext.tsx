@@ -9,7 +9,7 @@ import {
   useCallback,
 } from "react";
 
-export type PostIndexContext = {
+export type PostIndexHeadingsContext = {
   postHeadings: Array<{
     tagName: string;
     textContent: string;
@@ -18,31 +18,35 @@ export type PostIndexContext = {
   }>;
   currentIdx: number;
 };
+const postIndexHeadingsContext = createContext<
+  Handler<PostIndexHeadingsContext>
+>(null!);
 
-const postIndexContext = createContext<Handler<PostIndexContext>>(null!);
-
-const initialState: PostIndexContext = {
+const headingsInitialState: PostIndexHeadingsContext = {
   postHeadings: [],
   currentIdx: -1,
 };
-export const PostIndexContextProvider = ({ children }: PropsWithChildren) => {
-  const handler = useState<PostIndexContext>(initialState);
+export const PostIndexHeadingsContextProvider = ({
+  children,
+}: PropsWithChildren) => {
+  const headingsHandler =
+    useState<PostIndexHeadingsContext>(headingsInitialState);
   return (
-    <postIndexContext.Provider value={handler}>
+    <postIndexHeadingsContext.Provider value={headingsHandler}>
       {children}
-    </postIndexContext.Provider>
+    </postIndexHeadingsContext.Provider>
   );
 };
 
-const usePostIndexContext = () => {
-  const [{ postHeadings, currentIdx }, setPostIndexContext] =
-    useContext(postIndexContext);
+const usePostIndexHeadingsContext = () => {
+  const [{ postHeadings, currentIdx }, setPostIndexHeadingsContext] =
+    useContext(postIndexHeadingsContext);
 
   const setIdx = useCallback(
     (idx: number) => {
-      setPostIndexContext({ postHeadings, currentIdx: idx });
+      setPostIndexHeadingsContext({ postHeadings, currentIdx: idx });
     },
-    [setPostIndexContext, postHeadings],
+    [setPostIndexHeadingsContext, postHeadings],
   );
 
   const findNextIdx = useCallback(() => {
@@ -67,20 +71,20 @@ const usePostIndexContext = () => {
     return Math.min(postHeadings.length - 1, nextIdx);
   }, [currentIdx, postHeadings]);
 
-  const initializePostIndexContext = useCallback(
-    (postHeadings: PostIndexContext["postHeadings"]) => {
+  const initializePostIndexHeadingsContext = useCallback(
+    (postHeadings: PostIndexHeadingsContext["postHeadings"]) => {
       const currentIdx = findNextIdx();
-      setPostIndexContext({ postHeadings, currentIdx });
+      setPostIndexHeadingsContext({ postHeadings, currentIdx });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [findNextIdx, setPostIndexContext],
+    [findNextIdx, setPostIndexHeadingsContext],
   );
 
-  const resetPostIndexContext = useCallback(() => {
-    setPostIndexContext(initialState);
-  }, [setPostIndexContext]);
+  const resetPostIndexHeadingsContext = useCallback(() => {
+    setPostIndexHeadingsContext(headingsInitialState);
+  }, [setPostIndexHeadingsContext]);
 
-  const onPostIndexClick = useCallback(
+  const onPostIndexHeadingClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
       e.preventDefault();
 
@@ -100,13 +104,13 @@ const usePostIndexContext = () => {
     postHeadings,
     currentIdx,
     setIdx,
-    setPostIndexContext,
+    setPostIndexHeadingsContext,
     findNextIdx,
     findPrevIdx,
-    initializePostIndexContext,
-    resetPostIndexContext,
-    onPostIndexClick,
+    initializePostIndexHeadingsContext,
+    resetPostIndexHeadingsContext,
+    onPostIndexHeadingClick,
   };
 };
 
-export default usePostIndexContext;
+export default usePostIndexHeadingsContext;

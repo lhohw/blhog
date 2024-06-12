@@ -5,15 +5,25 @@ import Link from "next/link";
 import { clsx } from "clsx";
 import usePostIndexContext from "@/hooks/react/usePostIndexContext";
 import Section from "@/components/molecules/Section";
+import CaretDown from "@/components/icons/CaretDown";
 
 export default function PostSidebarIndexSection() {
-  const { postHeadings, currentIdx, onPostIndexClick } = usePostIndexContext();
+  const {
+    postHeadings,
+    currentIdx,
+    onPostIndexHeadingClick,
+    maxHeight,
+    isFold,
+    toggle,
+  } = usePostIndexContext();
 
   return (
     <Section
+      id="sidebar-index-section"
       title="INDEX"
       titleClassName="text-xs md:text-xs pb-1"
-      className="flex-1 mb-4 overflow-hidden min-h-24"
+      className="flex-1 mb-4 overflow-hidden min-h-24 transition-height relative md:max-h-[100%!important]"
+      style={{ maxHeight }}
     >
       <ul className="h-full text-wrap overflow-y-scroll relative">
         {postHeadings.map((heading, idx) => {
@@ -23,12 +33,21 @@ export default function PostSidebarIndexSection() {
               key={heading.id}
               isCurrent={isCurrent}
               idx={idx}
-              onPostIndexClick={onPostIndexClick}
+              onPostIndexHeadingClick={onPostIndexHeadingClick}
               {...heading}
             />
           );
         })}
       </ul>
+      <button
+        className={clsx(
+          "w-6 h-6 block md:hidden absolute right-2 top-2 cursor-pointer transition-transform duration-300",
+          isFold ? "rotate-180" : "rotate-0",
+        )}
+        onClick={toggle}
+      >
+        <CaretDown />
+      </button>
     </Section>
   );
 }
@@ -39,7 +58,7 @@ type PostHeadingLiProps = {
   textContent: string;
   isCurrent: boolean;
   idx: number;
-  onPostIndexClick: React.MouseEventHandler;
+  onPostIndexHeadingClick: React.MouseEventHandler;
 };
 // eslint-disable-next-line react/display-name
 const PostHeadingLi = memo(
@@ -49,7 +68,7 @@ const PostHeadingLi = memo(
     textContent,
     isCurrent,
     idx,
-    onPostIndexClick,
+    onPostIndexHeadingClick,
   }: PostHeadingLiProps) => {
     const depth = parseInt(tagName.substring(1) || "0");
 
@@ -62,7 +81,7 @@ const PostHeadingLi = memo(
           className={clsx(isCurrent && "text-primary")}
           data-post-heading-idx={idx}
           href={`#${id}`}
-          onClick={onPostIndexClick}
+          onClick={onPostIndexHeadingClick}
         >
           {textContent}
         </Link>
