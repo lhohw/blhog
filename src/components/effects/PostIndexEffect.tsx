@@ -8,6 +8,7 @@ import usePostIndexContext, {
 
 export default function PostIndexEffect() {
   const {
+    currentIdx,
     setIdx,
     findNextIdx,
     findPrevIdx,
@@ -41,7 +42,7 @@ export default function PostIndexEffect() {
             prevY.current > scrollY ? findPrevIdx() : findNextIdx();
 
           prevY.current = scrollY;
-          setIdx(nextIdx);
+          if (currentIdx !== nextIdx) setIdx(nextIdx);
         },
         500,
         2000,
@@ -52,7 +53,7 @@ export default function PostIndexEffect() {
         window.removeEventListener("scroll", scrollListener);
       };
     },
-    [findNextIdx, findPrevIdx, setIdx],
+    [findNextIdx, findPrevIdx, setIdx, currentIdx],
   );
 
   return <></>;
