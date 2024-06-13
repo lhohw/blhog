@@ -1,3 +1,4 @@
+import type { PageProps } from "@/types/type";
 import Post from "@/components/templates/Post";
 import "@/styles/post-prism.scss";
 

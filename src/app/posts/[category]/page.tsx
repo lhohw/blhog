@@ -1,3 +1,4 @@
+import type { PageProps } from "@/types/type";
 import { Suspense } from "react";
 import CategoryPosts from "@/components/templates/CategoryPosts";
 import Breadcrumbs from "@/components/organisms/Breadcrumbs";
