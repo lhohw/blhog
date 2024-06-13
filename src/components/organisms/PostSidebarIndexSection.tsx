@@ -22,10 +22,10 @@ export default function PostSidebarIndexSection() {
       id="sidebar-index-section"
       title="INDEX"
       titleClassName="text-xs md:text-xs pb-1"
-      className="flex-1 mb-4 overflow-hidden min-h-24 transition-height relative md:max-h-[100%!important]"
+      className="relative min-h-24 flex-1 overflow-hidden transition-height md:max-h-[100%!important] md:mb-4"
       style={{ maxHeight }}
     >
-      <ul className="h-full text-wrap overflow-y-scroll relative">
+      <ul className="relative h-full text-wrap overflow-y-scroll">
         {postHeadings.map((heading, idx) => {
           const isCurrent = idx === currentIdx;
           return (
@@ -41,8 +41,8 @@ export default function PostSidebarIndexSection() {
       </ul>
       <button
         className={clsx(
-          "w-6 h-6 block md:hidden absolute right-2 top-2 cursor-pointer transition-transform duration-300",
-          isFold ? "rotate-180" : "rotate-0",
+          "absolute right-2 top-2 block w-6 h-6 cursor-pointer transition-transform duration-300 md:hidden",
+          isFold ? "rotate-0" : "rotate-180",
         )}
         onClick={toggle}
       >
@@ -74,7 +74,7 @@ const PostHeadingLi = memo(
 
     return (
       <li
-        className="text-text-alpha text-sm cursor-pointer transition-colors mt-1"
+        className="mt-1 text-text-alpha text-sm cursor-pointer transition-colors"
         style={{ marginLeft: `${depth * 0.5}rem` }}
       >
         <Link
