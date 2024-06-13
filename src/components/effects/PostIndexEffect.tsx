@@ -14,8 +14,9 @@ export default function PostIndexEffect() {
     findPrevIdx,
     initializePostIndexHeadingsContext,
     resetPostIndexHeadingsContext,
-    isFold,
-    setFoldContext,
+    fold,
+    initializeFoldContext,
+    resetFoldContext,
   } = usePostIndexContext();
 
   useEffect(function initializeHeadings() {
@@ -26,10 +27,17 @@ export default function PostIndexEffect() {
           return { tagName, textContent: textContent ?? "", offsetTop, id };
         },
       );
+    const HEADING_LI_HEIGHT = 24;
+    const TITLE_HEIGHT = 20;
+    const PADDING_Y = 48;
+    const maxHeight =
+      postHeadings.length * HEADING_LI_HEIGHT + TITLE_HEIGHT + PADDING_Y + "px";
 
     initializePostIndexHeadingsContext(postHeadings);
+    initializeFoldContext(maxHeight);
     return () => {
       resetPostIndexHeadingsContext();
+      resetFoldContext();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -58,27 +66,14 @@ export default function PostIndexEffect() {
     [findNextIdx, findPrevIdx, setIdx, currentIdx],
   );
 
-  useEffect(function initializeIsFold() {
-    const { scrollY } = window;
-    const isFold = scrollY !== 0;
-    setFoldContext({ isFold, maxHeight: isFold ? "0" : "none" });
-    return () => {
-      setFoldContext({ isFold: false, maxHeight: "none" });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   useEffect(
     function isFoldResizeListener() {
-      const resizeListener = () => {
-        setFoldContext({ isFold: true, maxHeight: "0" });
-      };
-      window.addEventListener("resize", resizeListener);
+      window.addEventListener("resize", fold);
       return () => {
-        window.removeEventListener("resize", resizeListener);
+        window.removeEventListener("resize", fold);
       };
     },
-    [setFoldContext],
+    [fold],
   );
 
   return <></>;

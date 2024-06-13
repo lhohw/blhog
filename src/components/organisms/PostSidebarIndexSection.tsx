@@ -12,7 +12,7 @@ export default function PostSidebarIndexSection() {
     postHeadings,
     currentIdx,
     onPostIndexHeadingClick,
-    maxHeight,
+    height,
     isFold,
     toggle,
   } = usePostIndexContext();
@@ -22,8 +22,8 @@ export default function PostSidebarIndexSection() {
       id="sidebar-index-section"
       title="INDEX"
       titleClassName="text-xs md:text-xs pb-1"
-      className="relative min-h-24 flex-1 overflow-hidden transition-height md:max-h-[100%!important] md:mb-4"
-      style={{ maxHeight }}
+      className="relative min-h-24 block overflow-hidden transition-height md:flex md:flex-1 md:max-h-[100%!important] md:mb-4"
+      style={{ height }}
     >
       <ul className="relative h-full text-wrap overflow-y-scroll">
         {postHeadings.map((heading, idx) => {
@@ -74,7 +74,7 @@ const PostHeadingLi = memo(
 
     return (
       <li
-        className="mt-1 text-text-alpha text-sm cursor-pointer transition-colors"
+        className="h-5 mt-1 text-text-alpha text-sm cursor-pointer transition-colors"
         style={{ marginLeft: `${depth * 0.5}rem` }}
       >
         <Link
