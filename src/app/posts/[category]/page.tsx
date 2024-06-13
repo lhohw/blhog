@@ -7,7 +7,7 @@ import PostsSkeleton from "@/components/skeletons/PostsSkeleton";
 export default function Page({ params }: PageProps<{ category: string }>) {
   const { category } = params;
   return (
-    <div className="p-4 flex flex-col">
+    <div className="p-4 flex flex-col mt-14 md:mt-0">
       <Breadcrumbs />
       <Suspense key={"category-posts"} fallback={<PostsSkeleton />}>
         <CategoryPosts category={category} />

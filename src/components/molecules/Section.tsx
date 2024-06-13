@@ -1,4 +1,4 @@
-import type { CSSProperties, HTMLAttributes, PropsWithChildren } from "react";
+import type { HTMLAttributes, PropsWithChildren } from "react";
 import clsx from "clsx";
 import H3 from "@/components/atoms/headings/H3";
 
