@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const Heading = z.object({
+  tagName: z.string(),
+  textContent: z.string(),
+});
+export type Heading = z.infer<typeof Heading>;
+
 export const Post = z.object({
   id: z.string().uuid(),
   created_at: z.coerce.date(),
@@ -14,6 +20,7 @@ export const Post = z.object({
   user_link: z.string(),
   alt: z.string(),
   blur_hash: z.string(),
+  headings: z.array(Heading),
 });
 export type Post = z.infer<typeof Post>;
 

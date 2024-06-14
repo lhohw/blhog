@@ -3,6 +3,7 @@ import { MDXRemoteProps } from "next-mdx-remote/rsc";
 import React from "react";
 import { gunzipSync } from "zlib";
 import { strToSlug } from "@/lib/utils/string";
+import { Post } from "@/const/definitions";
 
 export const withImageSize = (
   url: string,
@@ -59,4 +60,30 @@ export const createMDXHeadings = () => {
 export const format = (date: Date) => {
   const formatter = Intl.DateTimeFormat("ko-KR", { dateStyle: "medium" });
   return formatter.format(date);
+};
+
+export const unserialize = (post: Post) => {
+  const { title, body, headings, updated_at } = post;
+
+  const decompressed = decompress(body);
+  const headingsWithId = initHeadings(headings);
+  const formattedUpdatedAt = format(updated_at);
+  return {
+    title,
+    decompressed,
+    headingsWithId,
+    formattedUpdatedAt,
+  };
+};
+
+const initHeadings = (headings: Post["headings"]) => {
+  return headings.map((heading, i) => {
+    const textContent = heading.textContent.replace(/\\/g, "");
+    const id = textContent.split(" ").join("-") + i;
+    return {
+      id,
+      tagName: heading.tagName,
+      textContent,
+    };
+  });
 };

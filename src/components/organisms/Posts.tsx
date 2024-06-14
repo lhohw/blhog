@@ -5,7 +5,7 @@ export default async function Posts({ posts }: { posts: Post[] }) {
   return (
     <div className="flex flex-wrap justify-start">
       {posts.map((props) => {
-        const href = `/posts/${props.category}/${props.slug}`;
+        const href = `/post?category=${props.category}&slug=${props.slug}`;
         return <Card key={props.id} href={href} {...props} />;
       })}
     </div>
