@@ -18,7 +18,7 @@ export default function Metaphor({
     <div
       className={clsx(
         className,
-        "border-primary border-[1px] rounded-full p-1.5 m-1.5 cursor-pointer flex items-center justify-center",
+        "border-primary border-[1px] rounded-full p-1.5 m-1.5 cursor-pointer flex h-8 w-8 items-center justify-center",
       )}
       title={title}
       aria-label={title}
