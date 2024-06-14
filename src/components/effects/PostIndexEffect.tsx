@@ -1,58 +1,47 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { debouncing } from "@/lib/utils/performance";
-import usePostIndexContext, {
-  type PostIndexHeadingsContext,
-} from "@/hooks/react/usePostIndexContext";
 
-export default function PostIndexEffect() {
-  const {
-    currentIdx,
-    setIdx,
-    findNextIdx,
-    findPrevIdx,
-    initializePostIndexHeadingsContext,
-    resetPostIndexHeadingsContext,
-    fold,
-    initializeFoldContext,
-    resetFoldContext,
-  } = usePostIndexContext();
+export type PostIndexEffectProps = {
+  offsetTop: number[];
+  setOffsetTop: (offsetTop: number[]) => void;
+  isRead: boolean[];
+  setIsRead: (isRead: boolean[]) => void;
+};
+export default function PostIndexEffect({
+  offsetTop,
+  setOffsetTop,
+  isRead,
+  setIsRead,
+}: PostIndexEffectProps) {
+  useEffect(function initializePostIndex() {
+    const { scrollY } = window;
+    const headings = document.querySelectorAll(".heading");
+    const initialOffsetTop = [];
+    const initialIsRead = [];
 
-  useEffect(function initializeHeadings() {
-    const postHeadings: PostIndexHeadingsContext["postHeadings"] =
-      Array.from<HTMLHeadingElement>(document.querySelectorAll(".heading")).map(
-        (heading) => {
-          const { tagName, textContent, offsetTop, id } = heading;
-          return { tagName, textContent: textContent ?? "", offsetTop, id };
-        },
-      );
-    const HEADING_LI_HEIGHT = 24;
-    const TITLE_HEIGHT = 20;
-    const PADDING_Y = 48;
-    const maxHeight =
-      postHeadings.length * HEADING_LI_HEIGHT + TITLE_HEIGHT + PADDING_Y + "px";
+    for (let i = 0; i < headings.length; i++) {
+      const heading = headings[i] as HTMLHeadingElement;
+      initialOffsetTop[i] = heading.offsetTop;
+      initialIsRead[i] = initialOffsetTop[i] <= scrollY;
+    }
 
-    initializePostIndexHeadingsContext(postHeadings);
-    initializeFoldContext(maxHeight);
-    return () => {
-      resetPostIndexHeadingsContext();
-      resetFoldContext();
-    };
+    setOffsetTop(initialOffsetTop);
+    setIsRead(initialIsRead);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const prevY = useRef(-1);
   useEffect(
     function addScrollListener() {
       const scrollListener = debouncing(
         () => {
           const { scrollY } = window;
-          const nextIdx =
-            prevY.current > scrollY ? findPrevIdx() : findNextIdx();
-
-          prevY.current = scrollY;
-          if (currentIdx !== nextIdx) setIdx(nextIdx);
+          const nextIsRead = [...isRead];
+          for (let i = 0; i < nextIsRead.length; i++) {
+            nextIsRead[i] = offsetTop[i] <= scrollY;
+          }
+          setIsRead(nextIsRead);
         },
         500,
         2000,
@@ -63,17 +52,7 @@ export default function PostIndexEffect() {
         window.removeEventListener("scroll", scrollListener);
       };
     },
-    [findNextIdx, findPrevIdx, setIdx, currentIdx],
-  );
-
-  useEffect(
-    function isFoldResizeListener() {
-      window.addEventListener("resize", fold);
-      return () => {
-        window.removeEventListener("resize", fold);
-      };
-    },
-    [fold],
+    [isRead, offsetTop, setIsRead],
   );
 
   return <></>;
