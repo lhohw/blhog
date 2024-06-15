@@ -54,7 +54,7 @@ const Resizer = ({
       {children}
       <div
         className={clsx(
-          "resizer absolute z-10 [&>div]:hover:opacity-70",
+          "resizer absolute z-10 [&>div]:hover:opacity-70 hidden md:block",
           isHorizontal ? "md:cursor-ew-resize" : "md:cursor-ns-resize",
           direction === "top"
             ? "top-0"
@@ -79,11 +79,11 @@ const Resizer = ({
       >
         <div
           className={clsx(
-            "rounded-full border-primary border-2 absolute w-8 h-8 bg-background p-1 z-20 opacity-0 transition-opacity duration-300 hidden md:block",
+            "rounded-full border-primary border-2 absolute w-8 h-8 bg-background p-1 z-20 opacity-0 transition-opacity duration-300",
             isHorizontal
               ? "cursor-ew-resize top-1/2 -translate-y-1/2"
               : "cursor-ns-resize left-1/2 -translate-x-1/2",
-            noIcon && "md:hidden",
+            noIcon && "hidden",
           )}
         >
           {isHorizontal ? <EWResize /> : <NSResize />}
