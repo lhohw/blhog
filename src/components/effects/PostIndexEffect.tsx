@@ -4,6 +4,7 @@ import { useCallback, useEffect } from "react";
 import { FOLDED_SIDEBAR_SIZE_UNDER_MD } from "@/const/size";
 import { debouncing } from "@/lib/utils/performance";
 import { getAllHeadingsInPost, getIndexHeadingsUl } from "@/lib/utils/dom";
+import useDom from "@/hooks/react/useDom";
 
 export type PostIndexEffectProps = {
   offsetTop: number[];
@@ -17,8 +18,11 @@ export default function PostIndexEffect({
   isRead,
   setIsRead,
 }: PostIndexEffectProps) {
+  const getCachedAllHeadingsInPost = useDom(getAllHeadingsInPost);
+  const getCachedIndexHeadingsUl = useDom(getIndexHeadingsUl);
+
   const initializePostIndex = useCallback(() => {
-    const headingsInPost = getAllHeadingsInPost();
+    const headingsInPost = getCachedAllHeadingsInPost();
     const initialOffsetTop = [];
     const initialIsRead = [];
 
@@ -38,14 +42,17 @@ export default function PostIndexEffect({
     return offsetTop - FOLDED_SIDEBAR_SIZE_UNDER_MD <= window.scrollY;
   }, []);
 
-  const syncScroll = useCallback((lastIsReadIdx: number) => {
-    if (lastIsReadIdx < 0) return;
+  const syncScroll = useCallback(
+    (lastIsReadIdx: number) => {
+      if (lastIsReadIdx < 0) return;
 
-    const ul = getIndexHeadingsUl();
-    const lastReadLi = ul.children[lastIsReadIdx] as HTMLLIElement;
+      const ul = getCachedIndexHeadingsUl();
+      const lastReadLi = ul.children[lastIsReadIdx] as HTMLLIElement;
 
-    ul.scrollTo({ top: lastReadLi.offsetTop, behavior: "smooth" });
-  }, []);
+      ul.scrollTo({ top: lastReadLi.offsetTop, behavior: "smooth" });
+    },
+    [getCachedIndexHeadingsUl],
+  );
 
   useEffect(function initialize() {
     initializePostIndex();
