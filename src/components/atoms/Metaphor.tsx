@@ -1,6 +1,6 @@
+import type { IconProps } from "@/components/icons";
+import Link, { type LinkProps } from "next/link";
 import clsx from "clsx";
-import { IconProps } from "../icons";
-import Link, { LinkProps } from "next/link";
 
 export type MetaphorProps = {
   className?: string;
