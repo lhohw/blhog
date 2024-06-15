@@ -9,8 +9,9 @@ import PostIndexEffect from "@/components/effects/PostIndexEffect";
 
 export type PostHeadingsProps = Pick<PostSidebarIndexSectionProps, "headings">;
 export default function PostHeadings({ headings }: PostHeadingsProps) {
-  const { isRead, setIsRead, offsetTop, setOffsetTop, onHeadingClick } =
+  const { isRead, offsetTop, setIsRead, setOffsetTop, onHeadingClick } =
     usePostIndex();
+
   return (
     <ul
       id="post-index-list"
@@ -20,16 +21,16 @@ export default function PostHeadings({ headings }: PostHeadingsProps) {
         return (
           <PostHeadingLi
             key={heading.id}
-            isRead={isRead[i]}
             {...heading}
+            isRead={isRead[i]}
             onHeadingClick={onHeadingClick}
           />
         );
       })}
       <PostIndexEffect
         isRead={isRead}
-        setIsRead={setIsRead}
         offsetTop={offsetTop}
+        setIsRead={setIsRead}
         setOffsetTop={setOffsetTop}
       />
     </ul>

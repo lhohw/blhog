@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
+import { FOLDED_SIDEBAR_SIZE_UNDER_MD } from "@/const/size";
 import { debouncing } from "@/lib/utils/performance";
+import { getAllHeadingsInPost, getIndexHeadingsUl } from "@/lib/utils/dom";
 
 export type PostIndexEffectProps = {
   offsetTop: number[];
@@ -15,20 +17,44 @@ export default function PostIndexEffect({
   isRead,
   setIsRead,
 }: PostIndexEffectProps) {
-  useEffect(function initializePostIndex() {
-    const { scrollY } = window;
-    const headings = document.querySelectorAll(".heading");
+  const initializePostIndex = useCallback(() => {
+    const headingsInPost = getAllHeadingsInPost();
     const initialOffsetTop = [];
     const initialIsRead = [];
 
-    for (let i = 0; i < headings.length; i++) {
-      const heading = headings[i] as HTMLHeadingElement;
+    for (let i = 0; i < headingsInPost.length; i++) {
+      const heading = headingsInPost[i] as HTMLHeadingElement;
       initialOffsetTop[i] = heading.offsetTop;
-      initialIsRead[i] = initialOffsetTop[i] <= scrollY;
+      initialIsRead[i] = isReadHeading(initialOffsetTop[i]);
     }
 
     setOffsetTop(initialOffsetTop);
     setIsRead(initialIsRead);
+    syncScroll(initialIsRead.findLastIndex((e) => e === true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const isReadHeading = useCallback((offsetTop: number) => {
+    return offsetTop - FOLDED_SIDEBAR_SIZE_UNDER_MD <= window.scrollY;
+  }, []);
+
+  const syncScroll = useCallback((lastIsReadIdx: number) => {
+    if (lastIsReadIdx < 0) return;
+
+    const ul = getIndexHeadingsUl();
+    const lastReadLi = ul.children[lastIsReadIdx] as HTMLLIElement;
+
+    ul.scrollTo({ top: lastReadLi.offsetTop, behavior: "smooth" });
+  }, []);
+
+  useEffect(function initialize() {
+    initializePostIndex();
+    const resizeListener = debouncing(initializePostIndex, 500);
+
+    window.addEventListener("resize", resizeListener);
+    return () => {
+      window.removeEventListener("resize", resizeListener);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -36,12 +62,14 @@ export default function PostIndexEffect({
     function addScrollListener() {
       const scrollListener = debouncing(
         () => {
-          const { scrollY } = window;
           const nextIsRead = [...isRead];
+          let lastIsReadIdx = 0;
           for (let i = 0; i < nextIsRead.length; i++) {
-            nextIsRead[i] = offsetTop[i] <= scrollY;
+            nextIsRead[i] = isReadHeading(offsetTop[i]);
+            if (nextIsRead[i]) lastIsReadIdx = i;
           }
           setIsRead(nextIsRead);
+          syncScroll(lastIsReadIdx);
         },
         500,
         2000,
@@ -52,7 +80,7 @@ export default function PostIndexEffect({
         window.removeEventListener("scroll", scrollListener);
       };
     },
-    [isRead, offsetTop, setIsRead],
+    [isRead, isReadHeading, offsetTop, setIsRead, syncScroll],
   );
 
   return <></>;
