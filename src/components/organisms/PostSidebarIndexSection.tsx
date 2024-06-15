@@ -26,7 +26,7 @@ export default function PostSidebarIndexSection({
       <Section
         title="INDEX"
         titleClassName="text-xs md:text-xs pb-1"
-        className="relative min-h-24 w-full block overflow-hidden transition-height md:flex md:flex-1 md:max-h-[100%!important] md:mb-4"
+        className="relative min-h-24 w-full block overflow-hidden transition-height md:flex md:flex-1 md:h-[100%!important] md:mb-4"
         style={{ height }}
       >
         <Suspense fallback="post headings...">
