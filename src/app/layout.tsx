@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Header from "@/components/organisms/Header";
+import PlumTreeBackground from "@/components/organisms/PlumTreeBackground";
 import MainColorEffect from "@/components/effects/MainColorEffect";
-import PlumTreeEffect from "@/components/effects/PlumTreeEffect";
 import { nunito_sans } from "@/styles/fonts";
 import "@/styles/globals.scss";
 
@@ -20,8 +21,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={nunito_sans.className} data-theme="unset">
-        {children}
-        <PlumTreeEffect />
+        <div className="p-1 sm:pt-3 sm:px-6 sm:pb-6">
+          <Header />
+          <main className="flex flex-1 flex-col md:flex-row">{children}</main>
+        </div>
+        <PlumTreeBackground />
       </body>
       <MainColorEffect />
     </html>

@@ -1,7 +1,7 @@
-import Link from "next/link";
-import Metaphor from "../atoms/Metaphor";
 import { Git } from "@/components/icons";
+import Metaphor from "@/components/atoms/Metaphor";
 import ThemeMetaphor from "@/components/organisms/ThemeMetaphor";
+import HeaderTitle from "@/components/organisms/HeaderTitle";
 
 export default function Header() {
   return (
@@ -11,9 +11,7 @@ export default function Header() {
         boxShadow: "0 5px 10px -5px var(--primary)",
       }}
     >
-      <Link href="/posts">
-        <h1 className="text-base font-bold">{`lhohw's blog`}</h1>
-      </Link>
+      <HeaderTitle />
       <ul className="flex flex-1 justify-end items-center h-full">
         <li>
           <Metaphor.Link
