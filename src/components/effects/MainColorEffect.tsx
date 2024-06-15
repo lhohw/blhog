@@ -2,13 +2,14 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import { textSeaColors } from "@/const/color";
+import { getRoot } from "@/lib/utils/dom";
 
 export default function MainColorEffect() {
   const id = useRef<Timer>(null!);
 
   const mainColorAnim = useCallback(() => {
     let i = 0;
-    const root = document.querySelector(":root")! as HTMLHtmlElement;
+    const root = getRoot();
     id.current = setInterval(() => {
       root.style.setProperty("--main-color", textSeaColors[i]);
       i = ++i % textSeaColors.length;
