@@ -12,6 +12,10 @@ export const getPostIndexUl = () => {
   return getSidebar().querySelector("ul#post-index-list") as HTMLUListElement;
 };
 
+export const getPostImagesUl = () => {
+  return getSidebar().querySelector("ul#post-images-list") as HTMLUListElement;
+};
+
 export const getPostArticle = () => {
   const key = "article#post-article";
   return document.querySelector(key) as HTMLDivElement;

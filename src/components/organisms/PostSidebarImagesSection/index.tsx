@@ -8,22 +8,26 @@ import usePostImages, { type PostImage } from "./usePostImages";
 import InitializePostImageEffect from "./InitializePostImageEffect";
 
 export default function PostSidebarImagesSection() {
-  const { images, setImages, maxHeight, setMaxHeight } = usePostImages();
+  const { images, setImages, maxHeight, setMaxHeight, isRead, setIsRead } =
+    usePostImages();
 
   return (
     <>
       <Resizer
         className="hidden md:block"
-        initialLength={100}
-        min={100}
+        initialLength={200}
+        min={200}
         max={maxHeight}
         direction="top"
       >
         <ImagesSection images={images} />
       </Resizer>
       <InitializePostImageEffect
+        images={images}
         setImages={setImages}
         setMaxHeight={setMaxHeight}
+        isRead={isRead}
+        setIsRead={setIsRead}
       />
     </>
   );
@@ -37,7 +41,10 @@ const ImagesSection = memo(({ images }: { images: PostImage[] }) => {
       titleClassName="text-xs md:text-xs pb-1"
       className="h-full"
     >
-      <ul className="my-2 w-full h-full overflow-y-scroll snap-y snap-mandatory">
+      <ul
+        id="post-images-list"
+        className="my-2 w-full h-full overflow-y-scroll snap-y snap-mandatory"
+      >
         {images.map((img, idx) => {
           return (
             <li key={idx} className="h-full w-full snap-center">

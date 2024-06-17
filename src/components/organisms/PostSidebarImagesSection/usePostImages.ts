@@ -11,12 +11,15 @@ export type PostImage = {
 const usePostImages = () => {
   const [images, setImages] = useState<PostImage[]>([]);
   const [maxHeight, setMaxHeight] = useState(100);
+  const [isRead, setIsRead] = useState<boolean[]>([]);
 
   return {
     images,
     setImages,
     maxHeight,
     setMaxHeight,
+    isRead,
+    setIsRead,
   };
 };
 
