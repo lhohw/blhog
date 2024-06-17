@@ -1,12 +1,12 @@
 import { useCallback, useState } from "react";
-import { getIndexHeadingsUl } from "@/lib/utils/dom";
+import { getPostIndexUl } from "@/lib/utils/dom";
 import { MIN_POST_INDEX_UL_SIZE } from "@/const/size";
 import useDom from "@/hooks/react/useDom";
 
 export default function usePostSidebarIndexSectionState() {
   const [height, setHeight] = useState(MIN_POST_INDEX_UL_SIZE);
   const [isFold, setIsFold] = useState(true);
-  const getCachedIndexHeadingsUl = useDom(getIndexHeadingsUl);
+  const getCachedIndexHeadingsUl = useDom(getPostIndexUl);
 
   const calculateMaxHeight = useCallback(() => {
     const ul = getCachedIndexHeadingsUl();

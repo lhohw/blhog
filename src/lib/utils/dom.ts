@@ -8,8 +8,8 @@ export const getSidebar = () => {
   return document.querySelector(selector) as HTMLDivElement;
 };
 
-export const getIndexHeadingsUl = () => {
-  return getSidebar().querySelector("ul") as HTMLUListElement;
+export const getPostIndexUl = () => {
+  return getSidebar().querySelector("ul#post-index-list") as HTMLUListElement;
 };
 
 export const getPostArticle = () => {

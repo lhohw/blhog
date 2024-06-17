@@ -3,7 +3,7 @@
 import { useCallback, useEffect } from "react";
 import { FOLDED_SIDEBAR_SIZE_UNDER_MD } from "@/const/size";
 import { debouncing } from "@/lib/utils/performance";
-import { getAllHeadingsInPost, getIndexHeadingsUl } from "@/lib/utils/dom";
+import { getAllHeadingsInPost, getPostIndexUl } from "@/lib/utils/dom";
 import useDom from "@/hooks/react/useDom";
 
 export type PostIndexEffectProps = {
@@ -19,7 +19,7 @@ export default function PostIndexEffect({
   setIsRead,
 }: PostIndexEffectProps) {
   const getCachedAllHeadingsInPost = useDom(getAllHeadingsInPost);
-  const getCachedIndexHeadingsUl = useDom(getIndexHeadingsUl);
+  const getCachedIndexHeadingsUl = useDom(getPostIndexUl);
 
   const initializePostIndex = useCallback(() => {
     const headingsInPost = getCachedAllHeadingsInPost();
