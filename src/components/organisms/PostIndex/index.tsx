@@ -5,10 +5,10 @@ import { memo } from "react";
 import Link from "next/link";
 import clsx from "clsx";
 import usePostIndex from "@/hooks/react/usePostIndex";
-import PostIndexEffect from "@/components/effects/PostIndexEffect";
+import PostIndexEffect from "./PostIndexEffect";
 
 export type PostHeadingsProps = Pick<PostSidebarIndexSectionProps, "headings">;
-export default function PostHeadings({ headings }: PostHeadingsProps) {
+export default function PostIndex({ headings }: PostHeadingsProps) {
   const { isRead, offsetTop, setIsRead, setOffsetTop, onHeadingClick } =
     usePostIndex();
 
@@ -19,7 +19,7 @@ export default function PostHeadings({ headings }: PostHeadingsProps) {
     >
       {headings.map((heading, i) => {
         return (
-          <PostHeadingLi
+          <PostIndexLi
             key={heading.id}
             {...heading}
             isRead={isRead[i]}
@@ -38,7 +38,7 @@ export default function PostHeadings({ headings }: PostHeadingsProps) {
 }
 
 // eslint-disable-next-line react/display-name
-const PostHeadingLi = memo(
+const PostIndexLi = memo(
   ({ id, tagName, textContent, isRead, onHeadingClick }: any) => {
     const depth = parseInt(tagName.substring(1) || "0");
 

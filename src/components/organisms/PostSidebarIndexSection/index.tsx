@@ -4,9 +4,9 @@ import { Suspense } from "react";
 import { clsx } from "clsx";
 import Section from "@/components/molecules/Section";
 import CaretDown from "@/components/icons/CaretDown";
-import PostHeadings from "@/components/organisms/PostHeadings";
-import PostIndexStateEffect from "@/components/effects/PostIndexStateEffect";
-import usePostIndexState from "@/hooks/react/usePostIndexState";
+import PostIndex from "@/components/organisms/PostIndex";
+import PostSidebarIndexSectionEffect from "./PostSidebarIndexSectionEffect";
+import usePostSidebarIndexSectionState from "./usePostSidebarIndexSectionState";
 
 export type PostSidebarIndexSectionProps = {
   headings: {
@@ -18,8 +18,8 @@ export type PostSidebarIndexSectionProps = {
 export default function PostSidebarIndexSection({
   headings,
 }: PostSidebarIndexSectionProps) {
-  const { height, isFold, getMaxHeight, setHeight, spread, toggle } =
-    usePostIndexState();
+  const { height, isFold, calculateMaxHeight, setHeight, spread, toggle } =
+    usePostSidebarIndexSectionState();
 
   return (
     <>
@@ -30,7 +30,7 @@ export default function PostSidebarIndexSection({
         style={{ height }}
       >
         <Suspense fallback="post headings...">
-          <PostHeadings headings={headings} />
+          <PostIndex headings={headings} />
         </Suspense>
         <button
           className={clsx(
@@ -42,9 +42,9 @@ export default function PostSidebarIndexSection({
           <CaretDown />
         </button>
       </Section>
-      <PostIndexStateEffect
+      <PostSidebarIndexSectionEffect
         isFold={isFold}
-        getMaxHeight={getMaxHeight}
+        calculateMaxHeight={calculateMaxHeight}
         setHeight={setHeight}
         spread={spread}
         toggle={toggle}

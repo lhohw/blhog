@@ -3,12 +3,12 @@ import { getIndexHeadingsUl } from "@/lib/utils/dom";
 import { MIN_POST_INDEX_UL_SIZE } from "@/const/size";
 import useDom from "@/hooks/react/useDom";
 
-export default function usePostIndexState() {
+export default function usePostSidebarIndexSectionState() {
   const [height, setHeight] = useState(MIN_POST_INDEX_UL_SIZE);
   const [isFold, setIsFold] = useState(true);
   const getCachedIndexHeadingsUl = useDom(getIndexHeadingsUl);
 
-  const getMaxHeight = useCallback(() => {
+  const calculateMaxHeight = useCallback(() => {
     const ul = getCachedIndexHeadingsUl();
     const maxHeight = Math.min(ul.scrollHeight, window.innerHeight - 76);
     return maxHeight;
@@ -20,17 +20,17 @@ export default function usePostIndexState() {
 
   const toggle = useCallback(() => {
     const nextIsFold = !isFold;
-    const maxHeight = getMaxHeight();
+    const maxHeight = calculateMaxHeight();
 
     setIsFold(nextIsFold);
     setHeight(nextIsFold === true ? MIN_POST_INDEX_UL_SIZE : maxHeight);
-  }, [isFold, getMaxHeight]);
+  }, [isFold, calculateMaxHeight]);
 
   return {
     height,
     isFold,
     setHeight,
-    getMaxHeight,
+    calculateMaxHeight,
     toggle,
     spread,
   };

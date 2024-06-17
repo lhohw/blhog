@@ -1,21 +1,21 @@
 import { useEffect, useLayoutEffect } from "react";
 
-export type PostIndexStateEffectProps = {
+export type PostSidebarIndexSectionEffectProps = {
   isFold: boolean;
-  getMaxHeight: () => number;
+  calculateMaxHeight: () => number;
   setHeight: (height: number) => void;
   spread: () => void;
   toggle: () => void;
 };
-export default function PostIndexStateEffect({
+export default function PostSidebarIndexSectionEffect({
   isFold,
-  getMaxHeight,
+  calculateMaxHeight,
   setHeight,
   spread,
   toggle,
-}: PostIndexStateEffectProps) {
+}: PostSidebarIndexSectionEffectProps) {
   useLayoutEffect(function initializeIndexState() {
-    const maxHeight = getMaxHeight();
+    const maxHeight = calculateMaxHeight();
 
     if (window.scrollY === 0) {
       setHeight(maxHeight);
