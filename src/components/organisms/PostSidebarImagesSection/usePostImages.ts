@@ -29,7 +29,7 @@ const usePostImages = () => {
   const initialize = useCallback(() => {
     initializePostImages();
     initializeMaxHeight();
-    onScroll();
+    setTimeout(onScroll, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -56,8 +56,6 @@ const usePostImages = () => {
 
   const syncScroll = useCallback(
     (lastIsReadIdx: number) => {
-      if (lastIsReadIdx < 0) return;
-
       const ul = getImagesUlInSidebarWithCache();
       const lastReadLi = ul.children[lastIsReadIdx] as HTMLLIElement;
 
@@ -69,7 +67,7 @@ const usePostImages = () => {
 
   const onScroll = useCallback(() => {
     const nextIsRead = [...isRead];
-    let lastIsReadIdx = -1;
+    let lastIsReadIdx = 0;
 
     const postImages = getImagesInPostWithCache();
 
