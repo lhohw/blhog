@@ -8,7 +8,7 @@ import usePostImages, { type PostImage } from "./usePostImages";
 import InitializePostImageEffect from "./InitializePostImageEffect";
 
 export default function PostSidebarImagesSection() {
-  const { images, setImages, maxHeight, setMaxHeight, isRead, setIsRead } =
+  const { images, maxHeight, initialize, initializeMaxHeight, onScroll } =
     usePostImages();
 
   return (
@@ -23,11 +23,9 @@ export default function PostSidebarImagesSection() {
         <ImagesSection images={images} />
       </Resizer>
       <InitializePostImageEffect
-        images={images}
-        setImages={setImages}
-        setMaxHeight={setMaxHeight}
-        isRead={isRead}
-        setIsRead={setIsRead}
+        initialize={initialize}
+        initializeMaxHeight={initializeMaxHeight}
+        onScroll={onScroll}
       />
     </>
   );
