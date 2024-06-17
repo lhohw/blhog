@@ -57,7 +57,7 @@ const usePostImages = () => {
   const syncScroll = useCallback(
     (lastIsReadIdx: number) => {
       const ul = getImagesUlInSidebarWithCache();
-      const lastReadLi = ul.children[lastIsReadIdx] as HTMLLIElement;
+      const lastReadLi = ul?.children[lastIsReadIdx] as HTMLLIElement;
 
       if (!lastReadLi) return;
       ul.scrollTo({ top: lastReadLi.offsetTop, behavior: "smooth" });
