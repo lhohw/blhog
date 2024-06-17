@@ -7,16 +7,17 @@ import useDom from "@/hooks/react/useDom";
 
 export default function MainColorEffect() {
   const id = useRef<Timer>(null!);
-  const getCachedRoot = useDom(getRoot);
+  const getRootWithCache = useDom(getRoot);
 
   const mainColorAnim = useCallback(() => {
     let i = 0;
-    const root = getCachedRoot();
+    const root = getRootWithCache();
+
     id.current = setInterval(() => {
       root.style.setProperty("--main-color", textSeaColors[i]);
       i = ++i % textSeaColors.length;
     }, 1e4);
-  }, [getCachedRoot]);
+  }, [getRootWithCache]);
 
   useEffect(() => {
     const isMotionReduced = window.matchMedia("(prefers-reduced-motion)");

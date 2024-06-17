@@ -22,9 +22,9 @@ const usePostImages = () => {
   const [isRead, setIsRead] = useState<boolean[]>([]);
   const [maxHeight, setMaxHeight] = useState(100);
 
-  const getCachedSidebar = useDom(getSidebar);
-  const getCachedImagesUlInSidebar = useDom(getPostImagesUl);
-  const getCachedImagesInPost = useDom(getImagesInPost);
+  const getSidebarWithCache = useDom(getSidebar);
+  const getImagesUlInSidebarWithCache = useDom(getPostImagesUl);
+  const getImagesInPostWithCache = useDom(getImagesInPost);
 
   const initialize = useCallback(() => {
     initializePostImages();
@@ -35,7 +35,7 @@ const usePostImages = () => {
 
   const initializeMaxHeight = useCallback(() => {
     const maxHeight =
-      getCachedSidebar().offsetHeight -
+      getSidebarWithCache().offsetHeight -
       SIDEBAR_PADDING_Y -
       MIN_POST_INDEX_UL_SIZE -
       POST_INDEX_SECTION_MARGIN_BOTTOM;
@@ -45,7 +45,7 @@ const usePostImages = () => {
   }, []);
 
   const initializePostImages = useCallback(() => {
-    const postImages = getCachedImagesInPost();
+    const postImages = getImagesInPostWithCache();
     setImages(postImages);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -58,13 +58,13 @@ const usePostImages = () => {
     (lastIsReadIdx: number) => {
       if (lastIsReadIdx < 0) return;
 
-      const ul = getCachedImagesUlInSidebar();
+      const ul = getImagesUlInSidebarWithCache();
       const lastReadLi = ul.children[lastIsReadIdx] as HTMLLIElement;
 
       if (!lastReadLi) return;
       ul.scrollTo({ top: lastReadLi.offsetTop, behavior: "smooth" });
     },
-    [getCachedImagesUlInSidebar],
+    [getImagesUlInSidebarWithCache],
   );
 
   const onScroll = useCallback(() => {

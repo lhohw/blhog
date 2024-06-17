@@ -18,11 +18,11 @@ export default function PostIndexEffect({
   isRead,
   setIsRead,
 }: PostIndexEffectProps) {
-  const getCachedAllHeadingsInPost = useDom(getAllHeadingsInPost);
-  const getCachedIndexHeadingsUl = useDom(getPostIndexUl);
+  const getAllHeadingsInPostWithCache = useDom(getAllHeadingsInPost);
+  const getPostIndexUlWithCache = useDom(getPostIndexUl);
 
   const initializePostIndex = useCallback(() => {
-    const headingsInPost = getCachedAllHeadingsInPost();
+    const headingsInPost = getAllHeadingsInPostWithCache();
     const initialOffsetTop = [];
     const initialIsRead = [];
 
@@ -46,12 +46,12 @@ export default function PostIndexEffect({
     (lastIsReadIdx: number) => {
       if (lastIsReadIdx < 0) return;
 
-      const ul = getCachedIndexHeadingsUl();
+      const ul = getPostIndexUlWithCache();
       const lastReadLi = ul.children[lastIsReadIdx] as HTMLLIElement;
 
       ul.scrollTo({ top: lastReadLi.offsetTop, behavior: "smooth" });
     },
-    [getCachedIndexHeadingsUl],
+    [getPostIndexUlWithCache],
   );
 
   useEffect(function initialize() {

@@ -6,13 +6,13 @@ import useDom from "@/hooks/react/useDom";
 export default function usePostSidebarIndexSectionState() {
   const [height, setHeight] = useState(MIN_POST_INDEX_UL_SIZE);
   const [isFold, setIsFold] = useState(true);
-  const getCachedIndexHeadingsUl = useDom(getPostIndexUl);
+  const getIndexHeadingsUlWithCache = useDom(getPostIndexUl);
 
   const calculateMaxHeight = useCallback(() => {
-    const ul = getCachedIndexHeadingsUl();
+    const ul = getIndexHeadingsUlWithCache();
     const maxHeight = Math.min(ul.scrollHeight, window.innerHeight - 76);
     return maxHeight;
-  }, [getCachedIndexHeadingsUl]);
+  }, [getIndexHeadingsUlWithCache]);
 
   const spread = useCallback(() => {
     setIsFold(false);
