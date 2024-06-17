@@ -4,13 +4,12 @@ import type { PostSidebarIndexSectionProps } from "@/components/organisms/PostSi
 import { memo } from "react";
 import Link from "next/link";
 import clsx from "clsx";
-import usePostIndex from "@/hooks/react/usePostIndex";
+import usePostIndex from "./usePostIndex";
 import PostIndexEffect from "./PostIndexEffect";
 
 export type PostHeadingsProps = Pick<PostSidebarIndexSectionProps, "headings">;
 export default function PostIndex({ headings }: PostHeadingsProps) {
-  const { isRead, offsetTop, setIsRead, setOffsetTop, onHeadingClick } =
-    usePostIndex();
+  const { isRead, onHeadingClick, onScroll } = usePostIndex();
 
   return (
     <ul
@@ -27,12 +26,7 @@ export default function PostIndex({ headings }: PostHeadingsProps) {
           />
         );
       })}
-      <PostIndexEffect
-        isRead={isRead}
-        offsetTop={offsetTop}
-        setIsRead={setIsRead}
-        setOffsetTop={setOffsetTop}
-      />
+      <PostIndexEffect onScroll={onScroll} />
     </ul>
   );
 }

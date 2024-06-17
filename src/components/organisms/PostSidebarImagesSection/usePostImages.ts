@@ -71,14 +71,16 @@ const usePostImages = () => {
     const nextIsRead = [...isRead];
     let lastIsReadIdx = -1;
 
-    for (let i = 0; i < images.length; i++) {
-      nextIsRead[i] = isReadImage(images[i].offsetTop);
+    const postImages = getImagesInPostWithCache();
+
+    for (let i = 0; i < postImages.length; i++) {
+      nextIsRead[i] = isReadImage(postImages[i].offsetTop);
       if (nextIsRead[i]) lastIsReadIdx = i;
     }
 
     setIsRead(nextIsRead);
     syncScroll(lastIsReadIdx);
-  }, [images, isRead, isReadImage, syncScroll]);
+  }, [getImagesInPostWithCache, isRead, isReadImage, syncScroll]);
 
   return {
     images,
