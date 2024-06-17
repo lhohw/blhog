@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import LinkList, { LinkListProps } from "@/components/molecules/LinkList";
-import WindowResizeEffect from "@/components/effects/WindowResizeEffect";
+import WindowResizeEffect from "./WindowResizeEffect";
 import useList from "@/hooks/react/useList";
 
 export default function SidebarLinks({ links }: Pick<LinkListProps, "links">) {
