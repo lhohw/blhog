@@ -10,7 +10,9 @@ export const metadata: Metadata = {
     template: "%s | Blhog",
     default: "Blhog",
   },
-  description: "lhohw's blog",
+  description: "lhohw's personal blog to share various information",
+  applicationName: "lhohw's blog",
+  classification: "personal blog",
 };
 
 export default function RootLayout({
