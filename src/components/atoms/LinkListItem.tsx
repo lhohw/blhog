@@ -24,6 +24,7 @@ export default function LinkListItem({
     <Link
       className="flex items-center flex-none h-14 py-2 px-4"
       href={href}
+      aria-label={title}
       {...props}
     >
       <div

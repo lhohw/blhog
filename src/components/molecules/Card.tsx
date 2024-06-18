@@ -16,7 +16,11 @@ export default function Card({
 }: Post & { href: string }) {
   return (
     <CardWrapper>
-      <Link href={href} className="p-4 block">
+      <Link
+        href={href}
+        className="p-4 block"
+        aria-label={`${title} card component`}
+      >
         <Photo
           url={photo_url}
           alt={alt}

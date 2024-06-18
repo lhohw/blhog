@@ -39,7 +39,9 @@ export default function Breadcrumbs() {
               index === breadcrumbs.length - 1 ? "main-color" : "inherit",
             )}
           >
-            <Link href={breadcrumb.href}>{breadcrumb.label}</Link>
+            <Link href={breadcrumb.href} aria-label={breadcrumb.label}>
+              {breadcrumb.label}
+            </Link>
             {index < breadcrumbs.length - 1 ? (
               <span className="mx-3 inline-block">/</span>
             ) : null}

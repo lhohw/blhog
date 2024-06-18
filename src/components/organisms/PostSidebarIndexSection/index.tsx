@@ -37,6 +37,7 @@ export default function PostSidebarIndexSection({
             "absolute right-2 top-2 block w-8 h-8 cursor-pointer transition-transform duration-300 md:hidden",
             isFold ? "rotate-0" : "rotate-180",
           )}
+          aria-label="toggle post index"
           onClick={toggle}
         >
           <CaretDown />

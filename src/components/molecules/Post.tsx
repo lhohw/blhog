@@ -11,9 +11,9 @@ export type PostProps = {
 };
 export default function Post({ title, updated_at, decompressed }: PostProps) {
   return (
-    <div className={clsx("w-full", styles.post)}>
+    <div className={clsx("flex flex-col w-full", styles.post)}>
       <H1 className="main-color">{title}</H1>
-      <h4 className="mr-4 text-right mb-4 text-sm">{updated_at}</h4>
+      <span className="mb-4 mr-4 self-end text-sm">{updated_at}</span>
       <article id="post-article" className="prism">
         <CustomMDX source={decompressed} />
       </article>

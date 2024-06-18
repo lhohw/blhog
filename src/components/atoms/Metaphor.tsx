@@ -23,6 +23,7 @@ export default function Metaphor({
       title={title}
       aria-label={title}
       onClick={onClick}
+      tabIndex={0}
     >
       <Icon />
     </div>
@@ -42,7 +43,13 @@ const MetaphorLink = ({
     title={title}
     onClick={onClick}
     Icon={() => (
-      <Link className="w-full h-full" href={href} {...props}>
+      <Link
+        className="w-full h-full"
+        tabIndex={-1}
+        aria-label={title}
+        href={href}
+        {...props}
+      >
         <Icon />
       </Link>
     )}

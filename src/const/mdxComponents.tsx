@@ -5,7 +5,7 @@ import { createMDXHeadings } from "@/lib/utils/markdown";
 import { httpRegex, mdLinkRegex } from "@/const/regex";
 
 const components: MDXRemoteProps["components"] = {
-  a: ({ children, className, href = "", ...props }) => {
+  a: ({ children, className, href = "", title, ...props }) => {
     const isURI = children === href;
     href = decodeURIComponent(href);
     const isHttp = href.match(httpRegex);
@@ -22,6 +22,7 @@ const components: MDXRemoteProps["components"] = {
         className={clsx(className, "main-color")}
         href={href}
         target={isHttp ? "_blank" : "_self"}
+        aria-label={title ?? `link to ${href}`}
         {...props}
       >
         {children}
