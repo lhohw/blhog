@@ -21,21 +21,23 @@ export default function LinkListItem({
   title = toPascalCase(title, "-", " ");
 
   return (
-    <Link
-      className="flex items-center flex-none h-14 py-2 px-4"
-      href={href}
-      aria-label={title}
-      {...props}
-    >
-      <div
-        className="flex flex-1 flex-row items-center py-2 px-4 rounded-lg cursor-pointer hover:bg-primary-alpha transition-color"
-        title={title}
+    <li className="flex flex-none h-14 py-2 px-4">
+      <Link
+        className="w-full h-full items-center"
+        href={href}
+        aria-label={title}
+        {...props}
       >
-        <div className="w-6 h-6 p-1 mr-3">{icon ? <Icon /> : null}</div>
-        <div className={clsx("flex flex-1 ml-2 mr-4 overflow-hidden")}>
-          {title}
+        <div
+          className="flex flex-1 flex-row items-center py-2 px-4 rounded-lg cursor-pointer hover:bg-primary-alpha transition-color"
+          title={title}
+        >
+          <div className="w-6 h-6 p-1 mr-3">{icon ? <Icon /> : null}</div>
+          <div className={clsx("flex flex-1 ml-2 mr-4 overflow-hidden")}>
+            {title}
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </li>
   );
 }
