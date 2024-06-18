@@ -28,11 +28,10 @@ body[data-theme=dark] {
   .text-balance {
     text-wrap: balance;
   }
-  .shimmer {
+  .shimmer-bg {
     position: relative;
     overflow: hidden;
     isolation: isolate;
-    background: var(--shimmer-bg);
     &::before {
       content: "";
       position: absolute;

@@ -4,7 +4,7 @@ import PhotoWrapper from "@/components/atoms/wrapper/PhotoWrapper";
 
 export default function CardSkeleton() {
   return (
-    <CardWrapper>
+    <CardWrapper className="shimmer-bg">
       <div className="p-4 block border-slight border-primary rounded-lg">
         <PhotoWrapper>
           <ShimmerBar className="w-full h-full" />

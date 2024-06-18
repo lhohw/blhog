@@ -3,7 +3,7 @@ import ShimmerBar from "@/components/atoms/ShimmerBar";
 
 export default function SidebarSkeleton() {
   return (
-    <LinkListWrapper className="flex-none md:h-full min-h-14 bg-background-alpha md:bg-background md:relative">
+    <LinkListWrapper className="flex-none md:h-full min-h-14 bg-background-alpha md:bg-background md:relative shimmer-bg">
       <div className="max-md:shimmer border-slight border-primary before:rounded-tr-2xl h-full flex flex-col">
         <ul className="hidden md:flex md:flex-col md:h-full md:mt-4">
           {Array.from({ length: 3 }).map((_, i) => (

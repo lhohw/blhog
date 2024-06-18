@@ -7,7 +7,7 @@ export default function ShimmerBar({
   ...props
 }: PropsWithChildren<HTMLAttributes<HTMLDivElement>>) {
   return (
-    <div className={clsx("rounded shimmer", className)} {...props}>
+    <div className={clsx("rounded bg-shimmer-bg", className)} {...props}>
       {children}
     </div>
   );
