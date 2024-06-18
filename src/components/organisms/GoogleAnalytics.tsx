@@ -8,7 +8,6 @@ export default function GoogleAnalytics() {
     const gaWindow = window as typeof window & { dataLayer: any[]; gtag: any };
     gaWindow.dataLayer = gaWindow.dataLayer || [];
     gaWindow.gtag = function () {
-      console.log(arguments);
       gaWindow.dataLayer.push(arguments);
     };
 
