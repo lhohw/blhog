@@ -13,6 +13,10 @@ export const metadata: Metadata = {
   description: "lhohw's personal blog to share various information",
   applicationName: "lhohw's blog",
   classification: "personal blog",
+  generator: "Next.js",
+  creator: "lhohw",
+  authors: { name: "lhohw", url: "https://github.com/lhohw" },
+  icons: "./icon.ico",
 };
 
 export default function RootLayout({
