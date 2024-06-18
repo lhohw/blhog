@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Header from "@/components/organisms/Header";
 import PlumTreeBackground from "@/components/organisms/PlumTreeBackground";
 import MainColorEffect from "@/components/effects/MainColorEffect";
+import GoogleAnalytics from "@/components/organisms/GoogleAnalytics";
 import { nunito_sans } from "@/styles/fonts";
 import "@/styles/globals.scss";
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         <PlumTreeBackground />
       </body>
       <MainColorEffect />
+      <GoogleAnalytics />
     </html>
   );
 }
