@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import SidebarWrapper from "@/components/atoms/wrapper/SidebarWrapper";
 import PostsContentWrapper from "@/components/atoms/wrapper/PostsContentWrapper";
 import Post from "@/components/molecules/Post";
-import PostSkeleton from "@/components/skeletons/PostSkeleton";
+import PostPageSkeleton from "@/components/skeletons/PostPageSkeleton";
 import PostSidebar from "@/components/templates/PostSidebar";
 import { fetchPostByCategoryAndSlug } from "@/lib/api/post";
 import { unserialize } from "@/lib/utils/markdown";
@@ -22,7 +22,7 @@ export default async function page({
     unserialize(post);
 
   return (
-    <Suspense fallback={<PostSkeleton />}>
+    <Suspense fallback={<PostPageSkeleton />}>
       <SidebarWrapper>
         <PostSidebar headings={headingsWithId} />
       </SidebarWrapper>
