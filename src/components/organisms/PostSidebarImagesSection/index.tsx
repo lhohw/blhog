@@ -5,11 +5,9 @@ import Image from "next/image";
 import Section from "@/components/molecules/Section";
 import Resizer from "@/components/atoms/Resizer";
 import usePostImages, { type PostImage } from "./usePostImages";
-import InitializePostImageEffect from "./InitializePostImageEffect";
 
 export default function PostSidebarImagesSection() {
-  const { images, maxHeight, initialize, initializeMaxHeight, onScroll } =
-    usePostImages();
+  const { images, maxHeight } = usePostImages();
 
   return (
     <>
@@ -22,11 +20,6 @@ export default function PostSidebarImagesSection() {
       >
         <ImagesSection images={images} />
       </Resizer>
-      <InitializePostImageEffect
-        initialize={initialize}
-        initializeMaxHeight={initializeMaxHeight}
-        onScroll={onScroll}
-      />
     </>
   );
 }

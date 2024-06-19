@@ -5,35 +5,40 @@ import { memo } from "react";
 import Link from "next/link";
 import clsx from "clsx";
 import usePostIndex from "./usePostIndex";
-import PostIndexEffect from "./PostIndexEffect";
 
 export type PostIndexProps = Pick<PostSidebarIndexSectionProps, "headings">;
 export default function PostIndex({ headings }: PostIndexProps) {
-  const { isRead, onHeadingClick, onScroll } = usePostIndex();
+  const { postIndex, isPass, onListClick } = usePostIndex(headings);
 
   return (
     <ul
       id="post-index-list"
       className="relative h-full text-wrap overflow-y-scroll"
     >
-      {headings.map((heading, i) => {
+      {postIndex.map((heading, i) => {
+        const { id, tagName, textContent } = heading;
         return (
           <PostIndexLi
-            key={heading.id}
-            {...heading}
-            isRead={isRead[i]}
-            onHeadingClick={onHeadingClick}
+            key={id}
+            id={id}
+            textContent={textContent || ""}
+            tagName={tagName}
+            isPass={isPass[i]}
+            onListClick={onListClick}
           />
         );
       })}
-      <PostIndexEffect onScroll={onScroll} />
     </ul>
   );
 }
 
+type PostIndexLiProps = PostIndexProps["headings"][number] & {
+  isPass: boolean;
+  onListClick: React.MouseEventHandler;
+};
 // eslint-disable-next-line react/display-name
 const PostIndexLi = memo(
-  ({ id, tagName, textContent, isRead, onHeadingClick }: any) => {
+  ({ id, tagName, textContent, isPass, onListClick }: PostIndexLiProps) => {
     const depth = parseInt(tagName.substring(1) || "0");
 
     return (
@@ -43,9 +48,9 @@ const PostIndexLi = memo(
         style={{ marginLeft: `${depth * 0.5}rem` }}
       >
         <Link
-          className={clsx(isRead && "text-primary")}
+          className={clsx(isPass && "text-primary")}
           href={`#${id}`}
-          onClick={onHeadingClick}
+          onClick={onListClick}
           aria-label={`${textContent} post heading`}
         >
           {textContent}
@@ -54,6 +59,6 @@ const PostIndexLi = memo(
     );
   },
   (prevProps, nextProps) => {
-    return prevProps.isRead === nextProps.isRead;
+    return prevProps.isPass === nextProps.isPass;
   },
 );
