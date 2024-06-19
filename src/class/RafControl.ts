@@ -1,5 +1,6 @@
 class RafControl {
   private _isPaused = false;
+  private _isDone = false;
   constructor(
     private frame: (now: number) => void,
     private interval = 1000 / 40,
@@ -21,10 +22,15 @@ class RafControl {
         prevTime = performance.now();
         this.frame(now);
       }
+      if (this._isDone) return;
       requestAnimationFrame(animationFrame);
     };
 
     requestAnimationFrame(animationFrame);
+  }
+  done() {
+    this.pause();
+    this._isDone = true;
   }
 }
 

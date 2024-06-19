@@ -64,7 +64,7 @@ export default function plumTree(
     steps = [];
 
     if (!prevSteps.length) {
-      controls.pause();
+      controls.done();
     }
 
     prevSteps.forEach((step) => {
