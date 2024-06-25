@@ -1,4 +1,4 @@
-@import "./_init-color";
+@import './base.scss';
 
 @tailwind base;
 @tailwind components;
@@ -21,38 +21,6 @@ body[data-theme=dark] {
 @media ((prefers-color-scheme: dark)) {
   body[data-theme=unset] {
     @include darkTheme();
-  }
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  .shimmer-bg {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0px;
-      border-top-width: 1px;
-      border-color: var(--shimmer);
-      will-change: transform;
-      transform: translateX(-100%);
-      animation: shimmer 2s infinite;
-      background-image: linear-gradient(
-        to right,
-        transparent 0,
-        var(--shimmer) 50%, 
-        transparent 100%
-      );
-    }
-  }
-}
-@keyframes shimmer {
-  to {
-    transform: translateX(100%);
   }
 }
 

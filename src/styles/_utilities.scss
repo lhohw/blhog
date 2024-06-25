@@ -1,0 +1,40 @@
+@import "./_breakpoints";
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .shimmer-bg {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0px;
+      border-top-width: 1px;
+      border-color: var(--shimmer);
+      will-change: transform;
+      transform: translateX(-100%);
+      animation: shimmer 2s infinite;
+      background-image: linear-gradient(
+        to right,
+        transparent 0,
+        var(--shimmer) 50%, 
+        transparent 100%
+      );
+    }
+  }
+  .full-except-header {
+    height: calc(100dvh - 72px);
+    @media (min-width: $sm) {
+      height: calc(100dvh - 100px);
+    }
+  }
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
