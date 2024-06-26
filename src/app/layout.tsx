@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     default: "Blhog",
   },
   metadataBase: new URL(
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : "https://blhog.vercel.app",
+    process.env.NODE_ENV === "production"
+      ? "https://blhog.vercel.app"
+      : "http://localhost:3000",
   ),
   description: "lhohw's personal blog to share various information",
   applicationName: "lhohw's blog",
