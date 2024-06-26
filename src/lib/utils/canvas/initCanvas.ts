@@ -2,11 +2,11 @@ export default function initCanvas(
   canvas: HTMLCanvasElement,
   width: number,
   height: number,
+  dpr = window.devicePixelRatio || 1,
 ) {
   const ctx = canvas.getContext("2d");
-  if (!ctx) return;
+  if (!ctx) throw new Error("canvas not supported");
 
-  const dpr = window.devicePixelRatio || 1;
   // @ts-expect-error vendor
   // prettier-ignore
   const bsr = ctx.msBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;

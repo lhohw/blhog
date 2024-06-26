@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import plumTree from "@/lib/utils/canvas/plumTree";
 
-export default function PlumTreeEffect() {
+export default function PlumTreeBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export default function PlumTreeEffect() {
 
   return (
     <div
-      className="bg-inherit fixed left-0 top-0 w-full h-full -z-10"
+      className="bg-inherit fixed left-0 top-0 w-full h-full -z-20"
       style={{
         maskImage: "radial-gradient(circle, transparent, black)",
       }}

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Header from "@/components/organisms/Header";
-import PlumTreeBackground from "@/components/organisms/PlumTreeBackground";
 import MainColorEffect from "@/components/effects/MainColorEffect";
 import GoogleAnalytics from "@/components/organisms/GoogleAnalytics";
 import { nunito_sans } from "@/styles/fonts";
@@ -11,6 +10,11 @@ export const metadata: Metadata = {
     template: "%s | Blhog",
     default: "Blhog",
   },
+  metadataBase: new URL(
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://blhog.vercel.app",
+  ),
   description: "lhohw's personal blog to share various information",
   applicationName: "lhohw's blog",
   classification: "personal blog",
@@ -32,7 +36,6 @@ export default function RootLayout({
           <Header />
           <main className="flex flex-1 flex-col md:flex-row">{children}</main>
         </div>
-        <PlumTreeBackground />
       </body>
       <MainColorEffect />
       <GoogleAnalytics />
