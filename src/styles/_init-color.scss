@@ -4,6 +4,9 @@ $bg-dark: hsl(240, 50%, 1%);
 $text-light: hsl(240, 50%, 1%);
 $text-dark: hsl(0, 0%, 92%);
 
+$text-highlight-light: hsla(93, 53%, 77%, 0.255);
+$text-highlight-dark: hsla(194, 34%, 67%, 0.394);
+
 $primary-light: hsl(149, 45%, 61%);
 $primary-dark: hsl(149, 80%, 90%);
 
@@ -18,6 +21,7 @@ $shimmer-dark: #{$shimmer-bg-dark};
   --background-alpha: #{transparentize($bg-light, 0.3)};
   --text: #{$text-light};
   --text-alpha: #{transparentize($text-light, 0.6)};
+  --text-highlight: #{$text-highlight-light};
   --primary: #{$primary-light};
   --primary-alpha: #{transparentize($primary-light, 0.3)};
   --shimmer-bg: #{$shimmer-bg-light};
@@ -29,6 +33,7 @@ $shimmer-dark: #{$shimmer-bg-dark};
   --background-alpha: #{transparentize($bg-dark, 0.5)};
   --text: #{$text-dark};
   --text-alpha: #{transparentize($text-dark, 0.6)};
+  --text-highlight: #{$text-highlight-dark};
   --primary: #{$primary-dark};
   --primary-alpha: #{transparentize($primary-dark, 0.3)};
   --shimmer-bg: #{$shimmer-bg-dark};

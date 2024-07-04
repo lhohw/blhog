@@ -71,6 +71,8 @@ $lavender: #e8c2e1fc;
     a {
       cursor: pointer;
       transition: color .375s ease-in-out;
+      text-decoration: underline dotted var(--primary);
+      text-underline-offset: 3.5px;
       &:hover {
         color: $seagreen;
       }
@@ -88,8 +90,9 @@ $lavender: #e8c2e1fc;
     }
   
     /** code for emphasis */
-    p > code {
-      text-shadow: 1px 1px 1.5px $lavender;
+    p > code, li > code {
+      padding: 0 4px;
+      background-color: var(--text-highlight);
     }
 
     table {
