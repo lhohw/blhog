@@ -5,6 +5,9 @@ class RafControl {
     private frame: (now: number) => void,
     private interval = 1000 / 40,
   ) {}
+  get isDone() {
+    return this._isDone;
+  }
   get isPaused() {
     return this._isPaused;
   }

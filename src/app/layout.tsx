@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Header from "@/components/organisms/Header";
-import MainColorEffect from "@/components/effects/MainColorEffect";
-import GoogleAnalytics from "@/components/organisms/GoogleAnalytics";
 import { nunito_sans } from "@/styles/fonts";
 import "@/styles/globals.scss";
+import MainColorEffect from "@/components/effects/MainColorEffect";
+import Header from "@/components/organisms/Header";
+import PlumTreeBackground from "@/components/organisms/PlumTreeBackground";
+import GoogleAnalytics from "@/components/organisms/GoogleAnalytics";
 
 export const metadata: Metadata = {
   title: {
@@ -36,6 +37,7 @@ export default function RootLayout({
           <Header />
           <main className="flex flex-1 flex-col md:flex-row">{children}</main>
         </div>
+        <PlumTreeBackground />
       </body>
       <MainColorEffect />
       <GoogleAnalytics />

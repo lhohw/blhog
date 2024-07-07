@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import plumTree from "@/lib/utils/canvas/plumTree";
+import RafControl from "@/class/RafControl";
 
 export default function PlumTreeBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pathname = usePathname();
+  const controlsRef = useRef<RafControl>(null!);
 
   useEffect(() => {
     const { innerWidth, innerHeight } = window;
@@ -14,8 +18,21 @@ export default function PlumTreeBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    plumTree(canvas, width, height);
+    const { start } = plumTree(canvas, width, height);
+
+    const controls = start();
+    controlsRef.current = controls;
   }, []);
+
+  useEffect(() => {
+    if (!controlsRef.current) return;
+
+    const controls = controlsRef.current;
+    if (controls.isDone) return;
+
+    if (pathname.startsWith("/graphic")) controls.pause();
+    else controls.resume();
+  }, [pathname]);
 
   return (
     <div

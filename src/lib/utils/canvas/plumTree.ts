@@ -22,27 +22,16 @@ export default function plumTree(
   let prevSteps: StepProps[] = [];
   let controls: RafControl;
 
-  const run = (step: StepProps) => {
+  const step = (step: StepProps) => {
     const { vec, rad, count } = step;
     const len = random(length);
     const nVec = vec.addPolar(len, rad);
 
     count.value++;
 
-    ctx.beginPath();
-    ctx.moveTo(vec.x, vec.y);
-    ctx.lineTo(nVec.x, nVec.y);
-    ctx.stroke();
-    ctx.closePath();
+    drawLine(ctx, vec, nVec);
 
-    if (
-      nVec.x < -100 ||
-      nVec.x >= width + 100 ||
-      nVec.y < -100 ||
-      nVec.y >= height + 100
-    ) {
-      return;
-    }
+    if (isOut(nVec)) return;
 
     const rate = count.value < MIN_BRANCH ? 0.8 : 0.5;
 
@@ -59,6 +48,23 @@ export default function plumTree(
     }
   };
 
+  const drawLine = (ctx: CanvasRenderingContext2D, v1: Vector, v2: Vector) => {
+    ctx.beginPath();
+    ctx.moveTo(v1.x, v1.y);
+    ctx.lineTo(v2.x, v2.y);
+    ctx.stroke();
+    ctx.closePath();
+  };
+
+  const isOut = (vector: Vector) => {
+    return (
+      vector.x < -100 ||
+      vector.x >= width + 100 ||
+      vector.y < -100 ||
+      vector.y >= height + 100
+    );
+  };
+
   const frame = () => {
     prevSteps = steps;
     steps = [];
@@ -67,17 +73,17 @@ export default function plumTree(
       controls.done();
     }
 
-    prevSteps.forEach((step) => {
-      if (prob(0.5)) steps.push(step);
-      else run(step);
-    });
+    for (let i = 0; i < prevSteps.length; i++) {
+      const s = prevSteps[i];
+
+      if (prob(0.5)) steps.push(s);
+      else step(s);
+    }
   };
 
-  const start = () => {
-    controls = new RafControl(frame, interval);
-    controls.pause();
-
+  const initSteps = () => {
     const randomMiddle = (value: number) => random(0.6, 0.2) * value;
+
     steps = [
       {
         vec: new Vector(randomMiddle(width), -10),
@@ -100,9 +106,16 @@ export default function plumTree(
         count: { value: 0 },
       },
     ];
-
-    controls.resume();
   };
 
-  start();
+  const start = () => {
+    controls = new RafControl(frame, interval);
+    controls.pause();
+    initSteps();
+    controls.resume();
+
+    return controls;
+  };
+
+  return { start };
 }
