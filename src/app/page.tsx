@@ -1,5 +1,9 @@
-import { redirect } from "next/navigation";
+import HomeLinks from "@/components/organisms/HomeLinks";
 
 export default function Home() {
-  redirect("/posts");
+  return (
+    <div className="flex flex-1 mt-4">
+      <HomeLinks />
+    </div>
+  );
 }
