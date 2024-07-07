@@ -1,8 +1,7 @@
-import { MutableRefObject, useCallback, useMemo } from "react";
-import { Application, ApplicationOptions, Assets, Texture } from "pixi.js";
-import Particle from "@/class/Particle";
+import { MutableRefObject, useCallback } from "react";
+import Particle from "./Particle";
 import { Coord } from "./useText";
-import ParticleAsset from "@/assets/particle.webp";
+import initCanvas from "@/lib/utils/canvas/initCanvas";
 
 export type useVisualProps = {
   containerRef: MutableRefObject<HTMLDivElement>;
@@ -14,52 +13,74 @@ export default function useVisual(
   width: number,
   height: number,
 ) {
-  const app = useMemo(() => new Application(), []);
+  const initVisualCanvas = useCallback(() => {
+    const canvas = document.createElement("canvas") as HTMLCanvasElement;
+    const ctx = initCanvas(canvas, width, height);
 
-  const options = useMemo<Partial<ApplicationOptions>>(
-    () => ({
-      width,
-      height,
-      antialias: true,
-      resolution: 2,
-      autoDensity: true,
-      backgroundAlpha: 0,
-      powerPreference: "high-performance",
-    }),
-    [width, height],
-  );
-
-  const initApp = useCallback(async () => {
-    await app.init(options);
-
-    const { canvas } = app;
     canvas.classList.add("absolute", "inset-0");
-    return canvas;
+
+    return ctx;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const loadParticleAsset = useCallback(async () => {
-    return await Assets.load(ParticleAsset);
+  const initParticles = useCallback((coords: Coord[]) => {
+    const particles = [];
+    for (let i = 0; i < coords.length; i++) {
+      const { x, y } = coords[i];
+      const particle = new Particle(x, y);
+      particles.push(particle);
+    }
+
+    return particles;
   }, []);
 
-  const initParticles = useCallback(
-    (coords: Coord[], texture: Texture) => {
-      const particles = [];
-      for (let i = 0; i < coords.length; i++) {
-        const { x, y } = coords[i];
-        const particle = new Particle(x, y, texture);
-        particles.push(particle);
+  const drawParticles = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      particles: Particle[],
+      mx = 0,
+      my = 0,
+      mr = 0,
+    ) => {
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+      const radius = 44 * 0.03;
+
+      for (let i = 0; i < particles.length; i++) {
+        const particle = particles[i];
+        particle.render(mx, my, mr);
+
+        const { x, y, color } = particle;
+        const fillColor = Math.round(color).toString(16);
+        ctx.fillStyle = `#${fillColor}`;
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.closePath();
       }
-
-      app.stage.addChild(...particles.map((particle) => particle.sprite));
-
-      return particles;
     },
-    [app.stage],
+    [],
+  );
+
+  const init = useCallback(
+    (coords: Coord[]) => {
+      const ctx = initVisualCanvas();
+      const particles = initParticles(coords);
+      ctx.fillStyle = "#f3316e";
+      drawParticles(ctx, particles);
+
+      return {
+        ctx,
+        particles,
+      };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   const animate = useCallback(
-    (particles: Particle[]) => {
+    (ctx: CanvasRenderingContext2D, particles: Particle[]) => {
       const container = containerRef.current;
       let mx = 0,
         my = 0;
@@ -72,19 +93,15 @@ export default function useVisual(
 
       requestAnimationFrame(function cb() {
         requestAnimationFrame(cb);
-
-        for (let i = 0; i < particles.length; i++) {
-          particles[i].render(mx, my, mr);
-        }
+        drawParticles(ctx, particles, mx, my, mr);
       });
     },
-    [containerRef],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   return {
-    initApp,
-    loadParticleAsset,
-    initParticles,
+    init,
     animate,
   };
 }
