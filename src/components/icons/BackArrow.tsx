@@ -1,4 +1,4 @@
-import { IconProps } from ".";
+import type { IconProps } from ".";
 
 export default function BackArrow({ color = "var(--primary)" }: IconProps) {
   return (
@@ -17,36 +17,16 @@ export default function BackArrow({ color = "var(--primary)" }: IconProps) {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
-        d="M19.75 12 L4.25 12"
+        d="M19.75 12 L4.25 12 L 10 8 L 10 16 L4.25 12"
       >
         <animate
           fill="freeze"
           attributeName="stroke-dashoffset"
-          begin="0.6s"
-          dur="0.5s"
+          begin="0.4s"
+          dur="0.7s"
           values="48;0"
         />
       </path>
-      <g>
-        <path
-          fill="none"
-          stroke={color}
-          strokeDasharray="48"
-          strokeDashoffset="48"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M 4.25 12 L 10 8 L 10 16 L4.25 12"
-        >
-          <animate
-            fill="freeze"
-            attributeName="stroke-dashoffset"
-            begin="0.75s"
-            dur="0.6s"
-            values="48;0"
-          />
-        </path>
-      </g>
     </svg>
   );
 }
