@@ -1,7 +1,7 @@
 import { MutableRefObject, useCallback } from "react";
-import Particle from "./Particle";
-import { Coord } from "./useText";
+import Particle from "@/class/Particle";
 import initCanvas from "@/lib/utils/canvas/initCanvas";
+import { Coord } from "./useText";
 
 export type useVisualProps = {
   containerRef: MutableRefObject<HTMLDivElement>;
@@ -15,7 +15,9 @@ export default function useVisual(
 ) {
   const initVisualCanvas = useCallback(() => {
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
-    const ctx = initCanvas(canvas, width, height);
+    const { ctx } = initCanvas(canvas, width, height, {
+      desynchronized: true,
+    });
 
     canvas.classList.add("absolute", "inset-0");
 

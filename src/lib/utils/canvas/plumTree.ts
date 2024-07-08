@@ -13,7 +13,7 @@ export default function plumTree(
   width: number,
   height: number,
 ) {
-  const ctx = initCanvas(canvas, width, height)!;
+  const { ctx } = initCanvas(canvas, width, height)!;
   const MIN_BRANCH = 30;
   const length = 6;
   const interval = 1000 / 40;

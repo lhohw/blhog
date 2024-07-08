@@ -13,11 +13,12 @@ export default function useText(width: number, height: number) {
   const [density] = useState(2);
 
   const createCanvas = useCallback(() => {
-    const dpr = window.devicePixelRatio || 1;
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
-    const ctx = initCanvas(canvas, width, height, dpr);
+    const { ctx, dpi } = initCanvas(canvas, width, height, {
+      desynchronized: true,
+    });
 
-    return { ctx, dpr };
+    return { ctx, dpi };
   }, [height, width]);
 
   const drawText = useCallback(
@@ -69,9 +70,9 @@ export default function useText(width: number, height: number) {
   );
 
   const initText = useCallback(() => {
-    const { ctx, dpr } = createCanvas();
+    const { ctx, dpi } = createCanvas();
     drawText(ctx);
-    const coords = initCoords(ctx, dpr);
+    const coords = initCoords(ctx, dpi);
 
     return { ctx, coords };
   }, [createCanvas, drawText, initCoords]);

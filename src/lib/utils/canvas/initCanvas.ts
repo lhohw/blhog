@@ -2,9 +2,10 @@ export default function initCanvas(
   canvas: HTMLCanvasElement,
   width: number,
   height: number,
+  options?: CanvasRenderingContext2DSettings,
   dpr = window.devicePixelRatio || 1,
 ) {
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", options);
   if (!ctx) throw new Error("canvas not supported");
 
   // @ts-expect-error vendor
@@ -22,5 +23,5 @@ export default function initCanvas(
   ctx.lineWidth = 1;
   ctx.strokeStyle = "#d1fae525";
 
-  return ctx;
+  return { ctx, dpi };
 }
