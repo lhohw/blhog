@@ -1,5 +1,3 @@
-import { Sprite, Texture } from "pixi.js";
-
 const COLOR_SPEED = 0.12;
 const MOVE_SPEED = 0.88;
 const FRICTION = 0.98;
@@ -12,22 +10,13 @@ class Particle {
   private vy = 0;
   private originX = 0;
   private originY = 0;
-  private color = ORIGIN_COLOR;
-  public sprite: Sprite;
+  public color = ORIGIN_COLOR;
   constructor(
-    private x: number,
-    private y: number,
-    private texture: Texture,
+    public x: number,
+    public y: number,
   ) {
     this.originX = x;
     this.originY = y;
-    this.sprite = new Sprite({
-      x,
-      y,
-      scale: 0.06,
-      tint: this.color,
-      texture,
-    });
   }
   render(mx: number, my: number, mr: number) {
     this.detectCollision(mx, my, mr);
@@ -70,10 +59,6 @@ class Particle {
     this.vy *= FRICTION;
 
     this.color += (ORIGIN_COLOR - this.color) * COLOR_SPEED;
-
-    this.sprite.x = this.x;
-    this.sprite.y = this.y;
-    this.sprite.tint = this.color;
   }
 }
 
