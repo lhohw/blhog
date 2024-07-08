@@ -21,11 +21,13 @@ class RafControl {
     this._isPaused = false;
     let prevTime = 0;
     const animationFrame = (now: number) => {
-      if (!this._isPaused && performance.now() - prevTime >= this.interval) {
-        prevTime = performance.now();
+      if (!this._isPaused && now - prevTime >= this.interval) {
+        prevTime = now;
         this.frame(now);
       }
+
       if (this._isDone) return;
+
       requestAnimationFrame(animationFrame);
     };
 
