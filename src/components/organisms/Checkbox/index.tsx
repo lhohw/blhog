@@ -33,14 +33,22 @@ export default function Checkbox({ className, size, onChange }: CheckboxProps) {
       )}
     >
       <span
-        id="checkbox-span-lure"
         className={clsx(
           `absolute inset-0 inline-block overflow-hidden
-          before:inline-block before:absolute before:w-full before:h-full before:bg-primary before:transition-transform before:duration-300 before:-z-10`,
-          isChecked ? "before:-translate-x-0" : "before:-translate-x-full",
+          before:inline-block before:absolute before:w-full before:h-full before:bg-background before:transition-transform before:duration-500`,
+          isChecked ? "before:translate-x-full" : "before:-translate-x-0",
+          size === "lg"
+            ? "p-1"
+            : size === "xl"
+              ? "p-1"
+              : size === "2xl"
+                ? "p-1.5"
+                : size === "3xl"
+                  ? "p-1.5"
+                  : "",
         )}
       >
-        <Check color="var(--background)" />
+        <Check />
       </span>
       <input
         className={clsx(
