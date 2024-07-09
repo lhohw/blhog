@@ -3,17 +3,14 @@ class RafControl {
   private _isDone = false;
   private _requestId: number | null = null;
   constructor(
-    private frame: (now: number) => void,
-    private interval = 1000 / 40,
+    public frame: (now: number) => void = () => this.done(),
+    public interval = 1000 / 40,
   ) {}
   get isDone() {
     return this._isDone;
   }
   get isPaused() {
     return this._isPaused;
-  }
-  setInterval(interval: number) {
-    this.interval = interval;
   }
   pause() {
     this._isPaused = true;
@@ -27,11 +24,12 @@ class RafControl {
         this.frame(now);
       }
 
-      if (this._isDone) return;
+      if (this.isPaused || this._isDone) return;
 
       this._requestId = requestAnimationFrame(animationFrame);
     };
 
+    if (this._requestId) cancelAnimationFrame(this._requestId);
     this._requestId = requestAnimationFrame(animationFrame);
   }
   done() {

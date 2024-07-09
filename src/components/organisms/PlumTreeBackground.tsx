@@ -9,12 +9,9 @@ export default function PlumTreeBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pathname = usePathname();
   const controlsRef = useRef<RafControl>(null!);
-  const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (!isInitialized.current) {
-      isInitialized.current = true;
-
+    if (!controlsRef.current) {
       const { innerWidth, innerHeight } = window;
 
       const width = innerWidth;
@@ -22,9 +19,9 @@ export default function PlumTreeBackground() {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
-      const { start } = plumTree(canvas, width, height);
+      const { init } = plumTree(canvas, width, height);
 
-      const controls = start();
+      const controls = init();
       controlsRef.current = controls;
     }
   }, []);

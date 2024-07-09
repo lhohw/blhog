@@ -108,14 +108,13 @@ export default function plumTree(
     ];
   };
 
-  const start = () => {
+  const init = () => {
     controls = new RafControl(frame, interval);
     controls.pause();
     initSteps();
-    controls.resume();
 
     return controls;
   };
 
-  return { start };
+  return { init };
 }
