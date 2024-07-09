@@ -4,7 +4,7 @@ import H3 from "@/components/atoms/headings/H3";
 
 export default function KineticTypographyPage() {
   return (
-    <div className="flex flex-col text-center">
+    <div className="flex flex-col h-full justify-center items-center">
       <H3 mainColor={false} className="p-4">
         Kinetic Typography
       </H3>

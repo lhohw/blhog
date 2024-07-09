@@ -22,7 +22,7 @@ export default function AnimatedBackPage() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center h-full justify-center">
       <H3 mainColor={false} className="p-4">
         Animated Back
       </H3>
