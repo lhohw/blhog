@@ -3,7 +3,7 @@ import { strToSlug, toPascalCase } from "@/lib/utils/string";
 
 export default function GraphicPage() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col flex-1 items-center justify-center">
       <LinkBox title="Custom Checkbox" />
       <LinkBox title="Animated Back" />
       <LinkBox title="Kinetic Typography" />

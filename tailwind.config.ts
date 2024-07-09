@@ -11,6 +11,15 @@ const config: Config = {
       screens: {
         xs: "380px",
       },
+      height: {
+        "full-except-header": "calc(100dvh - 100px)",
+      },
+      minHeight: {
+        "full-except-header": "calc(100dvh - 100px)",
+      },
+      maxHeight: {
+        "full-except-header": "calc(100dvh - 100px)",
+      },
       colors: {
         background: "var(--background)",
         "background-alpha": "var(--background-alpha)",
