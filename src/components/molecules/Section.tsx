@@ -7,6 +7,7 @@ export type SectionProps = PropsWithChildren<
     title?: string;
     className?: string;
     titleClassName?: string;
+    mainColor?: boolean;
   } & HTMLAttributes<HTMLDivElement>
 >;
 export default function Section({
@@ -14,6 +15,7 @@ export default function Section({
   children,
   className,
   titleClassName,
+  mainColor,
   ...props
 }: SectionProps) {
   return (
@@ -24,7 +26,11 @@ export default function Section({
       )}
       {...props}
     >
-      {title ? <H3 className={titleClassName}>{title}</H3> : null}
+      {title ? (
+        <H3 className={titleClassName} mainColor={mainColor}>
+          {title}
+        </H3>
+      ) : null}
       {children}
     </div>
   );
