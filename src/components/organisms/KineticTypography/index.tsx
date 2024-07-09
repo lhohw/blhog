@@ -4,19 +4,18 @@ import { useEffect, useRef } from "react";
 import useText from "./useText";
 import useSetting from "./useSetting";
 import useVisual from "./useVisual";
+import RafControl from "@/class/RafControl";
 
 export default function KineticTypography() {
   const containerRef = useRef<HTMLDivElement>(null!);
-  const isInitialized = useRef(false);
+  const controlRef = useRef<RafControl>(null!);
 
   const { width, height } = useSetting();
   const { initText } = useText(width, height);
   const { init, animate } = useVisual(containerRef, width, height);
 
   useEffect(() => {
-    if (!isInitialized.current) {
-      isInitialized.current = true;
-
+    if (!controlRef.current) {
       const container = containerRef.current;
       const { ctx, coords } = initText();
       container.appendChild(ctx.canvas);
@@ -24,9 +23,14 @@ export default function KineticTypography() {
       const { ctx: visualCtx, particles } = init(coords);
       container.appendChild(visualCtx.canvas);
 
-      animate(visualCtx, particles);
+      controlRef.current = animate(visualCtx, particles);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    controlRef.current?.restart();
+    return () => controlRef.current?.done();
   }, []);
 
   return (

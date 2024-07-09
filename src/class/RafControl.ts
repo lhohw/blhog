@@ -44,6 +44,11 @@ class RafControl {
     this._isDone = true;
     this._requestId = null;
   }
+  restart() {
+    if (this._requestId) cancelAnimationFrame(this._requestId);
+    this._isDone = false;
+    this.resume();
+  }
 }
 
 export default RafControl;

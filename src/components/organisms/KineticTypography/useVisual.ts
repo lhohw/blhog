@@ -2,6 +2,7 @@ import { MutableRefObject, useCallback } from "react";
 import Particle from "@/class/Particle";
 import initCanvas from "@/lib/utils/canvas/initCanvas";
 import { Coord } from "./useText";
+import RafControl from "@/class/RafControl";
 
 export type useVisualProps = {
   containerRef: MutableRefObject<HTMLDivElement>;
@@ -93,10 +94,9 @@ export default function useVisual(
         my = offsetY;
       });
 
-      requestAnimationFrame(function cb() {
-        requestAnimationFrame(cb);
-        drawParticles(ctx, particles, mx, my, mr);
-      });
+      const frame = () => drawParticles(ctx, particles, mx, my, mr);
+      const controls = new RafControl(frame, 16);
+      return controls;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
