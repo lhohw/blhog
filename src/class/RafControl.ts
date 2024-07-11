@@ -1,6 +1,6 @@
 class RafControl {
-  private _isPaused = false;
-  private _isDone = false;
+  private _isPaused = true;
+  private _isDone = true;
   private _requestId: number | null = null;
   constructor(
     public frame: (now: number) => void = () => this.done(),
@@ -45,7 +45,10 @@ class RafControl {
     this._requestId = null;
   }
   restart() {
-    if (this._requestId) cancelAnimationFrame(this._requestId);
+    if (this._requestId) {
+      cancelAnimationFrame(this._requestId);
+      this._requestId = null;
+    }
     this._isDone = false;
     this.resume();
   }
