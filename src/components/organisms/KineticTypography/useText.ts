@@ -6,20 +6,20 @@ const fontWeight = 700;
 const fontName = "Inter";
 
 export type Coord = { x: number; y: number };
-export default function useText(width: number, height: number) {
+export default function useText() {
   const [text] = useState("lhohw");
   const font = useMemo(() => `${fontWeight} ${fontSize}px ${fontName}`, []);
   const color = useMemo(() => "#303030", []);
   const [density] = useState(2);
 
-  const createCanvas = useCallback(() => {
+  const createCanvas = useCallback((width: number, height: number) => {
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
     const { ctx, dpi } = initCanvas(canvas, width, height, {
       desynchronized: true,
     });
 
     return { ctx, dpi };
-  }, [height, width]);
+  }, []);
 
   const drawText = useCallback(
     (ctx: CanvasRenderingContext2D) => {
@@ -27,6 +27,8 @@ export default function useText(width: number, height: number) {
       ctx.fillStyle = color;
       ctx.textBaseline = "middle";
 
+      const width = parseInt(ctx.canvas.style.width);
+      const height = parseInt(ctx.canvas.style.height);
       const measuredText = ctx.measureText(text);
       const {
         width: textWidth,
@@ -41,7 +43,7 @@ export default function useText(width: number, height: number) {
           (height - (actualBoundingBoxAscent + actualBoundingBoxDescent)) / 2,
       );
     },
-    [color, font, height, text, width],
+    [color, font, text],
   );
 
   const initCoords = useCallback(
@@ -69,17 +71,19 @@ export default function useText(width: number, height: number) {
     [density],
   );
 
-  const initText = useCallback(() => {
-    const { ctx, dpi } = createCanvas();
-    drawText(ctx);
-    const coords = initCoords(ctx, dpi);
+  const initText = useCallback(
+    (width: number, height: number) => {
+      const { ctx, dpi } = createCanvas(width, height);
+      drawText(ctx);
+      const coords = initCoords(ctx, dpi);
 
-    return { ctx, coords };
-  }, [createCanvas, drawText, initCoords]);
+      return { ctx, coords };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return {
-    width,
-    height,
     fontSize,
     text,
     initText,

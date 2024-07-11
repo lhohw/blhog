@@ -1,20 +1,11 @@
-import { MutableRefObject, useCallback } from "react";
+import type { Pointer } from "./usePointer";
+import { useCallback } from "react";
 import Particle from "@/class/Particle";
 import initCanvas from "@/lib/utils/canvas/initCanvas";
 import { Coord } from "./useText";
-import RafControl from "@/class/RafControl";
 
-export type useVisualProps = {
-  containerRef: MutableRefObject<HTMLDivElement>;
-  width: number;
-  height: number;
-};
-export default function useVisual(
-  containerRef: MutableRefObject<HTMLDivElement>,
-  width: number,
-  height: number,
-) {
-  const initVisualCanvas = useCallback(() => {
+export default function useVisual() {
+  const initVisualCanvas = useCallback((width: number, height: number) => {
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
     const { ctx } = initCanvas(canvas, width, height, {
       desynchronized: true,
@@ -23,7 +14,6 @@ export default function useVisual(
     canvas.classList.add("absolute", "inset-0");
 
     return ctx;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const initParticles = useCallback((coords: Coord[]) => {
@@ -41,13 +31,12 @@ export default function useVisual(
     (
       ctx: CanvasRenderingContext2D,
       particles: Particle[],
-      mx = 0,
-      my = 0,
-      mr = 0,
+      pointer: Pointer = { mx: 0, my: 0, mr: 0 },
     ) => {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-      const radius = 44 * 0.03;
+      const radius = 22 * 0.06;
+      const { mx, my, mr } = pointer;
 
       for (let i = 0; i < particles.length; i++) {
         const particle = particles[i];
@@ -67,8 +56,8 @@ export default function useVisual(
   );
 
   const init = useCallback(
-    (coords: Coord[]) => {
-      const ctx = initVisualCanvas();
+    (width: number, height: number, coords: Coord[]) => {
+      const ctx = initVisualCanvas(width, height);
       const particles = initParticles(coords);
       ctx.fillStyle = "#f3316e";
       drawParticles(ctx, particles);
@@ -82,28 +71,8 @@ export default function useVisual(
     [],
   );
 
-  const animate = useCallback(
-    (ctx: CanvasRenderingContext2D, particles: Particle[]) => {
-      const container = containerRef.current;
-      let mx = 0,
-        my = 0;
-      const mr = 30;
-      container.addEventListener("pointermove", (e: PointerEvent) => {
-        const { offsetX, offsetY } = e;
-        mx = offsetX;
-        my = offsetY;
-      });
-
-      const frame = () => drawParticles(ctx, particles, mx, my, mr);
-      const controls = new RafControl(frame, 16);
-      return controls;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
   return {
     init,
-    animate,
+    drawParticles,
   };
 }
