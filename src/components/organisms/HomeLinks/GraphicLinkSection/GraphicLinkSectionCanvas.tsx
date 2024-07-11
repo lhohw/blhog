@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useSizeContext } from "../useSizeContext";
+import initCanvas from "@/lib/utils/canvas/initCanvas";
 
 export default function GraphicLinkSectionCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
@@ -9,7 +10,8 @@ export default function GraphicLinkSectionCanvas() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    initCanvas(canvas, width, height);
   }, [height, width]);
 
-  return <canvas ref={canvasRef} />;
+  return <canvas style={{ width, height }} ref={canvasRef} />;
 }
