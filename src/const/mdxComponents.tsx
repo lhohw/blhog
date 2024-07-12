@@ -1,5 +1,4 @@
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
-import Link from "next/link";
 import clsx from "clsx";
 import { createMDXHeadings } from "@/lib/utils/markdown";
 import { httpRegex, mdLinkRegex } from "@/const/regex";
@@ -18,7 +17,7 @@ const components: MDXRemoteProps["components"] = {
       children = href;
     }
     return (
-      <Link
+      <a
         className={clsx(className, "main-color")}
         href={href}
         target={isHttp ? "_blank" : "_self"}
@@ -26,7 +25,7 @@ const components: MDXRemoteProps["components"] = {
         {...props}
       >
         {children}
-      </Link>
+      </a>
     );
   },
   ...createMDXHeadings(),
