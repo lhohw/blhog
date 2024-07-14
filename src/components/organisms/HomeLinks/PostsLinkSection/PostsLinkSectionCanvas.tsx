@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useSizeContext } from "../useSizeContext";
 import GL from "@/class/glsl/GL";
-import { shaders, vertices, pattern } from "@/glsl/postLinkSection";
+import { shaders, vertices, pattern } from "@/const/glsl/postLinkSection";
 
 export default function PostsLinkSectionCanvas() {
   const isInitialized = useRef(false);
