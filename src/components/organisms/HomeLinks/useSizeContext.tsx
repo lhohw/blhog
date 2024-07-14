@@ -12,7 +12,7 @@ export type SizeContext = {
   size: Size;
   setSize: Dispatch<SetStateAction<Size>>;
 };
-const defaultSize = { width: 160, height: 100 };
+const defaultSize = { width: 160, height: 160 };
 const SizeContext = createContext<SizeContext>(null!);
 
 export const SizeContextProvider = ({ children }: PropsWithChildren) => {
