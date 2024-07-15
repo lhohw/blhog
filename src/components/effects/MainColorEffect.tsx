@@ -6,33 +6,35 @@ import { getRoot } from "@/lib/utils/dom";
 import useDom from "@/hooks/react/useDom";
 
 export default function MainColorEffect() {
-  const id = useRef<Timer>(null!);
+  const id = useRef<Timer | undefined>(undefined);
   const getRootWithCache = useDom(getRoot);
 
   const mainColorAnim = useCallback(() => {
     let i = 0;
     const root = getRootWithCache();
 
-    id.current = setInterval(() => {
+    const id = setInterval(() => {
       root.style.setProperty("--main-color", textSeaColors[i]);
       i = ++i % textSeaColors.length;
     }, 1e4);
+
+    return id;
   }, [getRootWithCache]);
 
   useEffect(() => {
     const isMotionReduced = window.matchMedia("(prefers-reduced-motion)");
-    if (isMotionReduced.matches) return;
-    mainColorAnim();
+    if (!isMotionReduced.matches) id.current = mainColorAnim();
 
     const onChange = (e: MediaQueryListEvent) => {
       const { matches } = e;
 
-      if (matches) mainColorAnim();
-      else clearInterval(id.current);
+      clearInterval(id.current);
+      if (!matches) id.current = mainColorAnim();
     };
 
     isMotionReduced.addEventListener("change", onChange);
     return () => {
+      clearInterval(id.current);
       isMotionReduced.removeEventListener("change", onChange);
     };
   }, [mainColorAnim]);
