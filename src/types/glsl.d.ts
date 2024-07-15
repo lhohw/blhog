@@ -27,3 +27,8 @@ export type BufferPattern = {
   count: number;
   dataType: BufferDataType;
 };
+
+export type ShaderSource = {
+  type: "vertex" | "fragment";
+  source: string;
+};

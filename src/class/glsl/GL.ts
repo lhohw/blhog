@@ -1,11 +1,8 @@
+import type { ShaderSource } from "@/types/glsl";
 import GLBuffer from "./GLBuffer";
 import GLAttribute from "./GLAttribute";
 import GLBufferPattern from "./GLBufferPattern";
 
-export type ShaderSource = {
-  type: "vertex" | "fragment";
-  source: string;
-};
 class GL {
   private gl: WebGLRenderingContext | null = null;
   private glBuffer: GLBuffer | null = null;

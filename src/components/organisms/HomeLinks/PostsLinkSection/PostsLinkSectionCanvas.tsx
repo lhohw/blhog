@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useSizeContext } from "../useSizeContext";
 import GL from "@/class/glsl/GL";
-import { shaders, vertices, pattern } from "@/const/glsl/postLinkSection";
+import { shaderSources, vertices, pattern } from "@/const/glsl/postLinkSection";
 
 export default function PostsLinkSectionCanvas() {
   const isInitialized = useRef(false);
@@ -14,7 +14,7 @@ export default function PostsLinkSectionCanvas() {
     if (!isInitialized.current) {
       isInitialized.current = true;
 
-      const gl = new GL(width, height, shaders, vertices, pattern);
+      const gl = new GL(width, height, shaderSources, vertices, pattern);
       const container = containerRef.current;
       const canvas = gl?.canvas;
 
