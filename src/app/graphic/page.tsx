@@ -5,6 +5,7 @@ export default function GraphicPage() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center">
       <LinkBox title="Kinetic Typography" />
+      <LinkBox title="Easing" />
     </div>
   );
 }
