@@ -20,7 +20,7 @@ export default function EasingSidebar({
   selectType,
 }: EasingSidebarProps) {
   return (
-    <div className="p-4 border-slight border-primary flex flex-1 flex-col">
+    <div className="p-4 border-slight border-primary flex flex-1 flex-col bg-background-alpha">
       <div className="flex flex-col">
         <Dropdown
           className="z-10"
