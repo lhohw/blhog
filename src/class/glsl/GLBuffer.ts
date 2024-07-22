@@ -30,6 +30,7 @@ class GLBuffer {
       for (let patternIdx = 0; patternIdx < pattern.length; patternIdx++) {
         const { count, bytesPerElement } = pattern.getPiece(patternIdx);
         const view = pattern.getView(patternIdx, arrayBuffer);
+        if (view === null) throw new Error(`view not defined`);
 
         for (let j = 0; j < count; j++) {
           view[byteOffset / bytesPerElement] = vertices[arrIdx];
