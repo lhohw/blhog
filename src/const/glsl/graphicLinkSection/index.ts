@@ -1,6 +1,6 @@
 import type { ShaderSource } from "@/types/glsl";
-import vertexShaderSource from "./.vert";
-import fragmentShaderSource from "./.frag";
+import vertexShaderSource from "./shader.vert";
+import fragmentShaderSource from "./shader.frag";
 import GLBufferPattern from "@/class/glsl/GLBufferPattern";
 
 export const shaders: ShaderSource[] = [
