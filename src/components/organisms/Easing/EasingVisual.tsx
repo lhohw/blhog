@@ -9,10 +9,12 @@ export type EasingVisualProps = {
 };
 export default function EasingVisual({ type, setFrame }: EasingVisualProps) {
   return (
-    <Section className="w-full" title={type} mainColor={false}>
-      <div className="flex flex-1 flex-col w-1/2 h-full area justify-end mt-4 self-center">
-        <EasingComponent type={type} setFrame={setFrame} />
-      </div>
+    <Section
+      className="w-full min-h-full-except-header"
+      title={type}
+      mainColor={false}
+    >
+      <EasingComponent type={type} setFrame={setFrame} />
     </Section>
   );
 }
