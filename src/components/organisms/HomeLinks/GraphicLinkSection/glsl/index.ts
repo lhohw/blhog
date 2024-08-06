@@ -30,23 +30,24 @@ class GraphicLinkSectionGlsl extends GL<typeof attributeKeys> {
   private setupBuffer() {
     const { gl, attributes } = this;
 
-    const vertices = [0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0];
     const buffer = new GLBuffer(
       gl,
-      vertices,
-      3,
-      attributes.index("aVertexPosition"),
-      "float32",
-      "STATIC_DRAW",
-    );
-    const vertexColors = [1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1];
-    new GLBuffer(
-      gl,
-      vertexColors,
-      4,
-      attributes.index("aVertexColor"),
-      "uint8",
-      "STATIC_DRAW",
+      [
+        0.0, 0.5, 0.0, 1, 0, 0, 1, -0.5, -0.5, 0.0, 0, 1, 0, 1, 0.5, -0.5, 0.0,
+        0, 0, 1, 1,
+      ],
+      [
+        {
+          itemSize: 3,
+          index: attributes.index("aVertexPosition"),
+          bufferType: "float32",
+        },
+        {
+          itemSize: 4,
+          index: attributes.index("aVertexColor"),
+          bufferType: "uint8",
+        },
+      ],
     );
 
     return buffer;

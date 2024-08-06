@@ -43,16 +43,14 @@ export default function useVisual() {
 
       const { mx, my, mr } = pointer;
 
-      const coords = [];
-      const colors = [];
+      const data = [];
       for (let i = 0; i < particles.length; i++) {
         const particle = particles[i];
         particle.render(mx, my, mr);
-        coords.push(particle.x, particle.y);
-        colors.push(...rgb(particle.color));
+        data.push(particle.x, particle.y, ...rgb(particle.color));
       }
 
-      gl.draw(coords, colors);
+      gl.draw(data);
     },
     [],
   );

@@ -22,10 +22,9 @@ export type BufferDataType =
   | "FLOAT";
 
 export type BufferPattern = {
-  key: string;
-  type: BufferType;
-  count: number;
-  dataType: BufferDataType;
+  itemSize: number;
+  index: number;
+  bufferType: BufferType;
 };
 
 export type ShaderSource = {

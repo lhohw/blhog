@@ -28,24 +28,31 @@ class KineticTypographyGlsl extends GL<
     uniforms.setUniform("uResolution", "2f", [width, height]);
   }
 
-  draw(coords: number[], colors: number[]) {
+  draw(data: number[]) {
     this.clear();
-    this._draw(coords, colors);
+    this._draw(data);
   }
 
-  private _draw(coords: number[], colors: number[]) {
-    const buffer = this.setupVertexBuffer(coords, colors);
+  private _draw(data: number[]) {
+    const buffer = this.setupVertexBuffer(data);
     this.drawParticles(buffer);
   }
 
-  private setupVertexBuffer(coords: number[], colors: number[]) {
+  private setupVertexBuffer(data: number[]) {
     const { gl, attributes } = this;
 
-    const index = attributes.index("aVertexPosition");
-    const buffer = new GLBuffer(gl, coords, 2, index, "float32", "STATIC_DRAW");
-
-    const colorIndex = attributes.index("aVertexColor");
-    new GLBuffer(gl, colors, 3, colorIndex, "float32", "STATIC_DRAW");
+    const buffer = new GLBuffer(gl, data, [
+      {
+        index: attributes.index("aVertexPosition"),
+        itemSize: 2,
+        bufferType: "float32",
+      },
+      {
+        index: attributes.index("aVertexColor"),
+        itemSize: 3,
+        bufferType: "float32",
+      },
+    ]);
 
     return buffer;
   }

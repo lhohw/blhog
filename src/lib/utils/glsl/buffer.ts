@@ -23,11 +23,6 @@ export const getView = (type: BufferType) => {
   throw new Error("invalid type");
 };
 
-export const arr2view = (array: number[], type: BufferType) => {
-  const constructor = getView(type);
-  return new constructor(array);
-};
-
 export const toDataType = (type: BufferType): BufferDataType => {
   switch (type) {
     case "int8": {
