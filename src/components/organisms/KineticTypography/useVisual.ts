@@ -8,10 +8,24 @@ let particles: Particle[];
 let gl: KineticTypographyGlsl;
 
 export default function useVisual() {
+  const handleContextLost = useCallback((e: Event) => {
+    e.preventDefault;
+  }, []);
+
+  const handleContextRestored = useCallback(() => {
+    gl.handleContextRestored();
+    drawParticles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const initVisualCanvas = useCallback((width: number, height: number) => {
     const gl = new KineticTypographyGlsl(width, height);
     gl.canvas.classList.add("absolute", "inset-0");
+    gl.canvas.addEventListener("webglcontextlost", handleContextLost);
+    gl.canvas.addEventListener("webglcontextrestored", handleContextRestored);
+
     return gl;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const initParticles = useCallback((coords: number[]) => {

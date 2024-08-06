@@ -17,15 +17,8 @@ class GL<
     private _uniformKeys?: U,
   ) {
     try {
-      const gl = this.initGl();
-      const shaders = this._initShaders(gl);
-      const program = this._initProgram(gl, shaders);
-      const attributes = this._initAttributes(gl, program);
-      const uniforms = this._initUniforms(gl, program);
-
-      this._gl = gl;
-      this._attributes = attributes;
-      this._uniforms = uniforms;
+      this._gl = this._initGl();
+      this._init();
     } catch (e) {
       console.error(e);
       this._resetToInitialState();
@@ -35,6 +28,10 @@ class GL<
     const gl = this._gl;
     if (!gl) throw new Error("gl not supported");
     return gl;
+  }
+
+  get canvas() {
+    return this.gl.canvas as HTMLCanvasElement;
   }
 
   get attributes() {
@@ -49,7 +46,7 @@ class GL<
     return uniforms;
   }
 
-  private initGl() {
+  private _initGl() {
     const { width, height } = this;
     const canvas = document.createElement("canvas");
 
@@ -62,6 +59,20 @@ class GL<
     gl.viewport(0, 0, width, height);
 
     return gl;
+  }
+
+  protected _init() {
+    const { _gl } = this;
+    if (!_gl) throw new Error("gl not defined");
+
+    const shaders = this._initShaders(_gl);
+    const program = this._initProgram(_gl, shaders);
+    const attributes = this._initAttributes(_gl, program);
+    const uniforms = this._initUniforms(_gl, program);
+
+    this._gl = _gl;
+    this._attributes = attributes;
+    this._uniforms = uniforms;
   }
 
   private _initShaders(gl: WebGLRenderingContext) {

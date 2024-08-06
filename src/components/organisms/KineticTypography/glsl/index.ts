@@ -22,15 +22,8 @@ class KineticTypographyGlsl extends GL<
     super(width, height, shaderSources, attributeKeys, uniformKeys);
     this.init();
   }
-
-  get canvas() {
-    const { gl } = this;
-    return gl.canvas as HTMLCanvasElement;
-  }
-
   private init() {
-    const { canvas, width, height, uniforms } = this;
-    canvas.classList.add("absolute", "inset-0");
+    const { width, height, uniforms } = this;
 
     uniforms.setUniform("uResolution", "2f", [width, height]);
   }
@@ -60,6 +53,11 @@ class KineticTypographyGlsl extends GL<
   private drawParticles(buffer: GLBuffer) {
     const { gl } = this;
     gl.drawArrays(gl.POINTS, 0, buffer.count);
+  }
+
+  handleContextRestored() {
+    this._init();
+    this.init();
   }
 }
 
