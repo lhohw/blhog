@@ -5,18 +5,23 @@ const fontSize = 70;
 const fontWeight = 700;
 const fontName = "Inter";
 
-export type Coord = { x: number; y: number };
 export default function useText() {
   const [text] = useState("lhohw");
   const font = useMemo(() => `${fontWeight} ${fontSize}px ${fontName}`, []);
   const color = useMemo(() => "#303030", []);
-  const [density] = useState(2);
+  const [density] = useState(1);
 
   const createCanvas = useCallback((width: number, height: number) => {
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
-    const { ctx, dpi } = initCanvas(canvas, width, height, {
-      desynchronized: true,
-    });
+    const { ctx, dpi } = initCanvas(
+      canvas,
+      width,
+      height,
+      {
+        desynchronized: true,
+      },
+      1,
+    );
 
     return { ctx, dpi };
   }, []);
@@ -62,7 +67,7 @@ export default function useText() {
         for (x; x < width; x += density) {
           const pixel = data[(y * width + x) * 4 - 1];
           if (pixel !== 0 && x > 0 && x < width && y > 0 && y < height) {
-            coords.push({ x: x / dpr, y: y / dpr });
+            coords.push(x, y);
           }
         }
       }

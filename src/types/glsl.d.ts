@@ -32,3 +32,33 @@ export type ShaderSource = {
   type: "vertex" | "fragment";
   source: string;
 };
+
+export type UniformType =
+  | "1i"
+  | "1iv"
+  | "1f"
+  | "1fv"
+  | "2i"
+  | "2iv"
+  | "2f"
+  | "2fv"
+  | "3i"
+  | "3iv"
+  | "3f"
+  | "3fv"
+  | "4i"
+  | "4iv"
+  | "4f"
+  | "4fv";
+
+export type AttributeConstType =
+  | "1f"
+  | "1fv"
+  | "2f"
+  | "2fv"
+  | "3f"
+  | "3fv"
+  | "4f"
+  | "4fv";
+
+export type DrawType = "STATIC_DRAW" | "STREAM_DRAW" | "DYNAMIC_DRAW";

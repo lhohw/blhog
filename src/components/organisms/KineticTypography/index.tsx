@@ -1,19 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import useText from "./useText";
-import useVisual from "./useVisual";
-import usePointer from "./usePointer";
 import RafControl from "@/class/RafControl";
-import Particle from "@/class/Particle";
+import useText from "./useText";
+import usePointer from "./usePointer";
+import useVisual from "./useVisual";
 
 export default function KineticTypography() {
   const containerRef = useRef<HTMLDivElement>(null!);
   const controlRef = useRef<RafControl>(null!);
 
   const { initText } = useText();
-  const { init, drawParticles } = useVisual();
   const { getPointer, pointerListener } = usePointer();
+  const { init, drawParticles } = useVisual();
 
   const initElements = useCallback(() => {
     const width = Math.min(window.innerWidth - 12, 600);
@@ -23,22 +22,20 @@ export default function KineticTypography() {
     container.style.width = `${width}px`;
     container.style.height = `${height}px`;
 
-    const { ctx: textCtx, coords } = initText(width, height);
-    container.appendChild(textCtx.canvas);
+    const { ctx, coords } = initText(width, height);
+    const gl = init(width, height, coords);
 
-    const { ctx: visualCtx, particles } = init(width, height, coords);
-    container.appendChild(visualCtx.canvas);
-
-    return { visualCtx, particles };
+    container.append(ctx.canvas, gl.canvas);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setControl = useCallback(
-    (visualCtx: CanvasRenderingContext2D, particles: Particle[]) => {
+    () => {
       const pointer = getPointer();
-      const frame = () => drawParticles(visualCtx, particles, pointer);
-      const ctrl = new RafControl(frame, 16);
+      const frame = () => drawParticles(pointer);
+      const ctrl = new RafControl(frame);
       controlRef.current = ctrl;
+      frame();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -56,8 +53,8 @@ export default function KineticTypography() {
 
   useEffect(() => {
     if (!controlRef.current) {
-      const { visualCtx, particles } = initElements();
-      setControl(visualCtx, particles);
+      initElements();
+      setControl();
       addListeners();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
