@@ -42,10 +42,10 @@ class KineticTypographyGlsl extends GL<
     const { gl, attributes } = this;
 
     const index = attributes.index("aVertexPosition");
-    const buffer = new GLBuffer(gl, coords, 2, index, "FLOAT", "STATIC_DRAW");
+    const buffer = new GLBuffer(gl, coords, 2, index, "float32", "STATIC_DRAW");
 
     const colorIndex = attributes.index("aVertexColor");
-    buffer.addBuffer(colors, 3, colorIndex, "FLOAT", "STATIC_DRAW");
+    new GLBuffer(gl, colors, 3, colorIndex, "float32", "STATIC_DRAW");
 
     return buffer;
   }

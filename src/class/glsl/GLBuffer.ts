@@ -1,24 +1,29 @@
-import type { BufferDataType, DrawType } from "@/types/glsl";
+import { arr2view, toDataType } from "@/lib/utils/glsl/buffer";
+import type { BufferDataType, BufferType, DrawType } from "@/types/glsl";
 
 class GLBuffer {
   private _buffer: WebGLBuffer;
   private _numberOfItems: number;
-  private isUsing = false;
+  private _isUsing = false;
+  private _dataType: BufferDataType;
   constructor(
     private _gl: WebGLRenderingContext,
-    private _vertices: Float32List,
+    private _vertices: number[],
     private _itemSize: number,
     private _index?: number,
-    private _itemType: BufferDataType = "FLOAT",
-    private _type: DrawType = "STATIC_DRAW",
+    private _itemType: BufferType = "float32",
+    private _drawType: DrawType = "STATIC_DRAW",
   ) {
     const buffer = _gl.createBuffer();
     if (!buffer) throw new Error("buffer not initialized");
 
     this._buffer = buffer;
+    const view = arr2view(_vertices, _itemType);
+    this._dataType = toDataType(_itemType);
     this._numberOfItems = _vertices.length / _itemSize;
+
     _gl.bindBuffer(_gl.ARRAY_BUFFER, buffer);
-    _gl.bufferData(_gl.ARRAY_BUFFER, new Float32Array(_vertices), _gl[_type]);
+    _gl.bufferData(_gl.ARRAY_BUFFER, view, _gl[_drawType]);
     this.use();
   }
 
@@ -27,32 +32,14 @@ class GLBuffer {
   }
 
   use() {
-    const { _gl, _index, _itemSize, _itemType, _buffer, isUsing } = this;
-    if (isUsing) return;
+    const { _gl, _index, _itemSize, _dataType, _buffer, _isUsing } = this;
+    if (_isUsing) return;
 
-    this.isUsing = true;
+    this._isUsing = true;
     _gl.bindBuffer(_gl.ARRAY_BUFFER, _buffer);
     if (_index !== undefined) {
-      _gl.vertexAttribPointer(_index, _itemSize, _gl[_itemType], false, 0, 0);
+      _gl.vertexAttribPointer(_index, _itemSize, _gl[_dataType], false, 0, 0);
     }
-  }
-
-  addBuffer(
-    vertices: Float32List,
-    itemSize: number,
-    index: number,
-    itemType: BufferDataType = "FLOAT",
-    type: DrawType = "STATIC_DRAW",
-  ) {
-    const { _gl } = this;
-
-    const buffer = _gl.createBuffer();
-    if (!buffer) throw new Error("buffer not initialized");
-
-    _gl.bindBuffer(_gl.ARRAY_BUFFER, buffer);
-    _gl.bufferData(_gl.ARRAY_BUFFER, new Float32Array(vertices), _gl[type]);
-
-    _gl.vertexAttribPointer(index, itemSize, _gl[itemType], false, 0, 0);
   }
 }
 
