@@ -25,7 +25,7 @@ class GLUniforms<U extends readonly string[] = readonly string[]> {
     return uniforms[key].index;
   }
 
-  setUniform(key: U[number], type: UniformType, values: number[]) {
+  setUniform(key: U[number], type: UniformType, values: Float32List) {
     const { gl } = this;
     const uniformSetter = getUniformFunction(gl, type);
     const index = this.index(key);

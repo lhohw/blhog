@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export type Pointer = { mx: number; my: number; mr: number };
 export default function usePointer() {
@@ -16,8 +16,14 @@ export default function usePointer() {
     return pointer.current;
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("pointermove", pointerListener);
+    return () => {
+      window.removeEventListener("pointermove", pointerListener);
+    };
+  }, [pointerListener]);
+
   return {
     getPointer,
-    pointerListener,
   };
 }

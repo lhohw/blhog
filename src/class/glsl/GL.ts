@@ -1,24 +1,23 @@
-import type { ShaderSource } from "@/types/glsl";
+import type { ShaderSource, TextureSource } from "@/types/glsl";
 import GLAttributes from "./GLAttributes";
 import GLUniforms from "./GLUniforms";
+import GLTextures from "./GLTextures";
 
 class GL<
   A extends readonly string[] = readonly string[],
   U extends readonly string[] = readonly string[],
+  T extends readonly TextureSource<U>[] = readonly TextureSource<U>[],
 > {
   private _gl: WebGLRenderingContext | null = null;
   private _attributes: GLAttributes<A> | null = null;
   private _uniforms: GLUniforms<U> | null = null;
-  constructor(
+  private _textures: GLTextures<T> | null = null;
+  protected constructor(
     protected width: number,
     protected height: number,
-    private _shaderSources: ShaderSource[],
-    private _attributeKeys?: A,
-    private _uniformKeys?: U,
   ) {
     try {
-      this._gl = this._initGl();
-      this._init();
+      this._gl = this._initCanvas();
     } catch (e) {
       console.error(e);
       this._resetToInitialState();
@@ -46,7 +45,13 @@ class GL<
     return uniforms;
   }
 
-  private _initGl() {
+  get textures() {
+    const textures = this._textures;
+    if (!textures) throw new Error("textures not initialized");
+    return textures;
+  }
+
+  private _initCanvas() {
     const { width, height } = this;
     const canvas = document.createElement("canvas");
 
@@ -61,22 +66,66 @@ class GL<
     return gl;
   }
 
-  protected _init() {
+  protected async initGL(
+    shaderSources: ShaderSource[],
+    attributeKeys?: A,
+    uniformKeys?: U,
+    textureSources?: T,
+  ) {
     const { _gl } = this;
     if (!_gl) throw new Error("gl not defined");
 
-    const shaders = this._initShaders(_gl);
+    const _textureSources = this._preloadImages(textureSources);
+    const shaders = this._initShaders(_gl, shaderSources);
     const program = this._initProgram(_gl, shaders);
-    const attributes = this._initAttributes(_gl, program);
-    const uniforms = this._initUniforms(_gl, program);
+    const attributes = this._initAttributes(_gl, program, attributeKeys);
+    const uniforms = this._initUniforms(_gl, program, uniformKeys);
+    await this.waitForLoadImage(_textureSources);
+    const textures = this._initTextures(_gl, uniforms, textureSources);
 
     this._gl = _gl;
     this._attributes = attributes;
     this._uniforms = uniforms;
+    this._textures = textures;
   }
 
-  private _initShaders(gl: WebGLRenderingContext) {
-    const { _shaderSources: shaderSources } = this;
+  private _preloadImages(_textureSources?: T) {
+    if (!_textureSources?.length) return [];
+
+    return _textureSources.map(this._preloadImage);
+  }
+
+  private _preloadImage(textureSource: T[number], idx: number) {
+    const { src, img, width, height, index } = textureSource;
+
+    if (!img) {
+      const image = new Image(width, height);
+      if (!src) throw new Error("src is required");
+      image.src = src;
+      textureSource.index = index ?? idx;
+      textureSource.img = image;
+    }
+
+    return textureSource;
+  }
+
+  private waitForLoadImage(textureSources: TextureSource[]) {
+    const promises = textureSources.map(({ img }) => {
+      return new Promise((res) => {
+        if (img instanceof HTMLImageElement) {
+          img.onload = () => res(true);
+        } else {
+          res(true);
+        }
+      });
+    });
+    return Promise.all(promises);
+  }
+
+  private _initShaders(
+    gl: WebGLRenderingContext,
+    shaderSources: ShaderSource[],
+  ) {
     const shaders = [];
 
     for (let i = 0; i < shaderSources.length; i++) {
@@ -126,20 +175,38 @@ class GL<
     return program;
   }
 
-  private _initAttributes(gl: WebGLRenderingContext, program: WebGLProgram) {
-    const { _attributeKeys } = this;
-    if (!_attributeKeys) return null;
+  private _initAttributes(
+    gl: WebGLRenderingContext,
+    program: WebGLProgram,
+    attributeKeys?: A,
+  ) {
+    if (!attributeKeys) return null;
 
-    const attributes = new GLAttributes(gl, program, _attributeKeys);
+    const attributes = new GLAttributes(gl, program, attributeKeys);
     return attributes;
   }
 
-  private _initUniforms(gl: WebGLRenderingContext, program: WebGLProgram) {
-    const { _uniformKeys } = this;
+  private _initUniforms(
+    gl: WebGLRenderingContext,
+    program: WebGLProgram,
+    _uniformKeys?: U,
+  ) {
     if (!_uniformKeys) return null;
 
     const uniforms = new GLUniforms(gl, program, _uniformKeys);
     return uniforms;
+  }
+
+  private _initTextures(
+    gl: WebGLRenderingContext,
+    uniforms: GLUniforms<U> | null,
+    textureSources?: T,
+  ) {
+    if (!textureSources) return null;
+    if (!uniforms) throw new Error("uniforms not initialized");
+
+    const textures = new GLTextures(gl, textureSources, uniforms);
+    return textures;
   }
 
   private _resetToInitialState() {
@@ -228,6 +295,50 @@ class GL<
     const [r, g, b, a] = color;
     _gl.clearColor(r, g, b, a);
     _gl.clear(bit);
+  }
+
+  cull(dir: "CCW" | "CW" = "CCW", face: "BACK" | "FRONT" = "BACK") {
+    const { gl } = this;
+
+    gl.frontFace(gl[dir]);
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl[face]);
+  }
+
+  blend(
+    options: Partial<{
+      blendFunc:
+        | { sFactor: "SRC_ALPHA"; dFactor: "ONE_MINUS_SRC_ALPHA" }
+        | { sFactor: "ONE_MINUS_SRC_ALPHA"; dFactor: "SRC_ALPHA" };
+      blendEquation: "FUNC_ADD" | "FUNC_SUBTRACT" | "FUNC_REVERSE_SUBTRACT";
+    }> = {
+      blendFunc: { sFactor: "SRC_ALPHA", dFactor: "ONE_MINUS_SRC_ALPHA" },
+      blendEquation: "FUNC_ADD",
+    },
+  ) {
+    const { gl } = this;
+
+    if (!options.blendFunc) {
+      options.blendFunc = {
+        sFactor: "SRC_ALPHA",
+        dFactor: "ONE_MINUS_SRC_ALPHA",
+      };
+    }
+    if (!options.blendEquation) {
+      options.blendEquation = "FUNC_ADD";
+    }
+
+    const { blendFunc, blendEquation } = options;
+    const { sFactor, dFactor } = blendFunc;
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl[sFactor], gl[dFactor]);
+    gl.blendEquation(gl[blendEquation]);
+  }
+
+  depthTest() {
+    const { gl } = this;
+    gl.enable(gl.DEPTH_TEST);
   }
 }
 

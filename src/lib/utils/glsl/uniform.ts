@@ -7,7 +7,10 @@ export const getUniformFunction = (
   if (!type.endsWith("v")) type += "v";
 
   const f = getUniformSetter(gl, type);
-  return f as (location: WebGLUniformLocation | null, values: number[]) => void;
+  return f as (
+    location: WebGLUniformLocation | null,
+    values: Float32List,
+  ) => void;
 };
 
 export const getUniformSetter = (

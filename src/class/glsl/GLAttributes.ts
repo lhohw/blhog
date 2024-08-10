@@ -1,3 +1,5 @@
+import { getAttributeConstFunction } from "@/lib/utils/glsl/attribute";
+
 class GLAttributes<A extends readonly string[] = readonly string[]> {
   private attributes: Record<A[number], GLAttributeElement>;
   constructor(
@@ -16,6 +18,20 @@ class GLAttributes<A extends readonly string[] = readonly string[]> {
   index(key: A[number]) {
     const { attributes } = this;
     return attributes[key].index;
+  }
+  enable(key: A[number]) {
+    const { attributes } = this;
+    return attributes[key].enable();
+  }
+  disable(key: A[number]) {
+    const { attributes } = this;
+    return attributes[key].disable();
+  }
+  setAttributeConst(key: A[number], value: Float32List) {
+    const { gl } = this;
+    const index = this.index(key);
+    const setter = getAttributeConstFunction(gl, value);
+    setter(index, value);
   }
 }
 

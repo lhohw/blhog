@@ -1,4 +1,9 @@
-import type { BufferPattern } from "@/types/glsl";
+import type {
+  BufferPattern,
+  IntegerBufferDataType,
+  IntegerBufferType,
+  IntegerTypedArray,
+} from "@/types/glsl";
 import {
   getBytesPerElement,
   getView,
@@ -11,6 +16,11 @@ class GLBuffer {
   private _numberOfItems = 0;
   private _stride = 0;
   private _offsets: number[] = [];
+  private _element: {
+    buffer: WebGLBuffer;
+    indices: IntegerTypedArray;
+    type: IntegerBufferDataType;
+  } | null = null;
   constructor(
     private _gl: WebGLRenderingContext,
     private _vertices: number[],
@@ -25,6 +35,12 @@ class GLBuffer {
 
   private get patterns() {
     return this._patterns as BufferPattern[];
+  }
+  private get element() {
+    const { _element } = this;
+    if (_element === null) throw new Error("element not initialized");
+
+    return _element;
   }
 
   private _init() {
@@ -78,6 +94,16 @@ class GLBuffer {
     return this._numberOfItems;
   }
 
+  get elementCount() {
+    const { element } = this;
+    return element.indices.length;
+  }
+
+  get elementType() {
+    const { _gl, element } = this;
+    return _gl[element.type];
+  }
+
   use() {
     const { _gl, _buffer, _stride, _offsets, _isUsing, patterns } = this;
 
@@ -101,6 +127,32 @@ class GLBuffer {
         offset,
       );
     }
+  }
+
+  setElement(type: IntegerBufferType, indices: number[]) {
+    const { _gl } = this;
+
+    if (!this._element) {
+      const buffer = _gl.createBuffer();
+      if (!buffer) throw new Error("buffer not initialized");
+
+      this._element = { buffer, indices: null!, type: null! };
+    }
+
+    const constructor = getView(type);
+    this._element.indices = new constructor(indices) as IntegerTypedArray;
+    this._element.type = toDataType(type) as IntegerBufferDataType;
+    this.useElement();
+  }
+
+  useElement() {
+    const { _gl, _element } = this;
+    if (_element === null) throw new Error("indices not initialized");
+
+    const { buffer, indices } = _element;
+
+    _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, buffer);
+    _gl.bufferData(_gl.ELEMENT_ARRAY_BUFFER, indices, _gl.STATIC_DRAW);
   }
 }
 
