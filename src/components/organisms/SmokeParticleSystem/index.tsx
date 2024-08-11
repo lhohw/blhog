@@ -11,7 +11,7 @@ const SmokeParticleSystem = () => {
   const rafControl = useRef<RafControl>(null!);
   const smokeParticleSystem = useRef<SmokeParticleSystemGL>(null!);
 
-  const { getPointer } = usePointer();
+  const { getPointer, setPointerTarget } = usePointer();
 
   useEffect(() => {
     if (!isInitialized.current) {
@@ -21,6 +21,7 @@ const SmokeParticleSystem = () => {
       const height = (width / 16) * 10;
       const gl = new SmokeParticleSystemGL(width, height);
       gl.canvas.style.filter = "blur(2px)";
+      setPointerTarget(gl.canvas);
 
       containerRef.current?.appendChild(gl.canvas);
       smokeParticleSystem.current = gl;
