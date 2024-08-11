@@ -14,6 +14,9 @@ export default function plumTree(
   height: number,
 ) {
   const { ctx } = initCanvas(canvas, width, height)!;
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "#d1fae525";
+
   const MIN_BRANCH = 30;
   const length = 6;
   const interval = 1000 / 40;
