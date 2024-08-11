@@ -11,11 +11,11 @@ void main() {
 const fragmentShaderSource = `
 precision mediump float;
 uniform vec2 uResolution;
-void main() {
-  vec2 uv=gl_FragCoord.xy/uResolution.xy;
-  float len=length(uv-.5);
-  float wb=step(len,.5);
-  gl_FragColor=vec4(wb);
+void main(){
+  vec2 st=gl_FragCoord.xy/uResolution;
+  float alphaMask=step(length(st-.5),.5);
+  vec4 color=vec4(1.-smoothstep(0.,1.,length(st-.5)));
+  gl_FragColor=vec4(color.rgb,color.a*alphaMask);
 }
 `;
 const shaderSources: ShaderSource[] = [

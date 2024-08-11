@@ -7,5 +7,5 @@ varying float vTexAlpha;
 
 void main(){
   vec4 color=texture2D(uSampler,vTexCoords);
-  gl_FragColor=vec4(color.rgb,min(color.a,vTexAlpha));
+  gl_FragColor=vec4(color.rgb*color.a,min(color.a,vTexAlpha));
 }

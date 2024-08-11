@@ -66,9 +66,7 @@ class SmokeParticleSystemGL extends GL<
       );
 
       this._setupUniforms();
-      this.blend({
-        blendFunc: { sFactor: "SRC_ALPHA", dFactor: "ONE_MINUS_SRC_ALPHA" },
-      });
+      this.blend();
       this.draw(0);
     } catch (e) {
       console.error("smoke particle system initialize failed");
@@ -86,20 +84,15 @@ class SmokeParticleSystemGL extends GL<
     const { _particleSystem } = this;
     const wind = new Vector(mx, 0);
 
-    _particleSystem.applyForce(wind);
-    _particleSystem.render();
-
     for (let i = 0; i < 2; i++) {
       _particleSystem.generate();
     }
+    _particleSystem.applyForce(wind);
+    _particleSystem.render();
 
-    this._draw();
-  }
-
-  private _draw() {
-    this.clear([0.0, 0.0, 0.0, 1.0]);
     this._updateParticles();
     const buffer = this._setupBuffer();
+    this.clear([0.0, 0.0, 0.0, 1.0]);
     this._drawParticles(buffer);
   }
 

@@ -20,7 +20,7 @@ const SmokeParticleSystem = () => {
       const width = Math.min(window.innerWidth - 12, 600);
       const height = (width / 16) * 10;
       const gl = new SmokeParticleSystemGL(width, height);
-      gl.canvas.classList.add("shadow-corona-primary");
+      gl.canvas.style.filter = "blur(2px)";
 
       containerRef.current?.appendChild(gl.canvas);
       smokeParticleSystem.current = gl;
@@ -51,7 +51,10 @@ const SmokeParticleSystem = () => {
   });
 
   return (
-    <div className="flex flex-col w-full items-center" ref={containerRef}></div>
+    <div
+      className="flex flex-col w-full h-fit items-center area"
+      ref={containerRef}
+    ></div>
   );
 };
 
