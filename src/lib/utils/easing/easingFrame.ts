@@ -1,15 +1,16 @@
+export const animationTypes = ["ball", "opacity"] as const;
 export type AnimationType = (typeof animationTypes)[number];
+
+type IsDone = boolean;
 export type TransformAnimation = (
   target: HTMLElement,
   t: number,
   x: number,
   direction: 1 | -1,
   duration: number,
-) => boolean;
+) => IsDone;
 
-export const animationTypes = ["ball"] as const;
-
-export const ballTransform: TransformAnimation = (
+const ballTransform: TransformAnimation = (
   target,
   t,
   x,
@@ -32,8 +33,20 @@ export const ballTransform: TransformAnimation = (
   return false;
 };
 
+const opacityTransform: TransformAnimation = (
+  target,
+  t,
+  x,
+  direction,
+  duration,
+) => {
+  target.style.setProperty("opacity", x.toString());
+  return false;
+};
+
 const transform: Record<AnimationType, TransformAnimation> = {
   ball: ballTransform,
+  opacity: opacityTransform,
 };
 
 export default transform;

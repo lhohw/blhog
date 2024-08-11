@@ -2,6 +2,7 @@ import type { AnimationType } from "@/lib/utils/easing/easingFrame";
 import { useEffect } from "react";
 import Section from "@/components/molecules/Section";
 import Ball from "@/components/atoms/easing/Ball";
+import Opacity from "@/components/atoms/easing/Opacity";
 
 export type EasingVisualProps = {
   type?: AnimationType;
@@ -30,5 +31,6 @@ const EasingComponent = ({ type, setFrame }: EasingVisualProps) => {
   });
 
   if (type === "ball") return <Ball />;
+  else if (type === "opacity") return <Opacity />;
   return null;
 };
