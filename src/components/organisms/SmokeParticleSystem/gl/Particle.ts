@@ -70,15 +70,16 @@ class Particle {
   }
 
   applyForce(f: Vector) {
-    this._acc.add(f);
+    const { _acc } = this;
+    this._acc = _acc.add(f);
   }
 
   private _update() {
     const { _vertices, _acc, _velocity } = this;
-    _velocity.add(_acc);
+    this._velocity = _velocity.add(_acc);
     this._alpha *= ALPHA_ATTENUATION;
     this._lifespan -= LIFESPAN_UNIT;
-    _acc.multiply(0);
+    this._acc = _acc.multiply(0);
 
     for (let i = 0; i < 4; i++) {
       _vertices[5 * i + 0] += _velocity.x;

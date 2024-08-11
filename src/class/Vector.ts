@@ -6,21 +6,16 @@ class Vector {
     public y: number,
   ) {}
   add(rhs: Vector) {
-    const { x, y } = rhs;
-    this.x += x;
-    this.y += y;
-    return this;
+    const { x, y } = this;
+    return new Vector(x + rhs.x, y + rhs.y);
   }
   multiply(scalar: number) {
-    this.x *= scalar;
-    this.y *= scalar;
-    return this;
+    const { x, y } = this;
+    return new Vector(scalar * x, scalar * y);
   }
   addPolar(radius: number, radian: number) {
     const { x, y } = polar2cart(radius, radian);
-    this.x += x;
-    this.y += y;
-    return this;
+    return new Vector(this.x + x, this.y + y);
   }
 }
 
