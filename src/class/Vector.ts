@@ -1,15 +1,21 @@
+import { polar2cart } from "@/lib/utils/math";
+
 class Vector {
   constructor(
     public x: number,
     public y: number,
   ) {}
-  addPolar(radius: number, radian: number) {
+  add(rhs: Vector) {
     const { x, y } = this;
-
-    const dx = radius * Math.cos(radian);
-    const dy = radius * Math.sin(radian);
-
-    return new Vector(x + dx, y + dy);
+    return new Vector(x + rhs.x, y + rhs.y);
+  }
+  multiply(scalar: number) {
+    const { x, y } = this;
+    return new Vector(scalar * x, scalar * y);
+  }
+  addPolar(radius: number, radian: number) {
+    const { x, y } = polar2cart(radius, radian);
+    return new Vector(this.x + x, this.y + y);
   }
 }
 

@@ -4,7 +4,7 @@ class RafControl {
   private _requestId: number | null = null;
   constructor(
     public frame: (now: number) => void = () => this.done(),
-    public interval = 1000 / 40,
+    public interval = 1000 / 60,
   ) {}
   get isDone() {
     return this._isDone;

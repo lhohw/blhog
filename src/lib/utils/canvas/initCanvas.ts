@@ -20,8 +20,6 @@ export default function initCanvas(
   canvas.height = height * dpi;
 
   ctx.scale(dpi, dpi);
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "#d1fae525";
 
   return { ctx, dpi };
 }

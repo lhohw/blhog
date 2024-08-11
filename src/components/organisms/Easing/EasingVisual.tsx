@@ -2,6 +2,7 @@ import type { AnimationType } from "@/lib/utils/easing/easingFrame";
 import { useEffect } from "react";
 import Section from "@/components/molecules/Section";
 import Ball from "@/components/atoms/easing/Ball";
+import Opacity from "@/components/atoms/easing/Opacity";
 
 export type EasingVisualProps = {
   type?: AnimationType;
@@ -9,10 +10,12 @@ export type EasingVisualProps = {
 };
 export default function EasingVisual({ type, setFrame }: EasingVisualProps) {
   return (
-    <Section className="w-full" title={type} mainColor={false}>
-      <div className="flex flex-1 flex-col w-1/2 h-full area justify-end mt-4 self-center">
-        <EasingComponent type={type} setFrame={setFrame} />
-      </div>
+    <Section
+      className="w-full min-h-full-except-header"
+      title={type}
+      mainColor={false}
+    >
+      <EasingComponent type={type} setFrame={setFrame} />
     </Section>
   );
 }
@@ -28,5 +31,6 @@ const EasingComponent = ({ type, setFrame }: EasingVisualProps) => {
   });
 
   if (type === "ball") return <Ball />;
+  else if (type === "opacity") return <Opacity />;
   return null;
 };

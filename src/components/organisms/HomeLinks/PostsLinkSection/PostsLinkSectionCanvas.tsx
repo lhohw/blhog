@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useSizeContext } from "../useSizeContext";
-import GL from "@/class/glsl/GL";
-import { shaderSources, vertices, pattern } from "@/const/glsl/postLinkSection";
+import PostsLinkSectionGlsl from "./glsl";
 
 export default function PostsLinkSectionCanvas() {
   const isInitialized = useRef(false);
@@ -14,14 +13,11 @@ export default function PostsLinkSectionCanvas() {
     if (!isInitialized.current) {
       isInitialized.current = true;
 
-      const gl = new GL(width, height, shaderSources, vertices, pattern);
-      const container = containerRef.current;
-      const canvas = gl?.canvas;
-
-      if (container && canvas) {
-        gl.draw(true);
-        container.appendChild(canvas);
-      }
+      const gl = new PostsLinkSectionGlsl(width, height);
+      containerRef.current.appendChild(gl.canvas);
+      gl.init().then(() => {
+        gl.draw();
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

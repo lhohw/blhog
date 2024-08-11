@@ -1,72 +1,158 @@
-import GLBufferPattern from "./GLBufferPattern";
+import type {
+  BufferPattern,
+  IntegerBufferDataType,
+  IntegerBufferType,
+  IntegerTypedArray,
+} from "@/types/glsl";
+import {
+  getBytesPerElement,
+  getView,
+  toDataType,
+} from "@/lib/utils/glsl/buffer";
 
 class GLBuffer {
-  private colCnt: number;
-  private rowCnt: number;
-  private vertexCnt: number;
-  public totalBytesPerRow: number;
-
-  private arrayBuffer: ArrayBuffer;
+  private _isUsing = false;
+  private _buffer: WebGLBuffer;
+  private _numberOfItems = 0;
+  private _stride = 0;
+  private _offsets: number[] = [];
+  private _element: {
+    buffer: WebGLBuffer;
+    indices: IntegerTypedArray;
+    type: IntegerBufferDataType;
+  } | null = null;
   constructor(
-    private _buffer: WebGLBuffer,
-    private vertices: number[],
-    private pattern: GLBufferPattern,
+    private _gl: WebGLRenderingContext,
+    private _vertices: number[],
+    private _patterns: BufferPattern | BufferPattern[],
   ) {
-    this.colCnt = pattern.count;
-    this.rowCnt = vertices.length / this.colCnt;
-    this.vertexCnt = this.colCnt * this.rowCnt;
+    if (!Array.isArray(this._patterns)) this._patterns = [this._patterns];
 
-    this.totalBytesPerRow = pattern.totalBytes;
-    this.arrayBuffer = new ArrayBuffer(this.totalBytesPerRow * this.rowCnt);
-
-    this.init();
+    this._init();
+    this._buffer = this._initBuffer();
+    this.use();
   }
-  private init() {
-    const { rowCnt, pattern, vertices, arrayBuffer } = this;
 
-    let arrIdx = 0;
-    let byteOffset = 0;
-    for (let i = 0; i < rowCnt; i++) {
-      for (let patternIdx = 0; patternIdx < pattern.length; patternIdx++) {
-        const { count, bytesPerElement } = pattern.getPiece(patternIdx);
-        const view = pattern.getView(patternIdx, arrayBuffer);
-        if (view === null) throw new Error(`view not defined`);
+  private get patterns() {
+    return this._patterns as BufferPattern[];
+  }
+  private get element() {
+    const { _element } = this;
+    if (_element === null) throw new Error("element not initialized");
 
-        for (let j = 0; j < count; j++) {
-          view[byteOffset / bytesPerElement] = vertices[arrIdx];
-          byteOffset += bytesPerElement;
-          arrIdx++;
+    return _element;
+  }
+
+  private _init() {
+    const { _vertices, patterns, _offsets } = this;
+
+    let offset = 0;
+    let totalItemSize = 0;
+
+    for (let i = 0; i < patterns.length; i++) {
+      const { itemSize, bufferType } = patterns[i];
+      _offsets[i] = offset;
+      const bytesPerElement = getBytesPerElement(bufferType);
+      offset += itemSize * bytesPerElement;
+      totalItemSize += itemSize;
+    }
+
+    this._stride = offset;
+    this._numberOfItems = _vertices.length / totalItemSize;
+  }
+
+  private _initBuffer() {
+    const { _gl, _stride, _numberOfItems, patterns, _vertices } = this;
+
+    const data = new ArrayBuffer(_stride * _numberOfItems);
+    const buffer = _gl.createBuffer();
+    if (!buffer) throw new Error("buffer not initialized");
+
+    let bytes = 0;
+    let idx = 0;
+    for (let i = 0; i < _numberOfItems; i++) {
+      for (let j = 0; j < patterns.length; j++) {
+        const { itemSize, bufferType } = patterns[j];
+        const constructor = getView(bufferType);
+        const view = new constructor(data);
+        const bytesPerElement = constructor.BYTES_PER_ELEMENT;
+        for (let k = 0; k < itemSize; k++) {
+          view[bytes / bytesPerElement] = _vertices[idx];
+          idx++;
+          bytes += bytesPerElement;
         }
       }
     }
+
+    _gl.bindBuffer(_gl.ARRAY_BUFFER, buffer);
+    _gl.bufferData(_gl.ARRAY_BUFFER, data, _gl.STATIC_DRAW);
+
+    return buffer;
   }
 
   get count() {
-    return this.rowCnt;
-  }
-  get buffer() {
-    return this._buffer;
-  }
-  get data() {
-    return this.arrayBuffer;
-  }
-  get patternLength() {
-    return this.pattern.length;
+    return this._numberOfItems;
   }
 
-  getKey(idx: number) {
-    return this.pattern.getPiece(idx).key;
+  get elementCount() {
+    const { element } = this;
+    return element.indices.length;
   }
-  getPointerProps(idx: number) {
-    const { pattern } = this;
-    const { count, dataType, bytesPerElement, key } = pattern.getPiece(idx);
 
-    return {
-      key,
-      count,
-      type: WebGLRenderingContext[dataType],
-      patternBytes: count * bytesPerElement,
-    };
+  get elementType() {
+    const { _gl, element } = this;
+    return _gl[element.type];
+  }
+
+  use() {
+    const { _gl, _buffer, _stride, _offsets, _isUsing, patterns } = this;
+
+    if (_isUsing) return;
+
+    this._isUsing = true;
+
+    _gl.bindBuffer(_gl.ARRAY_BUFFER, _buffer);
+
+    for (let i = 0; i < patterns.length; i++) {
+      const { index, itemSize, bufferType } = patterns[i];
+      const dataType = toDataType(bufferType);
+      const offset = _offsets[i];
+
+      _gl.vertexAttribPointer(
+        index,
+        itemSize,
+        _gl[dataType],
+        false,
+        _stride,
+        offset,
+      );
+    }
+  }
+
+  setElement(type: IntegerBufferType, indices: number[]) {
+    const { _gl } = this;
+
+    if (!this._element) {
+      const buffer = _gl.createBuffer();
+      if (!buffer) throw new Error("buffer not initialized");
+
+      this._element = { buffer, indices: null!, type: null! };
+    }
+
+    const constructor = getView(type);
+    this._element.indices = new constructor(indices) as IntegerTypedArray;
+    this._element.type = toDataType(type) as IntegerBufferDataType;
+    this.useElement();
+  }
+
+  useElement() {
+    const { _gl, _element } = this;
+    if (_element === null) throw new Error("indices not initialized");
+
+    const { buffer, indices } = _element;
+
+    _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, buffer);
+    _gl.bufferData(_gl.ELEMENT_ARRAY_BUFFER, indices, _gl.STATIC_DRAW);
   }
 }
 
