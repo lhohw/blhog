@@ -7,7 +7,7 @@ uniform vec2 uResolution;
 
 void main(){
   vVertexColor=aVertexColor;
-  vec2 position=aVertexPosition/uResolution*vec2(2.)-vec2(1.);
+  vec2 position=2.*aVertexPosition/uResolution-1.;
   gl_Position=vec4(position.x,-position.y,0.,1.);
   gl_PointSize=.659999;
 }

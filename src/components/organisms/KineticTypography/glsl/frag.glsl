@@ -1,6 +1,4 @@
-precision highp float;
-
-uniform vec2 uResolution;
+precision mediump float;
 
 varying vec3 vVertexColor;
 

@@ -1,13 +1,16 @@
-import type { Pointer } from "./usePointer";
+import type { Pointer } from "@/hooks/react/usePointer";
 import { useCallback } from "react";
 import Particle from "@/class/Particle";
 import KineticTypographyGlsl from "./glsl";
 import { rgb } from "@/lib/utils/color";
+import usePointer from "@/hooks/react/usePointer";
 
 let particles: Particle[];
 let gl: KineticTypographyGlsl;
 
 export default function useVisual() {
+  const { getPointer, setPointerTarget } = usePointer();
+
   const handleContextLost = useCallback((e: Event) => {
     e.preventDefault;
   }, []);
@@ -23,6 +26,7 @@ export default function useVisual() {
     gl.canvas.classList.add("absolute", "inset-0");
     gl.canvas.addEventListener("webglcontextlost", handleContextLost);
     gl.canvas.addEventListener("webglcontextrestored", handleContextRestored);
+    setPointerTarget(gl.canvas);
 
     return gl;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,28 +41,25 @@ export default function useVisual() {
     return particles;
   }, []);
 
-  const drawParticles = useCallback(
-    (pointer: Pointer = { mx: 0, my: 0, mr: 0 }) => {
-      gl.clear();
+  const drawParticles = useCallback(() => {
+    const { mx, my, mr } = getPointer();
 
-      const { mx, my, mr } = pointer;
+    const data = [];
+    for (let i = 0; i < particles.length; i++) {
+      const particle = particles[i];
+      particle.render(mx, my, mr);
+      data.push(particle.x, particle.y, ...rgb(particle.color));
+    }
 
-      const data = [];
-      for (let i = 0; i < particles.length; i++) {
-        const particle = particles[i];
-        particle.render(mx, my, mr);
-        data.push(particle.x, particle.y, ...rgb(particle.color));
-      }
-
-      gl.draw(data);
-    },
-    [],
-  );
+    gl.clear();
+    gl.draw(data);
+  }, [getPointer]);
 
   const init = useCallback(
-    (width: number, height: number, coords: number[]) => {
+    async (width: number, height: number, coords: number[]) => {
       particles = initParticles(coords);
       gl = initVisualCanvas(width, height);
+      await gl.init();
       drawParticles();
 
       return gl;

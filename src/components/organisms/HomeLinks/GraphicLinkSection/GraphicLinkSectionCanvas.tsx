@@ -15,7 +15,9 @@ export default function GraphicLinkSectionCanvas() {
 
       const gl = new GraphicLinkSectionGlsl(width, height);
       containerRef.current.appendChild(gl.canvas);
-      gl.draw();
+      gl.init().then(() => {
+        gl.draw();
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

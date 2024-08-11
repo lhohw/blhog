@@ -3,18 +3,17 @@
 import { useCallback, useEffect, useRef } from "react";
 import RafControl from "@/class/RafControl";
 import useText from "./useText";
-import usePointer from "./usePointer";
 import useVisual from "./useVisual";
 
 export default function KineticTypography() {
+  const isInitialized = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null!);
-  const controlRef = useRef<RafControl>(null!);
+  const controlRef = useRef<RafControl>(new RafControl());
 
   const { initText } = useText();
-  const { getPointer, pointerListener } = usePointer();
   const { init, drawParticles } = useVisual();
 
-  const initElements = useCallback(() => {
+  const initElements = useCallback(async () => {
     const width = Math.min(window.innerWidth - 12, 600);
     const height = (width / 16) * 10;
 
@@ -23,19 +22,16 @@ export default function KineticTypography() {
     container.style.height = `${height}px`;
 
     const { ctx, coords } = initText(width, height);
-    const gl = init(width, height, coords);
+    const { canvas } = await init(width, height, coords);
 
-    container.append(ctx.canvas, gl.canvas);
+    container.append(ctx.canvas, canvas);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setControl = useCallback(
     () => {
-      const pointer = getPointer();
-      const frame = () => drawParticles(pointer);
-      const ctrl = new RafControl(frame);
-      controlRef.current = ctrl;
-      frame();
+      const ctrl = controlRef.current;
+      ctrl.frame = () => drawParticles();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -45,17 +41,18 @@ export default function KineticTypography() {
     const container = containerRef.current;
     const ctrl = controlRef.current;
 
-    container.addEventListener("pointermove", pointerListener);
     container.addEventListener("pointerenter", ctrl.restart.bind(ctrl));
     container.addEventListener("pointerleave", ctrl.done.bind(ctrl));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!controlRef.current) {
-      initElements();
-      setControl();
-      addListeners();
+    if (!isInitialized.current) {
+      isInitialized.current = true;
+      initElements().then(() => {
+        setControl();
+        addListeners();
+        drawParticles();
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -65,7 +62,7 @@ export default function KineticTypography() {
 
     document.body.style.overflow = "hidden";
     return () => {
-      if (!ctrl.isDone) ctrl.done();
+      if (ctrl.isDone === false) ctrl.done();
       document.body.style.overflow = "visible";
     };
   }, []);

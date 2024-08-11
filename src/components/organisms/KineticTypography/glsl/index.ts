@@ -19,21 +19,17 @@ class KineticTypographyGlsl extends GL<
     protected width: number,
     protected height: number,
   ) {
-    super(width, height, shaderSources, attributeKeys, uniformKeys);
-    this.init();
+    super(width, height);
   }
-  private init() {
-    const { width, height, uniforms } = this;
+  async init() {
+    const { width, height } = this;
 
-    uniforms.setUniform("uResolution", "2f", [width, height]);
+    await this.initGL(shaderSources, attributeKeys, uniformKeys);
+    this.uniforms.setUniform("uResolution", "2f", [width, height]);
   }
 
   draw(data: number[]) {
-    this.clear();
-    this._draw(data);
-  }
-
-  private _draw(data: number[]) {
+    this.clear([0.0, 0.0, 0.0, 1.0]);
     const buffer = this.setupVertexBuffer(data);
     this.drawParticles(buffer);
   }
@@ -63,7 +59,6 @@ class KineticTypographyGlsl extends GL<
   }
 
   handleContextRestored() {
-    this._init();
     this.init();
   }
 }

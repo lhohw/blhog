@@ -15,20 +15,14 @@ class PostsLinkSectionGlsl extends GL<typeof attributeKeys> {
     protected width: number,
     protected height: number,
   ) {
-    super(width, height, shaderSources, attributeKeys);
-
-    this.init();
+    super(width, height);
   }
 
-  private init() {
-    this._init();
+  async init() {
+    this.initGL(shaderSources, attributeKeys);
   }
 
   draw() {
-    this._draw();
-  }
-
-  private _draw() {
     const buffer = this.setupBuffer();
     this.drawBuffer(buffer);
   }

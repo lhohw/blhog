@@ -15,7 +15,11 @@ class GraphicLinkSectionGlsl extends GL<typeof attributeKeys> {
     protected width: number,
     protected height: number,
   ) {
-    super(width, height, shaderSources, attributeKeys);
+    super(width, height);
+  }
+
+  async init() {
+    this.initGL(shaderSources, attributeKeys);
   }
 
   draw() {
