@@ -3,7 +3,7 @@ class RafControl {
   private _isDone = true;
   private _requestId: number | null = null;
   constructor(
-    public frame: (now: number) => void = () => this.done(),
+    public frame: (now?: number) => void = () => this.done(),
     public interval = 1000 / 60,
   ) {}
   get isDone() {
