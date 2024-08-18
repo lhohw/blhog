@@ -24,21 +24,21 @@ export default function HeaderTitle() {
       aria-labelledby="blog-title"
     >
       <button
-        className={clsx(
-          "relative p-2 h-full transition-width duration-700",
-          isHome ? "w-0" : "w-16 cursor-pointer",
-        )}
+        className={clsx("h-full", !isHome && "cursor-pointer")}
         aria-label="go back"
         tabIndex={isHome ? 0 : -1}
         onClick={goBack}
       >
         {!isHome && (
-          <span className="block absolute left-0 top-0 w-16 h-full">
+          <span className="block w-16 h-full">
             <BackArrow />
           </span>
         )}
       </button>
-      <h1 id="blog-title" className="text-base font-bold">{`lhohw's blog`}</h1>
+      <h1
+        id="blog-title"
+        className="absolute text-base font-bold ml-16"
+      >{`lhohw's blog`}</h1>
     </Link>
   );
 }
