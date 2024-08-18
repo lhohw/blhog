@@ -9,13 +9,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "JavaScript",
     "computer-science",
     "TypeScript",
+    "performance",
   ];
   return [
     {
       url: BASE_URL,
-      lastModified: new Date("2024-06-18"),
-      changeFrequency: "never",
+      lastModified: new Date("2024-08-18"),
+      changeFrequency: "monthly",
       priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/graphic`,
+      lastModified: new Date("2024-08-18"),
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
     {
       url: `${BASE_URL}/posts`,
