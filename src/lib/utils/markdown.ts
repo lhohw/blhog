@@ -1,6 +1,7 @@
+import type { ArrayOrNot } from "@/types/utility";
+import React from "react";
 import clsx from "clsx";
 import { MDXRemoteProps } from "next-mdx-remote/rsc";
-import React from "react";
 import { gunzipSync } from "zlib";
 import { strToSlug } from "@/lib/utils/string";
 import { Post } from "@/const/definitions";
@@ -43,8 +44,9 @@ export const createMDXHeadings = () => {
     MDXRemoteProps["components"]
   >((acc, _, idx) => {
     const tagName = `h${idx + 1}`;
-    const createHeading = (props: DetailedHTMLProps<HTMLHeadingElement>) => {
-      const id = strToSlug(props.children as string).toLowerCase();
+    const createHeading = (props: { children: string | JSX.Element }) => {
+      const str = handleHeadingStr(props);
+      const id = strToSlug(str).toLowerCase();
       return convertToMDX(tagName as "h1", id)(props);
     };
     return {
@@ -54,6 +56,22 @@ export const createMDXHeadings = () => {
   }, {});
 
   return headings;
+};
+
+export type HandleHeadingStrProps = {
+  children: ArrayOrNot<string | { props: HandleHeadingStrProps }>;
+};
+export const handleHeadingStr = ({ children }: HandleHeadingStrProps) => {
+  let ret = "";
+  if (typeof children === "string") ret = children;
+  else if (Array.isArray(children)) {
+    for (const child of children) {
+      ret += handleHeadingStr({ children: child });
+    }
+  } else if (typeof children === "object" && children.props) {
+    ret = handleHeadingStr(children.props);
+  }
+  return ret;
 };
 
 export const format = (date: Date) => {
