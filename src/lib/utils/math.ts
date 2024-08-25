@@ -51,7 +51,7 @@ export const marsagilaPolar = () => {
     v1 = random(2, -1);
     v2 = random(2, -1);
     w = v1 ** 2 + v2 ** 2;
-  } while (w >= 1);
+  } while (w >= 1 || w === 0);
 
   w = sqrt((-2 * log(w)) / w);
 
