@@ -2,7 +2,7 @@
 
 import Error from "@/components/templates/Error";
 
-export default function PostErrorPage({
+export default function KineticTypographyErrorPage({
   error,
   reset,
 }: {
