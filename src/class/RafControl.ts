@@ -6,15 +6,26 @@ class RafControl {
     public frame: (now: number) => void = () => this.done(),
     public interval = 1000 / 60,
   ) {}
+
   get isDone() {
     return this._isDone;
   }
   get isPaused() {
     return this._isPaused;
   }
+
+  initStart() {
+    if (!this.frame) {
+      console.log("frame not set");
+      return;
+    }
+    this._isDone = false;
+  }
+
   pause() {
     this._isPaused = true;
   }
+
   resume() {
     this._isPaused = false;
     let prevTime = 0;
@@ -24,7 +35,7 @@ class RafControl {
         this.frame(now);
       }
 
-      if (this.isPaused || this._isDone) return;
+      if (this._isPaused || this._isDone) return;
 
       this._requestId = requestAnimationFrame(animationFrame);
     };
@@ -32,11 +43,18 @@ class RafControl {
     if (this._requestId) cancelAnimationFrame(this._requestId);
     this._requestId = requestAnimationFrame(animationFrame);
   }
-  done() {
-    if (this._requestId === null) {
-      console.log("animation not started");
-      return;
+
+  start() {
+    if (this._requestId) {
+      cancelAnimationFrame(this._requestId);
+      this._requestId = null;
     }
+    this._isDone = false;
+    this.resume();
+  }
+
+  done() {
+    if (this._requestId === null) return;
 
     this.pause();
     cancelAnimationFrame(this._requestId);
@@ -44,13 +62,10 @@ class RafControl {
     this._isDone = true;
     this._requestId = null;
   }
-  restart() {
-    if (this._requestId) {
-      cancelAnimationFrame(this._requestId);
-      this._requestId = null;
-    }
-    this._isDone = false;
-    this.resume();
+
+  cleanup() {
+    this.frame = () => this.done();
+    this.done();
   }
 }
 

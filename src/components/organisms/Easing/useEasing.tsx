@@ -16,7 +16,7 @@ import transform from "@/lib/utils/easing/easingFrame";
 export default function useEasing() {
   const [isPlaying, setIsPlaying] = useState(false);
   const play = useCallback(() => {
-    rafControl.current.restart();
+    rafControl.current.start();
     setIsPlaying(true);
   }, []);
   const done = useCallback(() => {
