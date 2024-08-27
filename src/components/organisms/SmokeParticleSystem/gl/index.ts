@@ -70,6 +70,13 @@ class SmokeParticleSystemGL extends GL<
   }
 
   draw(mx: number) {
+    this._updateParticles(mx);
+    const buffer = this._setupBuffer();
+    this.clear([0.0, 0.0, 0.0, 1.0]);
+    this._drawParticles(buffer);
+  }
+
+  private _updateParticles(mx: number) {
     const { _particleSystem } = this;
     const wind = new Vector(mx, 0);
 
@@ -78,15 +85,6 @@ class SmokeParticleSystemGL extends GL<
     }
     _particleSystem.applyForce(wind);
     _particleSystem.render();
-
-    this._updateParticles();
-    const buffer = this._setupBuffer();
-    this.clear([0.0, 0.0, 0.0, 1.0]);
-    this._drawParticles(buffer);
-  }
-
-  private _updateParticles() {
-    this._particleSystem.render();
   }
 
   private _setupBuffer() {

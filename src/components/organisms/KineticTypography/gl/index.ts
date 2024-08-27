@@ -3,6 +3,7 @@ import vertexShaderSource from "./vert.glsl";
 import fragmentShaderSource from "./frag.glsl";
 import GL from "@/class/glsl/GL";
 import GLBuffer from "@/class/glsl/GLBuffer";
+import ParticleSystem from "./ParticleSystem";
 
 const shaderSources: ShaderSource[] = [
   { type: "vertex", source: vertexShaderSource },
@@ -15,10 +16,12 @@ class KineticTypographyGlsl extends GL<
   typeof attributeKeys,
   typeof uniformKeys
 > {
+  private _particleSystem = new ParticleSystem(this.coords);
   constructor(
     protected _canvas: HTMLCanvasElement,
     protected width: number,
     protected height: number,
+    private coords: number[],
     private _handleContextRestored?: (e: Event) => void,
     private _handleContextLost?: (e: Event) => void,
   ) {
@@ -36,16 +39,21 @@ class KineticTypographyGlsl extends GL<
     uniforms.setUniform("uResolution", "2f", [width, height]);
   }
 
-  draw(data: number[]) {
-    const buffer = this.setupBuffer(data);
+  draw(mx: number, my: number, mr: number) {
+    this._updateParticles(mx, my, mr);
+    const buffer = this._setupBuffer();
     this.clear([0.0, 0.0, 0.0, 1.0]);
-    this.drawParticles(buffer);
+    this._drawParticles(buffer);
   }
 
-  private setupBuffer(data: number[]) {
-    const { gl, attributes } = this;
+  private _updateParticles(mx: number, my: number, mr: number) {
+    this._particleSystem.render(mx, my, mr);
+  }
 
-    const buffer = new GLBuffer(gl, data, [
+  private _setupBuffer() {
+    const { gl, attributes, _particleSystem } = this;
+
+    const buffer = new GLBuffer(gl, _particleSystem.vertices, [
       {
         index: attributes.index("aVertexPosition"),
         itemSize: 2,
@@ -62,7 +70,7 @@ class KineticTypographyGlsl extends GL<
     return buffer;
   }
 
-  private drawParticles(buffer: GLBuffer) {
+  private _drawParticles(buffer: GLBuffer) {
     const { gl } = this;
     gl.drawArrays(gl.POINTS, 0, buffer.count);
   }
