@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 import Particle from "@/class/Particle";
-import KineticTypographyGlsl from "./glsl";
+import KineticTypographyGlsl from "./gl";
 import { rgb } from "@/lib/utils/color";
 import usePointer from "@/hooks/react/usePointer";
 
