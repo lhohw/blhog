@@ -2,27 +2,71 @@ import type { ShaderSource, TextureSource } from "@/types/glsl";
 import GLAttributes from "./GLAttributes";
 import GLUniforms from "./GLUniforms";
 import GLTextures from "./GLTextures";
+import GLBuffer from "./GLBuffer";
 
-class GL<
+abstract class GL<
   A extends readonly string[] = readonly string[],
   U extends readonly string[] = readonly string[],
   T extends readonly TextureSource<U>[] = readonly TextureSource<U>[],
 > {
   private _gl: WebGLRenderingContext | null = null;
+  private _shaders: WebGLShader[] | null = null;
+  private _program: WebGLProgram | null = null;
   private _attributes: GLAttributes<A> | null = null;
   private _uniforms: GLUniforms<U> | null = null;
   private _textures: GLTextures<T> | null = null;
+  protected buffers: GLBuffer[] = [];
+
   protected constructor(
+    protected _canvas: HTMLCanvasElement,
     protected width: number,
     protected height: number,
+    shaderSources: ShaderSource[],
+    attributeKeys?: A,
+    uniformKeys?: U,
+    textureSources?: T,
   ) {
-    try {
-      this._gl = this._initCanvas();
-    } catch (e) {
-      console.error(e);
-      this._resetToInitialState();
-    }
+    this._gl = this._initCanvas();
+    this.initGL(shaderSources, attributeKeys, uniformKeys, textureSources);
   }
+
+  /**
+   * only GL resource (gl, shaders, program, attributes, uniforms, textures) initialized.
+   * please set data to use on shader in init() method
+   * ex) setup uniforms, setup blend ...
+   */
+  abstract init(): void;
+
+  /**
+   * method to draw
+   * it includes clear, setup buffer, apply force, calculate frame, draw particles ...
+   */
+  abstract draw(...args: any[]): void;
+
+  /**
+   * TODO: hidden in GL
+   *
+   * coerce to create method to handle context lost (restored & lost)
+   * it's often implemented to call
+   *  restored: init, draw
+   *  lost: e.preventDefault
+   * so, it may could be hidden in GL
+   * but, need how to re-setup uniforms, buffer, etc... that exists in higher
+   */
+  abstract handleContextRestored(e: Event): void;
+
+  /**
+   * TODO: hidden in GL
+   *
+   * coerce to create method to handle context lost (restored & lost)
+   * it's often implemented to call
+   *  restored: init, draw
+   *  lost: e.preventDefault, resetToInitialState
+   * it may could be hidden in GL
+   * but, need how to re-setup uniforms, buffer, etc... that exists in higher
+   */
+  abstract handleContextLost(e: Event): void;
+
   get gl() {
     const gl = this._gl;
     if (!gl) throw new Error("gl not supported");
@@ -31,6 +75,18 @@ class GL<
 
   get canvas() {
     return this.gl.canvas as HTMLCanvasElement;
+  }
+
+  get shaders() {
+    const shaders = this._shaders;
+    if (!shaders) throw new Error("shaders not initialized");
+    return shaders;
+  }
+
+  get program() {
+    const program = this._program;
+    if (!program) throw new Error("program not initialized");
+    return program;
   }
 
   get attributes() {
@@ -51,22 +107,29 @@ class GL<
     return textures;
   }
 
-  private _initCanvas() {
-    const { width, height } = this;
-    const canvas = document.createElement("canvas");
+  cleanup() {
+    const { gl, buffers, shaders, program } = this;
 
-    const gl = canvas.getContext("webgl");
+    for (const buf of buffers) buf.deleteBuffer();
+    for (const shader of shaders) gl.deleteShader(shader);
+    gl.deleteProgram(program);
+  }
+
+  private _initCanvas() {
+    const { _canvas, width, height } = this;
+
+    const gl = _canvas.getContext("webgl");
     if (!gl) throw new Error("gl not supported");
 
-    canvas.width = width;
-    canvas.height = height;
+    _canvas.width = width;
+    _canvas.height = height;
 
     gl.viewport(0, 0, width, height);
 
     return gl;
   }
 
-  protected async initGL(
+  private initGL(
     shaderSources: ShaderSource[],
     attributeKeys?: A,
     uniformKeys?: U,
@@ -75,51 +138,47 @@ class GL<
     const { _gl } = this;
     if (!_gl) throw new Error("gl not defined");
 
-    const _textureSources = this._preloadImages(textureSources);
     const shaders = this._initShaders(_gl, shaderSources);
     const program = this._initProgram(_gl, shaders);
     const attributes = this._initAttributes(_gl, program, attributeKeys);
     const uniforms = this._initUniforms(_gl, program, uniformKeys);
-    await this.waitForLoadImage(_textureSources);
     const textures = this._initTextures(_gl, uniforms, textureSources);
 
     this._gl = _gl;
+    this._shaders = shaders;
+    this._program = program;
     this._attributes = attributes;
     this._uniforms = uniforms;
     this._textures = textures;
   }
 
-  private _preloadImages(_textureSources?: T) {
-    if (!_textureSources?.length) return [];
+  static preloadImages<U extends readonly string[] = readonly string[]>(
+    textureSources: TextureSource<U>[],
+  ) {
+    const preloadImage = (
+      textureSource: (typeof textureSources)[number],
+      idx: number,
+    ): Promise<typeof textureSource> => {
+      const { src, img, width, height, index } = textureSource;
 
-    return _textureSources.map(this._preloadImage);
-  }
+      if (img) return Promise.resolve(textureSource);
 
-  private _preloadImage(textureSource: T[number], idx: number) {
-    const { src, img, width, height, index } = textureSource;
-
-    if (!img) {
-      const image = new Image(width, height);
-      if (!src) throw new Error("src is required");
-      image.src = src;
-      textureSource.index = index ?? idx;
-      textureSource.img = image;
-    }
-
-    return textureSource;
-  }
-
-  private waitForLoadImage(textureSources: TextureSource[]) {
-    const promises = textureSources.map(({ img }) => {
       return new Promise((res) => {
-        if (img instanceof HTMLImageElement) {
-          img.onload = () => res(true);
-        } else {
-          res(true);
-        }
+        const image = new Image(width, height);
+        if (!src) throw new Error("src is required");
+
+        image.src = src;
+        textureSource.index = index ?? idx;
+        textureSource.img = image;
+
+        image.onload = () => {
+          res(textureSource);
+        };
       });
-    });
-    return Promise.all(promises);
+    };
+
+    const preloadedImages = textureSources.map(preloadImage);
+    return Promise.all(preloadedImages);
   }
 
   private _initShaders(
@@ -209,7 +268,7 @@ class GL<
     return textures;
   }
 
-  private _resetToInitialState() {
+  protected _resetToInitialState() {
     const { gl } = this;
     const numAttribs = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
     const tmp = gl.createBuffer();

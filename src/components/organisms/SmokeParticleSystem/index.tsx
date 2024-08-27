@@ -1,62 +1,68 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import SmokeParticleSystemGL from "./gl";
+import { useEffect, useRef, useState } from "react";
+import clsx from "clsx";
 import RafControl from "@/class/RafControl";
-import usePointer from "@/hooks/react/usePointer";
+import useCanvasSetting from "@/hooks/react/useCanvasSetting";
+import useVisual from "./useVisual";
 
-const SmokeParticleSystem = () => {
-  const isInitialized = useRef(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+export default function SmokeParticleSystem() {
+  const canvasRef = useRef<HTMLCanvasElement>(null!);
   const rafControl = useRef<RafControl>(null!);
-  const smokeParticleSystem = useRef<SmokeParticleSystemGL>(null!);
 
-  const { getPointer, setPointerTarget } = usePointer();
+  const { width, height } = useCanvasSetting();
+  const { initVisual, drawParticles, cleanup } = useVisual(width);
+  const [loadState, setLoadState] = useState<"loading" | "error" | "resolve">(
+    "loading",
+  );
 
   useEffect(() => {
-    if (!isInitialized.current) {
-      isInitialized.current = true;
-
-      const width = Math.min(window.innerWidth - 12, 600);
-      const height = (width / 16) * 10;
-      const gl = new SmokeParticleSystemGL(width, height);
-      gl.canvas.style.filter = "blur(2px)";
-      setPointerTarget(gl.canvas);
-
-      containerRef.current?.appendChild(gl.canvas);
-      smokeParticleSystem.current = gl;
-
-      rafControl.current = new RafControl(() => {
-        const { mx } = getPointer();
-        const normalizedMx = ((mx - width / 2) / width) * 2;
-        gl.draw(normalizedMx);
-      });
+    try {
+      initVisual(canvasRef.current, width, height);
+      setLoadState("resolve");
+    } catch (e) {
+      console.error(e);
+      setLoadState("error");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    return () => {
+      cleanup();
+    };
+  }, [initVisual, width, height, cleanup]);
 
   useEffect(() => {
-    const container = containerRef.current;
+    rafControl.current = new RafControl(drawParticles);
     const raf = rafControl.current;
-    if (!container) return;
+    const canvas = canvasRef.current;
 
-    const start = () => raf.restart();
-    const done = () => raf.done();
+    raf.start();
 
-    container.addEventListener("pointerenter", start);
-    container.addEventListener("pointerleave", done);
+    const start = raf.resume.bind(raf);
+    const pause = raf.pause.bind(raf);
+
+    canvas.addEventListener("pointerenter", start);
+    canvas.addEventListener("pointerleave", pause);
     return () => {
-      container.removeEventListener("pointerenter", start);
-      container.removeEventListener("pointerleave", done);
+      raf.cleanup();
+      rafControl.current = null!;
+      canvas.removeEventListener("pointerenter", start);
+      canvas.removeEventListener("pointerleave", pause);
     };
-  });
+  }, [drawParticles]);
 
   return (
     <div
-      className="flex flex-col w-full h-fit items-center area"
-      ref={containerRef}
-    ></div>
+      className={clsx(
+        "flex flex-col w-full h-fit items-center relative",
+        loadState !== "loading" && "area",
+      )}
+    >
+      <canvas className="blur-[2px]" ref={canvasRef} />
+      {loadState === "error" ? (
+        <div className="flex absolute self-center top-5 text-lg">
+          <span>WebGL is not initialized correctly</span>
+        </div>
+      ) : null}
+    </div>
   );
-};
-
-export default SmokeParticleSystem;
+}

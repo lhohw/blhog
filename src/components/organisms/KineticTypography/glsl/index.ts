@@ -16,25 +16,33 @@ class KineticTypographyGlsl extends GL<
   typeof uniformKeys
 > {
   constructor(
+    protected _canvas: HTMLCanvasElement,
     protected width: number,
     protected height: number,
+    private _handleContextRestored?: (e: Event) => void,
+    private _handleContextLost?: (e: Event) => void,
   ) {
-    super(width, height);
+    super(_canvas, width, height, shaderSources, attributeKeys, uniformKeys);
+    _canvas.addEventListener("webglcontextrestored",this.handleContextRestored); // prettier-ignore
+    _canvas.addEventListener("webglcontextlost", this.handleContextLost);
   }
-  async init() {
-    const { width, height } = this;
 
-    await this.initGL(shaderSources, attributeKeys, uniformKeys);
-    this.uniforms.setUniform("uResolution", "2f", [width, height]);
+  init() {
+    this._setupUniforms();
+  }
+
+  private _setupUniforms() {
+    const { uniforms, width, height } = this;
+    uniforms.setUniform("uResolution", "2f", [width, height]);
   }
 
   draw(data: number[]) {
+    const buffer = this.setupBuffer(data);
     this.clear([0.0, 0.0, 0.0, 1.0]);
-    const buffer = this.setupVertexBuffer(data);
     this.drawParticles(buffer);
   }
 
-  private setupVertexBuffer(data: number[]) {
+  private setupBuffer(data: number[]) {
     const { gl, attributes } = this;
 
     const buffer = new GLBuffer(gl, data, [
@@ -50,6 +58,7 @@ class KineticTypographyGlsl extends GL<
       },
     ]);
 
+    this.buffers[0] = buffer;
     return buffer;
   }
 
@@ -58,8 +67,15 @@ class KineticTypographyGlsl extends GL<
     gl.drawArrays(gl.POINTS, 0, buffer.count);
   }
 
-  handleContextRestored() {
+  handleContextRestored(e: Event) {
     this.init();
+    this._handleContextRestored?.(e);
+  }
+
+  handleContextLost(e: Event) {
+    e.preventDefault();
+    this._resetToInitialState();
+    this._handleContextLost?.(e);
   }
 }
 

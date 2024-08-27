@@ -1,76 +1,73 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
-import RafControl from "@/class/RafControl";
+import { useEffect, useRef, useState } from "react";
+import clsx from "clsx";
 import useText from "./useText";
 import useVisual from "./useVisual";
+import useCanvasSetting from "@/hooks/react/useCanvasSetting";
+import RafControl from "@/class/RafControl";
 
 export default function KineticTypography() {
-  const isInitialized = useRef(false);
-  const containerRef = useRef<HTMLDivElement>(null!);
-  const controlRef = useRef<RafControl>(new RafControl());
+  const textCanvasRef = useRef<HTMLCanvasElement>(null!);
+  const visualCanvasRef = useRef<HTMLCanvasElement>(null!);
+  const rafControl = useRef<RafControl>(null!);
 
-  const { initText } = useText();
-  const { init, drawParticles } = useVisual();
-
-  const initElements = useCallback(async () => {
-    const width = Math.min(window.innerWidth - 12, 600);
-    const height = (width / 16) * 10;
-
-    const container = containerRef.current;
-    container.style.width = `${width}px`;
-    container.style.height = `${height}px`;
-
-    const { ctx, coords } = initText(width, height);
-    const { canvas } = await init(width, height, coords);
-
-    container.append(ctx.canvas, canvas);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const setControl = useCallback(
-    () => {
-      const ctrl = controlRef.current;
-      ctrl.frame = () => drawParticles();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+  const { width, height, dpr } = useCanvasSetting();
+  const { coords } = useText("lhohw", textCanvasRef, width, height, dpr);
+  const { initVisual, drawParticles, cleanup } = useVisual();
+  const [loadState, setLoadState] = useState<"loading" | "error" | "resolve">(
+    "loading",
   );
 
-  const addListeners = useCallback(() => {
-    const container = containerRef.current;
-    const ctrl = controlRef.current;
-
-    container.addEventListener("pointerenter", ctrl.restart.bind(ctrl));
-    container.addEventListener("pointerleave", ctrl.done.bind(ctrl));
-  }, []);
-
   useEffect(() => {
-    if (!isInitialized.current) {
-      isInitialized.current = true;
-      initElements().then(() => {
-        setControl();
-        addListeners();
-        drawParticles();
-      });
+    try {
+      initVisual(visualCanvasRef.current, width, height, coords);
+      setLoadState("resolve");
+    } catch (e) {
+      console.error(e);
+      setLoadState("error");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    return () => {
+      cleanup();
+    };
+  }, [initVisual, width, height, coords, cleanup]);
 
   useEffect(() => {
-    const ctrl = controlRef.current;
+    rafControl.current = new RafControl(drawParticles);
+    const raf = rafControl.current;
+    const visualCanvas = visualCanvasRef.current;
 
-    document.body.style.overflow = "hidden";
+    raf.start();
+
+    const start = raf.resume.bind(raf);
+    const pause = raf.pause.bind(raf);
+
+    visualCanvas.addEventListener("pointerenter", start);
+    visualCanvas.addEventListener("pointerleave", pause);
+
     return () => {
-      if (ctrl.isDone === false) ctrl.done();
-      document.body.style.overflow = "visible";
+      raf.cleanup();
+      rafControl.current = null!;
+      visualCanvas.removeEventListener("pointerenter", start);
+      visualCanvas.removeEventListener("pointerleave", pause);
     };
-  }, []);
+  }, [drawParticles]);
 
   return (
     <div
-      ref={containerRef}
-      className="relative overflow-hidden shadow-corona-primary"
-    ></div>
+      className={clsx(
+        "relative overflow-hidden transition-shadow",
+        loadState !== "loading" && "shadow-corona-primary",
+      )}
+    >
+      <canvas ref={textCanvasRef} />
+      <canvas className="absolute inset-0" ref={visualCanvasRef} />
+      {loadState === "error" ? (
+        <div className="flex absolute self-center top-5 text-lg">
+          <span>WebGL is not initialized correctly</span>
+        </div>
+      ) : null}
+    </div>
   );
 }

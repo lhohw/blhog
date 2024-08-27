@@ -30,39 +30,52 @@ class ParticleOffScreen extends GL<typeof attributeKeys, typeof uniformKeys> {
     protected width: number,
     protected height: number,
   ) {
-    super(width, height);
+    const canvas = document.createElement("canvas");
+    super(canvas, width, height, shaderSources, attributeKeys, uniformKeys);
+    this.init();
   }
-  async init() {
-    try {
-      await this.initGL(shaderSources, attributeKeys, uniformKeys);
-      this._setupUniforms();
-      this._draw();
-    } catch (e) {
-      console.error(e);
-      throw new Error("particle offscreen initialize failed");
-    }
+
+  init() {
+    this.buffers = [];
+    this._setupUniforms();
+    this.draw();
   }
+
   private _setupUniforms() {
     const { uniforms, width, height } = this;
     uniforms.setUniform("uResolution", "2fv", [width, height]);
   }
-  private _draw() {
+
+  draw() {
     const buffer = this._initBuffer();
     this._drawParticle(buffer);
   }
+
+  private _drawParticle(buffer: GLBuffer) {
+    const { gl } = this;
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffer.count);
+  }
+
   private _initBuffer() {
     const { gl, attributes } = this;
+
     const vertices = [-1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0];
     const buffer = new GLBuffer(gl, vertices, {
       itemSize: 2,
       index: attributes.index("aVertexPosition"),
       bufferType: "float32",
     });
+    this.buffers[0] = buffer;
+
     return buffer;
   }
-  private _drawParticle(buffer: GLBuffer) {
-    const { gl } = this;
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffer.count);
+
+  handleContextRestored(e: Event): void {
+    this.init();
+  }
+
+  handleContextLost(e: Event): void {
+    e.preventDefault();
   }
 }
 

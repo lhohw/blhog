@@ -1,30 +1,27 @@
-import { useCallback, useMemo, useState } from "react";
+import {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import initCanvas from "@/lib/utils/canvas/initCanvas";
 
 const fontSize = 70;
 const fontWeight = 700;
 const fontName = "Inter";
 
-export default function useText() {
-  const [text] = useState("lhohw");
+export default function useText(
+  initialText = "lhohw",
+  canvasRef: MutableRefObject<HTMLCanvasElement>,
+  width: number,
+  height: number,
+  dpr: number,
+) {
+  const [text] = useState(initialText);
   const font = useMemo(() => `${fontWeight} ${fontSize}px ${fontName}`, []);
   const color = useMemo(() => "#303030", []);
-  const [density] = useState(1);
-
-  const createCanvas = useCallback((width: number, height: number) => {
-    const canvas = document.createElement("canvas") as HTMLCanvasElement;
-    const { ctx, dpi } = initCanvas(
-      canvas,
-      width,
-      height,
-      {
-        desynchronized: true,
-      },
-      1,
-    );
-
-    return { ctx, dpi };
-  }, []);
+  const [coords, setCoords] = useState<number[]>([]);
 
   const drawText = useCallback(
     (ctx: CanvasRenderingContext2D) => {
@@ -32,8 +29,6 @@ export default function useText() {
       ctx.fillStyle = color;
       ctx.textBaseline = "middle";
 
-      const width = parseInt(ctx.canvas.style.width);
-      const height = parseInt(ctx.canvas.style.height);
       const measuredText = ctx.measureText(text);
       const {
         width: textWidth,
@@ -60,38 +55,45 @@ export default function useText() {
 
       let i = 0;
       let x = 0;
-      for (let y = 0; y < height; y += density) {
+      for (let y = 0; y < height; y++) {
         x = 0;
         i++;
         if (i % 2 === 0) x += 6;
-        for (x; x < width; x += density) {
+        for (x; x < width; x++) {
           const pixel = data[(y * width + x) * 4 - 1];
           if (pixel !== 0 && x > 0 && x < width && y > 0 && y < height) {
-            coords.push(x, y);
+            coords.push(x / dpr, y / dpr);
           }
         }
       }
+
       return coords;
     },
-    [density],
-  );
-
-  const initText = useCallback(
-    (width: number, height: number) => {
-      const { ctx, dpi } = createCanvas(width, height);
-      drawText(ctx);
-      const coords = initCoords(ctx, dpi);
-
-      return { ctx, coords };
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const { ctx } = initCanvas(
+        canvas,
+        width,
+        height,
+        {
+          desynchronized: true,
+          willReadFrequently: false,
+        },
+        dpr,
+      );
+      if (!ctx) throw new Error("canvas not supported");
+
+      drawText(ctx);
+      const coords = initCoords(ctx, dpr);
+      setCoords(coords);
+    }
+  }, [drawText, initCoords]);
+
   return {
-    fontSize,
-    text,
-    initText,
-    drawText,
+    coords,
   };
 }

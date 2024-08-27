@@ -1,36 +1,36 @@
-import type { Pointer } from "@/hooks/react/usePointer";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import Particle from "@/class/Particle";
 import KineticTypographyGlsl from "./glsl";
 import { rgb } from "@/lib/utils/color";
 import usePointer from "@/hooks/react/usePointer";
 
-let particles: Particle[];
-let gl: KineticTypographyGlsl;
-
 export default function useVisual() {
   const { getPointer, setPointerTarget } = usePointer();
+  const kineticTypographyGL = useRef<KineticTypographyGlsl | null>(null);
+  const particles = useRef<Particle[]>([]);
 
-  const handleContextLost = useCallback((e: Event) => {
-    e.preventDefault;
-  }, []);
+  const drawParticles = useCallback(() => {
+    const { mx, my, mr } = getPointer();
 
-  const handleContextRestored = useCallback(() => {
-    gl.handleContextRestored();
-    drawParticles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const data = [];
+    for (let i = 0; i < particles.current.length; i++) {
+      const particle = particles.current[i];
+      particle.render(mx, my, mr);
+      data.push(particle.x, particle.y, ...rgb(particle.color));
+    }
 
-  const initVisualCanvas = useCallback((width: number, height: number) => {
-    const gl = new KineticTypographyGlsl(width, height);
-    gl.canvas.classList.add("absolute", "inset-0");
-    gl.canvas.addEventListener("webglcontextlost", handleContextLost);
-    gl.canvas.addEventListener("webglcontextrestored", handleContextRestored);
-    setPointerTarget(gl.canvas);
+    kineticTypographyGL.current?.draw(data);
+  }, [getPointer]);
 
-    return gl;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const initVisualCanvas = useCallback(
+    (canvas: HTMLCanvasElement, width: number, height: number) => {
+      const gl = new KineticTypographyGlsl(canvas, width, height, drawParticles); // prettier-ignore
+      gl.init();
+      kineticTypographyGL.current = gl;
+      setPointerTarget(canvas);
+    },
+    [drawParticles, setPointerTarget],
+  );
 
   const initParticles = useCallback((coords: number[]) => {
     const particles = [];
@@ -41,35 +41,30 @@ export default function useVisual() {
     return particles;
   }, []);
 
-  const drawParticles = useCallback(() => {
-    const { mx, my, mr } = getPointer();
-
-    const data = [];
-    for (let i = 0; i < particles.length; i++) {
-      const particle = particles[i];
-      particle.render(mx, my, mr);
-      data.push(particle.x, particle.y, ...rgb(particle.color));
-    }
-
-    gl.clear();
-    gl.draw(data);
-  }, [getPointer]);
-
-  const init = useCallback(
-    async (width: number, height: number, coords: number[]) => {
-      particles = initParticles(coords);
-      gl = initVisualCanvas(width, height);
-      await gl.init();
+  const initVisual = useCallback(
+    (
+      canvas: HTMLCanvasElement,
+      width: number,
+      height: number,
+      coords: number[],
+    ) => {
+      particles.current = initParticles(coords);
+      initVisualCanvas(canvas, width, height);
       drawParticles();
-
-      return gl;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [drawParticles, initParticles, initVisualCanvas],
   );
 
+  const cleanup = useCallback(() => {
+    kineticTypographyGL.current?.cleanup();
+    kineticTypographyGL.current = null;
+    particles.current = [];
+    setPointerTarget(undefined);
+  }, [setPointerTarget]);
+
   return {
-    init,
+    initVisual,
     drawParticles,
+    cleanup,
   };
 }
