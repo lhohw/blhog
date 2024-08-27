@@ -5,24 +5,22 @@ import { useSizeContext } from "../useSizeContext";
 import GraphicLinkSectionGlsl from "./glsl";
 
 export default function GraphicLinkSectionCanvas() {
-  const isInitialized = useRef(false);
-  const containerRef = useRef<HTMLDivElement>(null!);
+  const canvasRef = useRef<HTMLCanvasElement>(null!);
   const { width, height } = useSizeContext().size;
 
   useEffect(() => {
-    if (!isInitialized.current) {
-      isInitialized.current = true;
+    const canvas = canvasRef.current;
+    const gl = new GraphicLinkSectionGlsl(canvas, width, height);
+    gl.draw();
 
-      const gl = new GraphicLinkSectionGlsl(width, height);
-      containerRef.current.appendChild(gl.canvas);
-      gl.init().then(() => {
-        gl.draw();
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => {
+      gl.cleanup();
+    };
+  }, [height, width]);
 
   return (
-    <div className="my-4" ref={containerRef} style={{ width, height }}></div>
+    <div className="my-4" style={{ width, height }}>
+      <canvas ref={canvasRef} />
+    </div>
   );
 }
