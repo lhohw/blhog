@@ -64,8 +64,8 @@ class RafControl {
   }
 
   cleanup() {
-    this.frame = () => this.done();
     this.done();
+    this.frame = () => this.done();
   }
 }
 
