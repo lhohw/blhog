@@ -13,13 +13,23 @@ export default function KineticTypography() {
   const rafControl = useRef<RafControl>(null!);
 
   const { width, height, dpr } = useCanvasSetting();
-  const { coords } = useText("lhohw", textCanvasRef, width, height, dpr);
+  const { initVisualText, coords } = useText("lhohw");
   const { initVisual, drawParticles, cleanup } = useVisual();
   const [loadState, setLoadState] = useState<"loading" | "error" | "resolve">(
     "loading",
   );
 
   useEffect(() => {
+    if (!width || !height) return;
+
+    const canvas = textCanvasRef.current;
+
+    initVisualText(canvas, width, height, dpr);
+  }, [initVisualText, width, height, dpr]);
+
+  useEffect(() => {
+    if (!width || !height) return;
+
     try {
       initVisual(visualCanvasRef.current, width, height, coords);
       setLoadState("resolve");
@@ -57,7 +67,7 @@ export default function KineticTypography() {
   return (
     <div
       className={clsx(
-        "relative overflow-hidden transition-shadow",
+        "relative overflow-hidden transition-shadow w-fit h-fit",
         loadState !== "loading" && "shadow-corona-primary",
       )}
     >

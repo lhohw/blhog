@@ -11,13 +11,7 @@ const fontSize = 70;
 const fontWeight = 700;
 const fontName = "Inter";
 
-export default function useText(
-  initialText = "lhohw",
-  canvasRef: MutableRefObject<HTMLCanvasElement>,
-  width: number,
-  height: number,
-  dpr: number,
-) {
+export default function useText(initialText = "lhohw") {
   const [text] = useState(initialText);
   const font = useMemo(() => `${fontWeight} ${fontSize}px ${fontName}`, []);
   const color = useMemo(() => "#303030", []);
@@ -30,6 +24,8 @@ export default function useText(
       ctx.textBaseline = "middle";
 
       const measuredText = ctx.measureText(text);
+      const width = parseInt(ctx.canvas.style.width);
+      const height = parseInt(ctx.canvas.style.height);
       const {
         width: textWidth,
         actualBoundingBoxAscent,
@@ -72,28 +68,23 @@ export default function useText(
     [],
   );
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const { ctx } = initCanvas(
-        canvas,
-        width,
-        height,
-        {
-          desynchronized: true,
-          willReadFrequently: false,
-        },
-        dpr,
-      );
+  const initVisualText = useCallback(
+    (canvas: HTMLCanvasElement, width: number, height: number, dpr: number) => {
+      const { ctx } = initCanvas(canvas, width, height, {
+        desynchronized: true,
+        willReadFrequently: false,
+      });
       if (!ctx) throw new Error("canvas not supported");
 
       drawText(ctx);
       const coords = initCoords(ctx, dpr);
       setCoords(coords);
-    }
-  }, [drawText, initCoords]);
+    },
+    [drawText, initCoords],
+  );
 
   return {
+    initVisualText,
     coords,
   };
 }

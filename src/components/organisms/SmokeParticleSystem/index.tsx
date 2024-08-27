@@ -17,6 +17,8 @@ export default function SmokeParticleSystem() {
   );
 
   useEffect(() => {
+    if (!width || !height) return;
+
     try {
       initVisual(canvasRef.current, width, height);
       setLoadState("resolve");

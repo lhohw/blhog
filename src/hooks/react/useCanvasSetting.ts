@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-export default function useCanvasSetting() {
-  const [width, setWidth] = useState(600);
-  const [height, setHeight] = useState(375);
+export default function useCanvasSetting(initialWidth = 0, initialHeight = 0) {
+  const [width, setWidth] = useState(initialWidth);
+  const [height, setHeight] = useState(initialHeight);
   const [dpr, setDpr] = useState(1);
 
   useEffect(() => {
