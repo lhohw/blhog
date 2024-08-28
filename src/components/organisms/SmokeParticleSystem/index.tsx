@@ -3,21 +3,20 @@
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import RafControl from "@/class/RafControl";
-import useCanvasSetting from "@/hooks/react/useCanvasSetting";
 import useVisual from "./useVisual";
 
 export default function SmokeParticleSystem() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
   const rafControl = useRef<RafControl>(null!);
 
-  const { width, height } = useCanvasSetting();
-  const { initVisual, drawParticles, cleanup } = useVisual(width);
+  const { initVisual, drawParticles, cleanup } = useVisual();
   const [loadState, setLoadState] = useState<"loading" | "error" | "resolve">(
     "loading",
   );
 
   useEffect(() => {
-    if (!width || !height) return;
+    const width = Math.min(window.innerWidth - 12, 600);
+    const height = width / 1.6;
 
     try {
       initVisual(canvasRef.current, width, height);
@@ -30,7 +29,7 @@ export default function SmokeParticleSystem() {
     return () => {
       cleanup();
     };
-  }, [initVisual, width, height, cleanup]);
+  }, [initVisual, cleanup]);
 
   useEffect(() => {
     rafControl.current = new RafControl(drawParticles);

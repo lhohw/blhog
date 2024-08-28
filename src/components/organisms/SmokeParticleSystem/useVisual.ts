@@ -2,15 +2,14 @@ import { useCallback, useRef } from "react";
 import usePointer from "@/hooks/react/usePointer";
 import SmokeParticleSystemGL from "./gl";
 
-export default function useVisual(width: number) {
+export default function useVisual() {
   const { getPointer, setPointerTarget } = usePointer();
   const smokeParticleSystemGL = useRef<SmokeParticleSystemGL | null>(null);
 
   const drawParticles = useCallback(() => {
     const { mx } = getPointer();
-    const normalizedMx = ((mx - width / 2) / width) * 2;
-    smokeParticleSystemGL.current?.draw(normalizedMx);
-  }, [getPointer, width]);
+    smokeParticleSystemGL.current?.draw(mx);
+  }, [getPointer]);
 
   const initVisualCanvas = useCallback(
     (canvas: HTMLCanvasElement, width: number, height: number) => {
