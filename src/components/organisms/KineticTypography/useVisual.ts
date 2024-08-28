@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import KineticTypographyGlsl from "./gl";
 import usePointer from "@/hooks/react/usePointer";
 import initCanvas from "@/lib/utils/canvas/initCanvas";
@@ -13,23 +13,16 @@ const fontName = "Inter";
 const font = `${fontWeight} ${fontSize}px ${fontName}`;
 const color = "#303030";
 
-const initialGL = {
-  init: () => undefined,
-  draw: (...args: number[]) => undefined,
-  cleanup: () => undefined,
-};
-let gl: Record<"init" | "draw" | "cleanup", (...args: any[]) => void> =
-  initialGL;
-
 export default function useVisual() {
   const { getPointer, setPointerTarget } = usePointer();
   const [text, setText] = useState("lhohw");
+  const kineticTypographyGL = useRef<KineticTypographyGlsl>(null!);
 
   const initCoords = useCallback(
     (width: number, height: number, dpr: number) => {
       const options = { desynchronized: true, willReadFrequently: false };
       const canvas = document.createElement("canvas");
-      const { ctx } = initCanvas(canvas, width, height, options);
+      const { ctx } = initCanvas(canvas, width, height, options, dpr);
       if (!ctx) throw new Error("canvas not supported");
 
       drawTextToCenter(ctx, text, font, color);
@@ -46,8 +39,13 @@ export default function useVisual() {
       height: number,
       coords: number[],
     ) => {
-      gl = new KineticTypographyGlsl(canvas, width, height, coords);
-      gl.init();
+      kineticTypographyGL.current = new KineticTypographyGlsl(
+        canvas,
+        width,
+        height,
+        coords,
+      );
+      kineticTypographyGL.current.init();
       setPointerTarget(canvas);
     },
     [setPointerTarget],
@@ -55,7 +53,7 @@ export default function useVisual() {
 
   const drawParticles = useCallback(() => {
     const { mx, my, mr } = getPointer();
-    gl.draw(mx, my, mr);
+    kineticTypographyGL.current.draw(mx, my, mr);
   }, [getPointer]);
 
   const initVisual = useCallback(
@@ -68,7 +66,7 @@ export default function useVisual() {
   );
 
   const cleanup = useCallback(() => {
-    gl.cleanup();
+    kineticTypographyGL.current.cleanup();
     setPointerTarget(undefined);
   }, [setPointerTarget]);
 

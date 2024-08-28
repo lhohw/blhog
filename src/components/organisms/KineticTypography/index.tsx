@@ -3,21 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import useVisual from "./useVisual";
-import useCanvasSetting from "@/hooks/react/useCanvasSetting";
 import RafControl from "@/class/RafControl";
 
 export default function KineticTypography() {
   const visualCanvasRef = useRef<HTMLCanvasElement>(null!);
   const rafControl = useRef<RafControl>(null!);
 
-  const { width, height, dpr } = useCanvasSetting();
   const { initVisual, drawParticles, cleanup } = useVisual();
   const [loadState, setLoadState] = useState<"loading" | "error" | "resolve">(
     "loading",
   );
 
   useEffect(() => {
-    if (!width || !height) return;
+    const width = Math.min(window.innerWidth - 12, 600);
+    const height = width / 1.6;
+    const dpr = 1;
 
     try {
       initVisual(visualCanvasRef.current, width, height, dpr);
@@ -30,7 +30,7 @@ export default function KineticTypography() {
     return () => {
       cleanup();
     };
-  }, [initVisual, width, height, cleanup, dpr]);
+  }, [initVisual, cleanup]);
 
   useEffect(() => {
     rafControl.current = new RafControl(drawParticles);
@@ -56,12 +56,11 @@ export default function KineticTypography() {
   return (
     <div
       className={clsx(
-        "relative overflow-hidden transition-shadow w-fit h-fit",
-        "shadow-corona-primary",
+        "overflow-hidden transition-shadow w-fit h-fit",
+        loadState !== "loading" && "shadow-corona-primary",
       )}
-      style={{ width, height }}
     >
-      <canvas className="absolute inset-0" ref={visualCanvasRef} />
+      <canvas ref={visualCanvasRef} />
       {loadState === "error" ? (
         <div className="flex absolute self-center top-5 text-lg">
           <span>WebGL is not initialized correctly</span>

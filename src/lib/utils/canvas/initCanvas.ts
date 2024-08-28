@@ -3,11 +3,11 @@ export default function initCanvas(
   width: number,
   height: number,
   options?: CanvasRenderingContext2DSettings,
+  dpr = window.devicePixelRatio || 1,
 ) {
   const ctx = canvas.getContext("2d", options);
   if (!ctx) throw new Error("canvas not supported");
 
-  const dpr = typeof window === "undefined" ? 1 : window.devicePixelRatio;
   canvas.style.width = `${width}px`;
   canvas.style.height = `${height}px`;
 
