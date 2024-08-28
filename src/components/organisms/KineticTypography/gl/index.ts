@@ -12,10 +12,7 @@ const shaderSources: ShaderSource[] = [
 const attributeKeys = ["aVertexPosition", "aVertexColor"] as const;
 const uniformKeys = ["uResolution"] as const;
 
-class KineticTypographyGlsl extends GL<
-  typeof attributeKeys,
-  typeof uniformKeys
-> {
+class KineticTypographyGL extends GL<typeof attributeKeys, typeof uniformKeys> {
   private _particleSystem: ParticleSystem;
   constructor(
     protected _canvas: HTMLCanvasElement,
@@ -90,4 +87,4 @@ class KineticTypographyGlsl extends GL<
   }
 }
 
-export default KineticTypographyGlsl;
+export default KineticTypographyGL;

@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import KineticTypographyGlsl from "./gl";
+import KineticTypographyGL from "./gl";
 import usePointer from "@/hooks/react/usePointer";
 import initCanvas from "@/lib/utils/canvas/initCanvas";
 import {
@@ -16,7 +16,7 @@ const color = "#303030";
 export default function useVisual() {
   const { getPointer, setPointerTarget } = usePointer();
   const [text, setText] = useState("lhohw");
-  const kineticTypographyGL = useRef<KineticTypographyGlsl>(null!);
+  const kineticTypographyGL = useRef<KineticTypographyGL>(null!);
 
   const initCoords = useCallback(
     (width: number, height: number, dpr: number) => {
@@ -39,7 +39,7 @@ export default function useVisual() {
       height: number,
       coords: number[],
     ) => {
-      kineticTypographyGL.current = new KineticTypographyGlsl(
+      kineticTypographyGL.current = new KineticTypographyGL(
         canvas,
         width,
         height,
