@@ -16,22 +16,25 @@ class KineticTypographyGlsl extends GL<
   typeof attributeKeys,
   typeof uniformKeys
 > {
-  private _particleSystem = new ParticleSystem(this.coords);
+  private _particleSystem: ParticleSystem;
   constructor(
     protected _canvas: HTMLCanvasElement,
     protected width: number,
     protected height: number,
-    private coords: number[],
+    coords: number[],
     private _handleContextRestored?: (e: Event) => void,
     private _handleContextLost?: (e: Event) => void,
   ) {
     super(_canvas, width, height, shaderSources, attributeKeys, uniformKeys);
+    this._particleSystem = new ParticleSystem();
+    this._particleSystem.initParticles(coords);
     _canvas.addEventListener("webglcontextrestored",this.handleContextRestored); // prettier-ignore
     _canvas.addEventListener("webglcontextlost", this.handleContextLost);
   }
 
   init() {
     this._setupUniforms();
+    this.draw(0, 0, 20);
   }
 
   private _setupUniforms() {

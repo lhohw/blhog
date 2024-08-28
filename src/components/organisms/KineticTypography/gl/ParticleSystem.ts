@@ -3,9 +3,6 @@ import Particle from "./Particle";
 
 export default class ParticleSystem {
   private _particles: Particle[] = [];
-  constructor(coords: number[]) {
-    this.initParticles(coords);
-  }
 
   get vertices() {
     const { _particles } = this;

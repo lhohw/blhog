@@ -2,18 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import useText from "./useText";
 import useVisual from "./useVisual";
 import useCanvasSetting from "@/hooks/react/useCanvasSetting";
 import RafControl from "@/class/RafControl";
 
 export default function KineticTypography() {
-  const textCanvasRef = useRef<HTMLCanvasElement>(null!);
   const visualCanvasRef = useRef<HTMLCanvasElement>(null!);
   const rafControl = useRef<RafControl>(null!);
 
   const { width, height, dpr } = useCanvasSetting();
-  const { initVisualText, coords } = useText("lhohw");
   const { initVisual, drawParticles, cleanup } = useVisual();
   const [loadState, setLoadState] = useState<"loading" | "error" | "resolve">(
     "loading",
@@ -22,16 +19,8 @@ export default function KineticTypography() {
   useEffect(() => {
     if (!width || !height) return;
 
-    const canvas = textCanvasRef.current;
-
-    initVisualText(canvas, width, height, dpr);
-  }, [initVisualText, width, height, dpr]);
-
-  useEffect(() => {
-    if (!width || !height) return;
-
     try {
-      initVisual(visualCanvasRef.current, width, height, coords);
+      initVisual(visualCanvasRef.current, width, height, dpr);
       setLoadState("resolve");
     } catch (e) {
       console.error(e);
@@ -41,14 +30,14 @@ export default function KineticTypography() {
     return () => {
       cleanup();
     };
-  }, [initVisual, width, height, coords, cleanup]);
+  }, [initVisual, width, height, cleanup, dpr]);
 
   useEffect(() => {
     rafControl.current = new RafControl(drawParticles);
     const raf = rafControl.current;
     const visualCanvas = visualCanvasRef.current;
 
-    raf.start();
+    raf.initStart();
 
     const start = raf.resume.bind(raf);
     const pause = raf.pause.bind(raf);
@@ -68,10 +57,10 @@ export default function KineticTypography() {
     <div
       className={clsx(
         "relative overflow-hidden transition-shadow w-fit h-fit",
-        loadState !== "loading" && "shadow-corona-primary",
+        "shadow-corona-primary",
       )}
+      style={{ width, height }}
     >
-      <canvas ref={textCanvasRef} />
       <canvas className="absolute inset-0" ref={visualCanvasRef} />
       {loadState === "error" ? (
         <div className="flex absolute self-center top-5 text-lg">
