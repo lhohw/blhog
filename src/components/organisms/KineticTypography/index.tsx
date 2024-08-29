@@ -63,6 +63,16 @@ export default function KineticTypography() {
     };
   }, [drawParticles]);
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      if (rafControl.current?.isDone === false) {
+        rafControl.current.done();
+      }
+      document.body.style.removeProperty("overflow");
+    };
+  }, []);
+
   return (
     <div
       className={clsx(
