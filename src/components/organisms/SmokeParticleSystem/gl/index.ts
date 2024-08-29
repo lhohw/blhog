@@ -19,7 +19,7 @@ class SmokeParticleSystemGL extends GL<
   typeof attributeKeys,
   typeof uniformKeys
 > {
-  private _particleSystem = new ParticleSystem(this.width, this.height, particleSize); // prettier-ignore
+  private _particleSystem = new ParticleSystem(this.width);
   constructor(
     protected _canvas: HTMLCanvasElement,
     protected width: number,
