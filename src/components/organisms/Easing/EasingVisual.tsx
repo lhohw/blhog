@@ -11,7 +11,7 @@ export type EasingVisualProps = {
 export default function EasingVisual({ type, setFrame }: EasingVisualProps) {
   return (
     <Section
-      className="w-full min-h-full-except-header"
+      className="w-full md:min-h-full-except-header"
       title={type}
       mainColor={false}
     >
