@@ -4,6 +4,18 @@ class Point {
     private y: number,
   ) {}
 
+  static apply<T extends Exclude<keyof Point, "coord">>(
+    point: Point,
+    type: T,
+    ...args: Parameters<Point[T]>
+  ) {
+    const { x, y } = (point[type] as any).apply(point, args) as Point;
+    point.x = x;
+    point.y = y;
+
+    return point;
+  }
+
   get coord() {
     const { x, y } = this;
     return { x, y };
@@ -25,18 +37,6 @@ class Point {
   subtractVector(vector: { x: number; y: number }) {
     const { x, y } = vector;
     return this.addVector({ x: -x, y: -y });
-  }
-
-  static apply<T extends Exclude<keyof Point, "coord">>(
-    point: Point,
-    type: T,
-    ...args: Parameters<Point[T]>
-  ) {
-    const { x, y } = (point[type] as any).apply(point, args) as Point;
-    point.x = x;
-    point.y = y;
-
-    return point;
   }
 }
 
