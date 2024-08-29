@@ -3,16 +3,17 @@ import Particle from "./Particle";
 
 class ParticleSystem {
   private _particles: Particle[] = [];
-
-  constructor(
-    private width: number,
-    private height: number,
-    private particleSize: number,
-  ) {}
+  private _center: number;
+  constructor(width: number) {
+    this._center = width / 2;
+  }
 
   get vertices() {
     const { _particles } = this;
+    if (!_particles.length) return [];
+
     const vertices = [];
+
     for (let i = 0; i < _particles.length; i++) {
       const particle = _particles[i];
       vertices.push(...particle.vertices);
@@ -20,13 +21,6 @@ class ParticleSystem {
         vertices.push(...particle.tail, ..._particles[i + 1].head);
       }
     }
-
-    const origin = new Particle(this.width, this.height, this.particleSize);
-    vertices.push(
-      ..._particles[_particles.length - 1].tail,
-      ...origin.head,
-      ...origin.vertices,
-    );
 
     return vertices;
   }
@@ -54,8 +48,10 @@ class ParticleSystem {
   }
 
   generate() {
-    const { width, height, particleSize } = this;
-    this._particles.push(new Particle(width, height, particleSize));
+    const { _center } = this;
+
+    const particle = new Particle(_center);
+    this._particles.push(particle);
   }
 }
 

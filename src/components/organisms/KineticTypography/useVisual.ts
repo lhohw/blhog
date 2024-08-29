@@ -1,75 +1,78 @@
-import type { Pointer } from "@/hooks/react/usePointer";
-import { useCallback } from "react";
-import Particle from "@/class/Particle";
-import KineticTypographyGlsl from "./glsl";
-import { rgb } from "@/lib/utils/color";
+import { useCallback, useRef, useState } from "react";
+import KineticTypographyGL from "./gl";
 import usePointer from "@/hooks/react/usePointer";
+import initCanvas from "@/lib/utils/canvas/initCanvas";
+import {
+  drawTextToCenter,
+  extractNonTransparentCoords,
+} from "@/lib/utils/canvas";
 
-let particles: Particle[];
-let gl: KineticTypographyGlsl;
+const fontSize = 70;
+const fontWeight = 700;
+const fontName = "Inter";
+const font = `${fontWeight} ${fontSize}px ${fontName}`;
+const color = "#303030";
 
 export default function useVisual() {
   const { getPointer, setPointerTarget } = usePointer();
+  const [text, setText] = useState("lhohw");
+  const kineticTypographyGL = useRef<KineticTypographyGL>(null!);
 
-  const handleContextLost = useCallback((e: Event) => {
-    e.preventDefault;
-  }, []);
+  const initCoords = useCallback(
+    (width: number, height: number, dpr: number) => {
+      const options = { desynchronized: true, willReadFrequently: false };
+      const canvas = document.createElement("canvas");
+      const { ctx } = initCanvas(canvas, width, height, options, dpr);
+      if (!ctx) throw new Error("canvas not supported");
 
-  const handleContextRestored = useCallback(() => {
-    gl.handleContextRestored();
-    drawParticles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      drawTextToCenter(ctx, text, font, color);
+      const coords = extractNonTransparentCoords(ctx, dpr);
+      return coords;
+    },
+    [text],
+  );
 
-  const initVisualCanvas = useCallback((width: number, height: number) => {
-    const gl = new KineticTypographyGlsl(width, height);
-    gl.canvas.classList.add("absolute", "inset-0");
-    gl.canvas.addEventListener("webglcontextlost", handleContextLost);
-    gl.canvas.addEventListener("webglcontextrestored", handleContextRestored);
-    setPointerTarget(gl.canvas);
-
-    return gl;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const initParticles = useCallback((coords: number[]) => {
-    const particles = [];
-    for (let i = 0; i < coords.length; i += 2) {
-      const particle = new Particle(coords[i], coords[i + 1]);
-      particles.push(particle);
-    }
-    return particles;
-  }, []);
+  const initVisualCanvas = useCallback(
+    (
+      canvas: HTMLCanvasElement,
+      width: number,
+      height: number,
+      coords: number[],
+    ) => {
+      kineticTypographyGL.current = new KineticTypographyGL(
+        canvas,
+        width,
+        height,
+        coords,
+      );
+      kineticTypographyGL.current.init();
+      setPointerTarget(canvas);
+    },
+    [setPointerTarget],
+  );
 
   const drawParticles = useCallback(() => {
     const { mx, my, mr } = getPointer();
-
-    const data = [];
-    for (let i = 0; i < particles.length; i++) {
-      const particle = particles[i];
-      particle.render(mx, my, mr);
-      data.push(particle.x, particle.y, ...rgb(particle.color));
-    }
-
-    gl.clear();
-    gl.draw(data);
+    kineticTypographyGL.current.draw(mx, my, mr);
   }, [getPointer]);
 
-  const init = useCallback(
-    async (width: number, height: number, coords: number[]) => {
-      particles = initParticles(coords);
-      gl = initVisualCanvas(width, height);
-      await gl.init();
+  const initVisual = useCallback(
+    (canvas: HTMLCanvasElement, width: number, height: number, dpr: number) => {
+      const coords = initCoords(width, height, dpr);
+      initVisualCanvas(canvas, width, height, coords);
       drawParticles();
-
-      return gl;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [initCoords, initVisualCanvas, drawParticles],
   );
 
+  const cleanup = useCallback(() => {
+    kineticTypographyGL.current.cleanup();
+    setPointerTarget(undefined);
+  }, [setPointerTarget]);
+
   return {
-    init,
+    initVisual,
     drawParticles,
+    cleanup,
   };
 }

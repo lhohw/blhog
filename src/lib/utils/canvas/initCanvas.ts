@@ -8,18 +8,13 @@ export default function initCanvas(
   const ctx = canvas.getContext("2d", options);
   if (!ctx) throw new Error("canvas not supported");
 
-  // @ts-expect-error vendor
-  // prettier-ignore
-  const bsr = ctx.msBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
-  const dpi = dpr / bsr;
-
   canvas.style.width = `${width}px`;
   canvas.style.height = `${height}px`;
 
-  canvas.width = width * dpi;
-  canvas.height = height * dpi;
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
 
-  ctx.scale(dpi, dpi);
+  ctx.scale(dpr, dpr);
 
-  return { ctx, dpi };
+  return { ctx, dpr };
 }

@@ -23,7 +23,7 @@ export default function PlumTreeBackground() {
 
       const controls = init();
       controlsRef.current = controls;
-      controlsRef.current.restart();
+      controlsRef.current.start();
     }
   }, []);
 

@@ -12,16 +12,14 @@ const attributeKeys = ["aVertexPosition", "aVertexColor"] as const;
 
 class GraphicLinkSectionGlsl extends GL<typeof attributeKeys> {
   constructor(
+    protected _canvas: HTMLCanvasElement,
     protected width: number,
     protected height: number,
   ) {
-    super(width, height);
+    super(_canvas, width, height, shaderSources, attributeKeys);
   }
 
-  async init() {
-    this.initGL(shaderSources, attributeKeys);
-  }
-
+  init() {}
   draw() {
     this._draw();
   }
@@ -53,6 +51,7 @@ class GraphicLinkSectionGlsl extends GL<typeof attributeKeys> {
         },
       ],
     );
+    this.buffers[0] = buffer;
 
     return buffer;
   }
@@ -60,6 +59,15 @@ class GraphicLinkSectionGlsl extends GL<typeof attributeKeys> {
   private drawBuffer(buffer: GLBuffer) {
     const { gl } = this;
     gl.drawArrays(gl.TRIANGLES, 0, buffer.count);
+  }
+
+  handleContextRestored(e: Event): void {
+    this.draw();
+  }
+
+  handleContextLost(e: Event): void {
+    e.preventDefault();
+    this._resetToInitialState();
   }
 }
 

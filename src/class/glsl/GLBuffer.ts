@@ -154,6 +154,11 @@ class GLBuffer {
     _gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, buffer);
     _gl.bufferData(_gl.ELEMENT_ARRAY_BUFFER, indices, _gl.STATIC_DRAW);
   }
+
+  deleteBuffer() {
+    const { _gl } = this;
+    _gl.deleteBuffer(this._buffer);
+  }
 }
 
 export default GLBuffer;

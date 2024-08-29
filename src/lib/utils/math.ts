@@ -9,6 +9,9 @@ export const r15 = r45 / 3;
 export const random = (range = 1, min = 0) => min + range * Math.random();
 export const prob = (rate: number) => random() < rate;
 
+export const randomInt = (range: number, min = 0) =>
+  Math.floor(random(range, min));
+
 export const deg2Rad = (degree: number) => (degree / 180) * PI;
 
 export const polar2cart = (radius: number, radian: number) => {
@@ -42,18 +45,31 @@ export const gaussianBlur = (size = 5, std = 1) => {
   return kernel.map((k) => k / sum);
 };
 
-export const marsagilaPolar = () => {
-  let w = 1,
-    v1 = 0,
-    v2 = 0;
+export const marsagilaPolar = (() => {
+  let cache: number;
+  let isCached = false;
 
-  do {
-    v1 = random(2, -1);
-    v2 = random(2, -1);
-    w = v1 ** 2 + v2 ** 2;
-  } while (w >= 1 || w === 0);
+  return () => {
+    if (isCached) {
+      isCached = false;
+      return cache;
+    }
 
-  w = sqrt((-2 * log(w)) / w);
+    let w = 1,
+      v1 = 0,
+      v2 = 0;
 
-  return [v1 * w, v2 * w];
-};
+    do {
+      v1 = random(2, -1);
+      v2 = random(2, -1);
+      w = v1 ** 2 + v2 ** 2;
+    } while (w >= 1 || w === 0);
+
+    w = sqrt((-2 * log(w)) / w);
+
+    cache = v2 * w;
+    isCached = true;
+
+    return v1 * w;
+  };
+})();
