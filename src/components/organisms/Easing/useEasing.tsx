@@ -42,6 +42,12 @@ export default function useEasing() {
   const easingControl = useRef(new EasingControl(undefined!));
 
   const [type, setType] = useState<AnimationType>(animationTypes[0]);
+  const isBallOverflow = useMemo(() => {
+    return (
+      type === "ball" &&
+      (easingKey === "easeInElastic" || easingKey === "easeOutElastic")
+    );
+  }, [type, easingKey]);
 
   const selectType = useCallback((idx: number) => {
     setType(animationTypes[idx]);
@@ -89,5 +95,6 @@ export default function useEasing() {
     type,
     selectType,
     setFrame,
+    isBallOverflow,
   };
 }

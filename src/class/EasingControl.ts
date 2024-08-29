@@ -16,8 +16,8 @@ class EasingControl {
   getValue(progress: number) {
     const { dir, easingFunction: f } = this;
 
+    if (progress >= 1) progress = Math.max(0, Math.min(1, progress));
     let value = f(progress);
-    if (progress >= 1) value = Math.max(0, Math.min(1, value));
     if (dir === -1) value = 1 - value;
 
     return value;

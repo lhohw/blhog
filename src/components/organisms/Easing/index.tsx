@@ -1,11 +1,11 @@
 "use client";
 
-import PostsContentWrapper from "@/components/atoms/wrapper/PostsContentWrapper";
 import SidebarWrapper from "@/components/atoms/wrapper/SidebarWrapper";
 import ResizableSidebar from "@/components/molecules/ResizableSidebar";
 import EasingSidebar from "./EasingSidebar";
 import EasingVisual from "./EasingVisual";
 import useEasing from "./useEasing";
+import clsx from "clsx";
 
 export default function Easing() {
   const {
@@ -16,11 +16,12 @@ export default function Easing() {
     type,
     selectType,
     setFrame,
+    isBallOverflow,
   } = useEasing();
 
   return (
-    <>
-      <SidebarWrapper>
+    <div className="flex flex-col md:flex-row w-full">
+      <SidebarWrapper className="max-md:static">
         <ResizableSidebar>
           <EasingSidebar
             easingFunction={easingFunction}
@@ -31,9 +32,16 @@ export default function Easing() {
           />
         </ResizableSidebar>
       </SidebarWrapper>
-      <PostsContentWrapper>
-        <EasingVisual type={type} setFrame={setFrame} />
-      </PostsContentWrapper>
-    </>
+      <div className="flex flex-1.6 flex-col p-4 min-w-72 w-full">
+        <div
+          className={clsx(
+            "flex flex-col md:flex-row",
+            isBallOverflow && "scale-75",
+          )}
+        >
+          <EasingVisual type={type} setFrame={setFrame} />
+        </div>
+      </div>
+    </div>
   );
 }
