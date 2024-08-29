@@ -41,15 +41,25 @@ export default function KineticTypography() {
 
     const start = raf.resume.bind(raf);
     const pause = raf.pause.bind(raf);
+    let isInitialMoveListenerRemoved = false;
+    const initialMoveListener = () => {
+      if (raf.isPaused) raf.resume();
+      visualCanvas.removeEventListener("pointermove", initialMoveListener);
+      isInitialMoveListenerRemoved = true;
+    };
 
     visualCanvas.addEventListener("pointerenter", start);
     visualCanvas.addEventListener("pointerleave", pause);
+    visualCanvas.addEventListener("pointermove", initialMoveListener);
 
     return () => {
       raf.cleanup();
       rafControl.current = null!;
       visualCanvas.removeEventListener("pointerenter", start);
       visualCanvas.removeEventListener("pointerleave", pause);
+      if (!isInitialMoveListenerRemoved) {
+        visualCanvas.removeEventListener("pointermove", initialMoveListener);
+      }
     };
   }, [drawParticles]);
 
