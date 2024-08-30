@@ -16,7 +16,7 @@ export type DropdownProps = Omit<HTMLAttributes<HTMLDivElement>, "onClick"> & {
   items: (Record<string, any> & { title: string })[];
   itemHeight?: number;
   placeholder?: string;
-  onClick: (idx: number) => void;
+  onSelectItem: (idx: number) => void;
   defaultIdx?: number;
 };
 export default function Dropdown({
@@ -26,7 +26,7 @@ export default function Dropdown({
   itemHeight = 60,
   placeholder = "Select item",
   defaultIdx = -1,
-  onClick,
+  onSelectItem,
   ...props
 }: DropdownProps) {
   const {
@@ -37,7 +37,7 @@ export default function Dropdown({
     select,
     toggle,
     onHeadingClick,
-  } = useDropdown(itemHeight, items, onClick, defaultIdx);
+  } = useDropdown(itemHeight, items, onSelectItem, defaultIdx);
 
   const containerRef = useRef<HTMLDivElement>(null!);
   const onSelect = useCallback<MouseEventHandler>(

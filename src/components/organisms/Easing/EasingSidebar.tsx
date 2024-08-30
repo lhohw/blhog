@@ -6,7 +6,7 @@ import DefaultButton from "@/components/atoms/buttons/DefaultButton";
 import Graph from "@/components/atoms/Graph";
 
 export type EasingSidebarProps = {
-  selectEasingFunction: DropdownProps["onClick"];
+  selectEasingFunction: DropdownProps["onSelectItem"];
   easingFunction: EasingFunction | undefined;
   isPlaying: boolean;
   play: () => void;
@@ -26,14 +26,14 @@ export default function EasingSidebar({
           className="z-10"
           placeholder="Select Easing"
           items={easingFunctionKeys.map((title) => ({ title }))}
-          onClick={selectEasingFunction}
+          onSelectItem={selectEasingFunction}
           defaultIdx={0}
         />
         <Dropdown
           className="mt-4 z-0"
           placeholder="Select Type"
           items={animationTypes.map((title) => ({ title }))}
-          onClick={selectType}
+          onSelectItem={selectType}
           defaultIdx={0}
         />
         <DefaultButton
