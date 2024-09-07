@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { ImageProps } from "next/image";
 import clsx from "clsx";
 import PhotoWrapper from "@/components/atoms/wrapper/PhotoWrapper";
 
@@ -12,6 +12,7 @@ export type PhotoProps = {
   user_name: string;
   className?: string;
   ratio?: "auto" | "video" | "square";
+  priority?: ImageProps["priority"];
 };
 export default function Photo({
   url,
@@ -23,6 +24,7 @@ export default function Photo({
   user_name,
   className,
   ratio = "video",
+  priority,
 }: PhotoProps) {
   return (
     <PhotoWrapper
@@ -42,6 +44,7 @@ export default function Photo({
         title={title || user_link}
         width={width}
         height={height}
+        priority={priority}
       />
       <span className="text-[12px] text-opacity-80 mt-2">
         photo by: {user_name}

@@ -1,7 +1,7 @@
 import type { Post } from "@/const/definitions";
 import Link from "next/link";
 import { format } from "@/lib/utils/markdown";
-import Photo from "@/components/atoms/Photo";
+import Photo, { PhotoProps } from "@/components/atoms/Photo";
 import CardWrapper from "@/components/atoms/wrapper/CardWrapper";
 
 export default function Card({
@@ -13,7 +13,8 @@ export default function Card({
   href,
   user_link,
   user_name,
-}: Post & { href: string }) {
+  priority,
+}: Post & { href: string; priority?: PhotoProps["priority"] }) {
   return (
     <CardWrapper>
       <Link
@@ -29,6 +30,7 @@ export default function Card({
           user_name={user_name}
           width={320}
           height={200}
+          priority={priority}
         />
         <div className="mt-2 py-2">
           <div>
