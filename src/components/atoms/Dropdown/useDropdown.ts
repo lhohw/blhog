@@ -6,7 +6,7 @@ import { useCallback, useMemo, useState } from "react";
 export default function useDropdown(
   itemHeight = 60,
   items: DropdownProps["items"],
-  onClick: DropdownProps["onClick"],
+  onClick: DropdownProps["onSelectItem"],
   defaultIdx = -1,
 ) {
   const [isOpen, setIsOpen] = useState(false);

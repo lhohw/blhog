@@ -4,7 +4,7 @@ import type { Post } from "@/const/definitions";
 import DBPool from "@/class/DBClient";
 import { withImageSize } from "@/lib/utils/markdown";
 
-export async function fetchDirectoryNames(): Promise<Pick<Post, "category">[]> {
+export async function fetchCategories(): Promise<Pick<Post, "category">[]> {
   try {
     const client = await DBPool.getInstance();
     const res = await client.query<Pick<Post, "category">>(
