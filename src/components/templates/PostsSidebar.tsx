@@ -1,11 +1,11 @@
 import type { LinkListItemProps } from "@/components/atoms/LinkListItem";
-import { fetchDirectoryNames } from "@/lib/api/post";
+import { fetchCategories } from "@/lib/api/post";
 import SidebarLinks from "@/components/organisms/SidebarLinks";
 import ResizableSidebar from "@/components/molecules/ResizableSidebar";
 
 export default async function PostsSidebar() {
-  const dirNames = await fetchDirectoryNames();
-  const links: LinkListItemProps[] = dirNames.map(({ category }) => ({
+  const categories = await fetchCategories();
+  const links: LinkListItemProps[] = categories.map(({ category }) => ({
     title: category,
     href: `/posts/${category}`,
   }));
