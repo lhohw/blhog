@@ -3,7 +3,7 @@ const MOVE_SPEED = 0.88;
 const FRICTION = 0.98;
 const ORIGIN_COLOR = 0xf3316e;
 const COLLIDED_COLOR = 0x451966;
-const RADIUS = 30;
+const RADIUS = 42;
 
 class Particle {
   private vx = 0;
@@ -11,6 +11,7 @@ class Particle {
   private originX = 0;
   private originY = 0;
   public color = ORIGIN_COLOR;
+
   constructor(
     public x: number,
     public y: number,
@@ -18,23 +19,24 @@ class Particle {
     this.originX = x;
     this.originY = y;
   }
-  render(mx: number, my: number, mr: number) {
-    this.detectCollision(mx, my, mr);
+
+  render(mx: number, my: number) {
+    this.detectCollision(mx, my);
     this.draw();
   }
-  private detectCollision(mx: number, my: number, mr: number) {
+
+  private detectCollision(mx: number, my: number) {
     const { x, y } = this;
 
     const dx = mx - x;
     const dy = my - y;
     const dist = Math.hypot(dy, dx);
-    const minDist = RADIUS + mr;
 
-    if (dist >= minDist) return;
+    if (dist >= RADIUS) return;
 
     const radian = Math.atan2(dy, dx);
-    const tx = x + Math.cos(radian) * minDist;
-    const ty = y + Math.sin(radian) * minDist;
+    const tx = x + RADIUS * Math.cos(radian);
+    const ty = y + RADIUS * Math.sin(radian);
     const ax = mx - tx;
     const ay = my - ty;
 
@@ -43,6 +45,7 @@ class Particle {
 
     this.color = COLLIDED_COLOR;
   }
+
   private draw() {
     const { originX, originY } = this;
 

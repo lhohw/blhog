@@ -31,7 +31,7 @@ class KineticTypographyGL extends GL<typeof attributeKeys, typeof uniformKeys> {
 
   init() {
     this._setupUniforms();
-    this.draw(0, 0, 20);
+    this.draw(0, 0);
   }
 
   private _setupUniforms() {
@@ -39,15 +39,15 @@ class KineticTypographyGL extends GL<typeof attributeKeys, typeof uniformKeys> {
     uniforms.setUniform("uResolution", "2f", [width, height]);
   }
 
-  draw(mx: number, my: number, mr: number) {
-    this._updateParticles(mx, my, mr);
+  draw(mx: number, my: number) {
+    this._updateParticles(mx, my);
     const buffer = this._setupBuffer();
     this.clear([0.0, 0.0, 0.0, 1.0]);
     this._drawParticles(buffer);
   }
 
-  private _updateParticles(mx: number, my: number, mr: number) {
-    this._particleSystem.render(mx, my, mr);
+  private _updateParticles(mx: number, my: number) {
+    this._particleSystem.render(mx, my);
   }
 
   private _setupBuffer() {

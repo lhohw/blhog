@@ -19,12 +19,12 @@ export default class ParticleSystem {
     }
   }
 
-  render(mx: number, my: number, mr: number) {
+  render(mx: number, my: number) {
     const { _particles } = this;
 
     for (let i = 0; i < _particles.length; i++) {
       const particle = _particles[i];
-      particle.render(mx, my, mr);
+      particle.render(mx, my);
     }
   }
 }

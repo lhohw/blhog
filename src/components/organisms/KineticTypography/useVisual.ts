@@ -52,8 +52,8 @@ export default function useVisual() {
   );
 
   const drawParticles = useCallback(() => {
-    const { mx, my, mr } = getPointer();
-    kineticTypographyGL.current.draw(mx, my, mr);
+    const { mx, my } = getPointer();
+    kineticTypographyGL.current.draw(mx, my);
   }, [getPointer]);
 
   const initVisual = useCallback(
