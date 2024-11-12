@@ -14,13 +14,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: BASE_URL,
-      lastModified: new Date("2024-08-18"),
+      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.5,
     },
     {
       url: `${BASE_URL}/graphic`,
-      lastModified: new Date("2024-08-18"),
+      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
     },
