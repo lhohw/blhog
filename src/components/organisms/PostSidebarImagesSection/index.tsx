@@ -4,7 +4,7 @@ import { memo } from "react";
 import Image from "next/image";
 import Section from "@/components/molecules/Section";
 import Resizer from "@/components/atoms/Resizer";
-import usePostImages, { type PostImage } from "./usePostImages";
+import usePostImages from "./usePostImages";
 
 export default function PostSidebarImagesSection() {
   const { images, maxHeight } = usePostImages();
@@ -25,7 +25,7 @@ export default function PostSidebarImagesSection() {
 }
 
 // eslint-disable-next-line react/display-name
-const ImagesSection = memo(({ images }: { images: PostImage[] }) => {
+const ImagesSection = memo(({ images }: { images: HTMLImageElement[] }) => {
   return (
     <Section
       title="IMAGE"
@@ -37,16 +37,19 @@ const ImagesSection = memo(({ images }: { images: PostImage[] }) => {
         className="my-2 w-full h-full overflow-y-scroll snap-y snap-mandatory"
       >
         {images.map((img, idx) => {
+          const { width, height } = getComputedStyle(img);
+          const { src, alt, title } = img;
+
           return (
             <li key={idx} className="h-full w-full snap-center">
               <Image
                 className="h-full w-full object-contain"
-                data-src={img.src}
-                width={0}
-                height={100}
-                src={img.src}
-                alt={img.alt}
-                title={img.title}
+                data-src={src}
+                width={parseInt(width)}
+                height={parseInt(height)}
+                src={src}
+                alt={alt}
+                title={title}
               />
             </li>
           );
