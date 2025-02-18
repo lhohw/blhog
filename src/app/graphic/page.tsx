@@ -7,6 +7,7 @@ export default function GraphicPage() {
       <LinkBox title="Kinetic Typography" />
       <LinkBox title="Easing" />
       <LinkBox title="Smoke Particle System" />
+      <LinkBox title="Text Scrubber" />
     </div>
   );
 }

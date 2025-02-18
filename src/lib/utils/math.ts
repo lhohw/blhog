@@ -12,6 +12,8 @@ export const prob = (rate: number) => random() < rate;
 export const randomInt = (range: number, min = 0) =>
   Math.floor(random(range, min));
 
+export const minmax = (min: number, max: number, value: number) => Math.max(min, Math.min(max, value));
+
 export const deg2Rad = (degree: number) => (degree / 180) * PI;
 
 export const polar2cart = (radius: number, radian: number) => {
