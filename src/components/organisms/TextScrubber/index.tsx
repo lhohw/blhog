@@ -12,8 +12,7 @@ export default function TextScrubber() {
   const rafControl = useRef<RafControl>(null!);
 
   const {
-    initVisual, cleanup, onImageClick,
-    imgInfos
+    initVisual, onImageClick, imgInfos
   } = useVisual();
   const [loadState, setLoadState] = useState<"loading" | "error" | "resolve">(
     "loading"
@@ -32,11 +31,7 @@ export default function TextScrubber() {
       console.error(e);
       setLoadState("error");
     }
-
-    return () => {
-      cleanup();
-    }
-  }, [cleanup]);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -59,7 +54,7 @@ export default function TextScrubber() {
               width={width}
               src={src}
               alt={alt}
-              onClick={() => onImageClick(textCanvasRef.current, visualCanvasRef.current, idx)}
+              onClick={() => onImageClick(visualCanvasRef.current, idx)}
             />
           ))
         }

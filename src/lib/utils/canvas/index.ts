@@ -79,7 +79,7 @@ export const drawQuadraticCurve = (
   ctx.closePath();
 }
 
-export const getRandomPos = (textCoords: number[]): Point[] => {
+export const getRandomPos = (textCoords: number[], distance = 10, minDistance = 10): Point[] => {
   const idx = 2 * randomInt(textCoords.length / 2);
   const from = new Point(textCoords[idx], textCoords[idx+1]);
   const points = [ from ];
@@ -88,7 +88,7 @@ export const getRandomPos = (textCoords: number[]): Point[] => {
 
   for (let i=0; i<2; i++) {
     theta = random(r360);
-    r = random(10, 10);
+    r = random(distance, minDistance);
     x = from.x + r * Math.cos(theta);
     y = from.y + r * Math.sin(theta);
 
