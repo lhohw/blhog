@@ -8,6 +8,29 @@ import { clear, drawQuadraticCurve, drawTextToCenter, extractNonTransparentCoord
 import { loadImageData } from "@/lib/utils/image";
 
 export const IMAGE_HEIGHT = 140;
+const defaultImgInfos = [
+  {
+    src: cafeTerraceAtNight.src,
+    alt: "Cafe Terrace At Night",
+    ratio: cafeTerraceAtNight.width / cafeTerraceAtNight.height,
+    width: Math.floor(IMAGE_HEIGHT * cafeTerraceAtNight.width / cafeTerraceAtNight.height),
+    data: new Uint8ClampedArray<ArrayBufferLike>(new ArrayBuffer()),
+  },
+  {
+    src: starryNight.src,
+    alt: "Starry Night",
+    ratio: starryNight.width / starryNight.height,
+    width: Math.floor(IMAGE_HEIGHT * starryNight.width / starryNight.height),
+    data: new Uint8ClampedArray<ArrayBufferLike>(new ArrayBuffer()),
+  },
+  {
+    src: waterLilies.src,
+    alt: "Water Lilies",
+    ratio: waterLilies.width / waterLilies.height,
+    width: Math.floor(IMAGE_HEIGHT * waterLilies.width / waterLilies.height),
+    data: new Uint8ClampedArray<ArrayBufferLike>(new ArrayBuffer()),
+  }
+];
 
 export type ImgInfo = {
   src: string;
@@ -19,29 +42,7 @@ export type ImgInfo = {
 export default function useVisual() {
   const animId = useRef(-1);
   const textCoords = useRef<number[]>([]);
-  const [imgInfos, setImageInfos] = useState<ImgInfo[]>([
-    {
-      src: cafeTerraceAtNight.src,
-      alt: "Cafe Terrace At Night",
-      ratio: cafeTerraceAtNight.width / cafeTerraceAtNight.height,
-      width: Math.floor(IMAGE_HEIGHT * cafeTerraceAtNight.width / cafeTerraceAtNight.height),
-      data: new Uint8ClampedArray<ArrayBufferLike>(new ArrayBuffer()),
-    },
-    {
-      src: starryNight.src,
-      alt: "Starry Night",
-      ratio: starryNight.width / starryNight.height,
-      width: Math.floor(IMAGE_HEIGHT * starryNight.width / starryNight.height),
-      data: new Uint8ClampedArray<ArrayBufferLike>(new ArrayBuffer()),
-    },
-    {
-      src: waterLilies.src,
-      alt: "Water Lilies",
-      ratio: waterLilies.width / waterLilies.height,
-      width: Math.floor(IMAGE_HEIGHT * waterLilies.width / waterLilies.height),
-      data: new Uint8ClampedArray<ArrayBufferLike>(new ArrayBuffer()),
-    }
-  ]);
+  const [imgInfos, setImageInfos] = useState<ImgInfo[]>(defaultImgInfos);
 
   const initVisual = useCallback(async (textCanvas: HTMLCanvasElement, canvas: HTMLCanvasElement, width: number, height: number, dpr: number) => {
     initVisualCanvas(canvas, width, height, dpr);
