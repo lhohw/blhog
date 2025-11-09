@@ -12,6 +12,7 @@ export async function fetchCategories(): Promise<Pick<Post, "category">[]> {
     throw new Error(`=== Failed to fetch directory names ===\n>> ${error}`);
   }
 }
+
 export async function fetchLatestPosts(): Promise<Post[]> {
   try {
     const sql = getSql();
