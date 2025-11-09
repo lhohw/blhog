@@ -128,7 +128,6 @@ export default function useVisual() {
         if (start === undefined) start = now;
         if (now - start >= DURATION) {
           cancelAnimationFrame(animId.current);
-          console.log('done');
           return;
         }
 
