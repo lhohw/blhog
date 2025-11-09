@@ -1,20 +1,12 @@
 import type { MetadataRoute } from 'next'
-import { neon } from '@neondatabase/serverless'
+import { getSql } from '@/lib/api/sql'
 
 // 요청 시 실행 + 캐시 비활성화
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 export const runtime = 'nodejs' // Node 런타임(HTTP 드라이버와 호환)
 
-const BASE_URL = 'https://blhog.vercel.app'
-
-function getSql() {
-  const url = process.env.NEON_DATABASE_URL ?? process.env.DATABASE_URL
-  if (!url) throw new Error('Missing env: DATABASE_URL')
-  return neon(url)
-}
-
-type Row = { slug: string; category: string; updated_at: string }
+const BASE_URL = 'https://blhog.vercel.app';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sql = getSql()
