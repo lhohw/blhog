@@ -1,16 +1,14 @@
 "use server";
 
+import { sql } from "../sql";
+import * as query from "./query";
 import type { Post } from "@/const/definitions";
-import DBPool from "@/class/DBClient";
 import { withImageSize } from "@/lib/utils/markdown";
 
 export async function fetchCategories(): Promise<Pick<Post, "category">[]> {
   try {
-    const client = await DBPool.getInstance();
-    const res = await client.query<Pick<Post, "category">>(
-      `SELECT DISTINCT category FROM posts`,
-    );
-    return res.rows;
+    const res = await sql.query(query.fetchCategoriesQuery);
+    return res as Pick<Post, "category">[];
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch directory names.");
@@ -18,14 +16,7 @@ export async function fetchCategories(): Promise<Pick<Post, "category">[]> {
 }
 export async function fetchLatestPosts(): Promise<Post[]> {
   try {
-    const client = await DBPool.getInstance();
-    const res = await client.query<Post>(`
-      SELECT *
-        FROM posts
-        ORDER BY posts.updated_at DESC
-        LIMIT 12
-    `);
-    const latestPosts = res.rows;
+    const latestPosts = await sql.query(query.fetchLatestPostsQuery) as Post[];
     return latestPosts.map((post) => ({
       ...post,
       photo_url: withImageSize(post.photo_url, 640, 400),
@@ -38,15 +29,7 @@ export async function fetchLatestPosts(): Promise<Post[]> {
 
 export async function fetchPostsByCategory(category: string) {
   try {
-    const client = await DBPool.getInstance();
-    const res = await client.query<Post>({
-      text: `SELECT *
-        FROM posts
-        WHERE category=$1
-        ORDER BY posts.updated_at DESC`,
-      values: [category],
-    });
-    const posts = res.rows;
+    const posts = await sql.query(query.fetchPostsByCategoryQuery, [category]) as Post[];
     return posts.map((post) => ({
       ...post,
       photo_url: withImageSize(post.photo_url, 640, 400),
@@ -62,15 +45,8 @@ export async function fetchPostByCategoryAndSlug(
   slug: string,
 ): Promise<Post | null> {
   try {
-    const client = await DBPool.getInstance();
-    const res = await client.query<Post>({
-      text: `SELECT * FROM posts
-        WHERE category=$1 AND slug=$2`,
-      values: [category, slug],
-    });
-
-    const post = res.rows[0] || null;
-    return post;
+    const post = (await sql.query(query.fetchPostByCategoryAndSlugQuery, [category, slug]))?.[0] ?? null;
+    return post as Post | null;
   } catch (error) {
     console.error(error);
     throw new Error(
