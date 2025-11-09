@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { PageProps } from "@/types/type";
 import { Suspense } from "react";
-import CategoryPosts from "@/components/templates/CategoryPosts";
+import CategoryPosts from "@/app/posts/[category]/CategoryPosts";
 import Breadcrumbs from "@/components/organisms/Breadcrumbs";
 import PostsSkeleton from "@/components/skeletons/PostsSkeleton";
 import { fetchPostsByCategory } from "@/lib/api/post";

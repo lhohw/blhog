@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import PostsSkeleton from "@/components/skeletons/PostsSkeleton";
-import LatestPosts from "@/components/templates/LatestPosts";
+import LatestPosts from "@/app/posts/LatestPosts";
 
 export const metadata: Metadata = {
   title: "Latest Posts",

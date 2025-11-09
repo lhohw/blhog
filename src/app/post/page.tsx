@@ -6,7 +6,7 @@ import SidebarWrapper from "@/components/atoms/wrapper/SidebarWrapper";
 import PostsContentWrapper from "@/components/atoms/wrapper/PostsContentWrapper";
 import Post from "@/components/molecules/Post";
 import PostPageSkeleton from "@/components/skeletons/PostPageSkeleton";
-import PostSidebar from "@/components/templates/PostSidebar";
+import PostSidebar from "@/app/post/PostSidebar";
 import { fetchPostByCategoryAndSlug } from "@/lib/api/post";
 import { unserialize } from "@/lib/utils/markdown";
 

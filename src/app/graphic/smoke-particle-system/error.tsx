@@ -1,6 +1,6 @@
 "use client";
 
-import Error from "@/components/templates/Error";
+import Error from "@/components/Error";
 
 export default function SmokeParticleSystemErrorPage({
   error,
