@@ -14,21 +14,21 @@ const defaultImgInfos = [
     alt: "Cafe Terrace At Night",
     ratio: cafeTerraceAtNight.width / cafeTerraceAtNight.height,
     width: Math.floor(IMAGE_HEIGHT * cafeTerraceAtNight.width / cafeTerraceAtNight.height),
-    data: new Uint8ClampedArray<ArrayBufferLike>(new ArrayBuffer()),
+    data: new Uint8ClampedArray(),
   },
   {
     src: starryNight.src,
     alt: "Starry Night",
     ratio: starryNight.width / starryNight.height,
     width: Math.floor(IMAGE_HEIGHT * starryNight.width / starryNight.height),
-    data: new Uint8ClampedArray<ArrayBufferLike>(new ArrayBuffer()),
+    data: new Uint8ClampedArray(),
   },
   {
     src: waterLilies.src,
     alt: "Water Lilies",
     ratio: waterLilies.width / waterLilies.height,
     width: Math.floor(IMAGE_HEIGHT * waterLilies.width / waterLilies.height),
-    data: new Uint8ClampedArray<ArrayBufferLike>(new ArrayBuffer()),
+    data: new Uint8ClampedArray(),
   }
 ];
 
@@ -37,7 +37,7 @@ export type ImgInfo = {
   alt: string;
   ratio: number;
   width: number;
-  data: Uint8ClampedArray<ArrayBufferLike>;
+  data: Uint8ClampedArray,
 };
 export default function useVisual() {
   const animId = useRef(-1);

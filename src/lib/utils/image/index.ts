@@ -21,7 +21,7 @@ export const loadImageData = async (dpr: number, canvasHeight: number, imgInfos:
     const img = new Image(w, height);
     img.src = src;
 
-    return new Promise<Uint8ClampedArray<ArrayBufferLike>>((res) => {
+    return new Promise<Uint8ClampedArray>((res) => {
       img.onload = () => {
         tmpCtx.drawImage(img, 0, 0);
         const imgData = tmpCtx.getImageData(0, 0, w, canvasHeight);
