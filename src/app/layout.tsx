@@ -40,11 +40,11 @@ export default function RootLayout({
           <main className="flex flex-1 flex-col md:flex-row">{children}</main>
         </div>
         <PlumTreeBackground />
+        <MainColorEffect />
+        <GoogleAnalytics />
+        <SpeedInsights />
+        <Analytics />
       </body>
-      <MainColorEffect />
-      <GoogleAnalytics />
-      <SpeedInsights />
-      <Analytics />
     </html>
   );
 }
