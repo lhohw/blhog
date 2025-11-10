@@ -5,6 +5,7 @@ import MainColorEffect from "@/components/effects/MainColorEffect";
 import Header from "@/components/organisms/Header";
 import PlumTreeBackground from "@/components/organisms/PlumTreeBackground";
 import GoogleAnalytics from "@/components/organisms/GoogleAnalytics";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: {
@@ -41,6 +42,7 @@ export default function RootLayout({
       </body>
       <MainColorEffect />
       <GoogleAnalytics />
+      <SpeedInsights />
     </html>
   );
 }
