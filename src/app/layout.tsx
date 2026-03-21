@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { nunito_sans } from "@/styles/fonts";
 import "@/styles/globals.scss";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next"
 import MainColorEffect from "@/components/effects/MainColorEffect";
 import Header from "@/components/organisms/Header";
@@ -42,7 +41,6 @@ export default function RootLayout({
         <PlumTreeBackground />
         <MainColorEffect />
         <GoogleAnalytics gaId="G-S72WF3ZJF0" />
-        <SpeedInsights />
         <Analytics />
       </body>
     </html>
