@@ -17,3 +17,8 @@ declare module "*.frag" {
   const source: string;
   export default source;
 }
+
+declare module '*.scss' {
+  const content: { [className: string]: string };
+  export default content;
+}
